@@ -1,0 +1,159 @@
+<div class="px-4 py-0 animate-fade-in-up">
+  <!-- Standardized Section Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-2 mb-1">
+      <h2 class="text-xl font-bold text-gray-900">Logo System</h2>
+      <div class="info-trigger"
+        data-tooltip="Upload all logo variants including primary, mono, and icon versions. Define clear space rules to ensure visibility.">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </div>
+    </div>
+    <p class="text-sm text-gray-500">Manage your brand's visual identity assets.</p>
+  </div>
+
+  <div class="section-header">
+    <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-0">Logo Assets</span>
+    <div class="info-trigger"
+      data-tooltip="Upload all variants of your logo for different backgrounds and orientations (Primary, Mono, Horizontal, Vertical, etc.).">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+      </svg>
+    </div>
+  </div>
+  <form [formGroup]="form" class="flex flex-col gap-6 mt-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+      <!-- Primary -->
+      <div class="flex flex-col gap-3" id="logo-primary">
+        <label class="form-label">Primary Logo</label>
+        <app-file-upload label="Main logo" [value]="form.get('primary')?.value"
+          (fileChange)="onFileChange('primary', $event)"></app-file-upload>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
+            <input class="form-input" formControlName="primaryClearSpace" type="number" />
+          </div>
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
+            <input class="form-input" formControlName="primaryMinSize" type="number" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Secondary -->
+      <div class="flex flex-col gap-3">
+        <label class="form-label">Secondary Logo</label>
+        <app-file-upload label="Alternate version" [value]="form.get('secondary')?.value"
+          (fileChange)="onFileChange('secondary', $event)"></app-file-upload>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
+            <input class="form-input" formControlName="secondaryClearSpace" type="number" />
+          </div>
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
+            <input class="form-input" formControlName="secondaryMinSize" type="number" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Horizontal -->
+      <div class="flex flex-col gap-3">
+        <label class="form-label">Horizontal Layout</label>
+        <app-file-upload label="Horizontal version" [value]="form.get('horizontal')?.value"
+          (fileChange)="onFileChange('horizontal', $event)"></app-file-upload>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
+            <input class="form-input" formControlName="horizontalClearSpace" type="number" />
+          </div>
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
+            <input class="form-input" formControlName="horizontalMinSize" type="number" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Vertical -->
+      <div class="flex flex-col gap-3">
+        <label class="form-label">Vertical Layout</label>
+        <app-file-upload label="Vertical version" [value]="form.get('vertical')?.value"
+          (fileChange)="onFileChange('vertical', $event)"></app-file-upload>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
+            <input class="form-input" formControlName="verticalClearSpace" type="number" />
+          </div>
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
+            <input class="form-input" formControlName="verticalMinSize" type="number" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Icon -->
+      <div class="flex flex-col gap-3" id="logo-icon">
+        <label class="form-label">Icon / Favicon</label>
+        <app-file-upload label="Logo mark" [value]="form.get('icon')?.value"
+          (fileChange)="onFileChange('icon', $event)"></app-file-upload>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
+            <input class="form-input" formControlName="iconClearSpace" type="number" />
+          </div>
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
+            <input class="form-input" formControlName="iconMinSize" type="number" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Mono Black -->
+      <div class="flex flex-col gap-3">
+        <label class="form-label">Mono Black</label>
+        <app-file-upload label="Black version" [value]="form.get('monoBlack')?.value"
+          (fileChange)="onFileChange('monoBlack', $event)"></app-file-upload>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
+            <input class="form-input" formControlName="monoBlackClearSpace" type="number" />
+          </div>
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
+            <input class="form-input" formControlName="monoBlackMinSize" type="number" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Mono White -->
+      <div class="flex flex-col gap-3">
+        <label class="form-label">Mono White</label>
+        <app-file-upload label="White version" [value]="form.get('monoWhite')?.value"
+          (fileChange)="onFileChange('monoWhite', $event)"></app-file-upload>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
+            <input class="form-input" formControlName="monoWhiteClearSpace" type="number" />
+          </div>
+          <div class="form-group">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
+            <input class="form-input" formControlName="monoWhiteMinSize" type="number" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout Selection Moved to Bottom -->
+    <div class="mt-8 pt-8 border-t border-gray-100">
+      <app-variant-selector [variants]="variants" [selectedVariant]="selectedVariant"
+        (variantSelected)="onVariantChange($event)"></app-variant-selector>
+    </div>
+  </form>
+</div>

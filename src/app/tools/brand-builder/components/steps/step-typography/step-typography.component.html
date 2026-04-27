@@ -1,0 +1,99 @@
+<div class="px-4 py-0 animate-fade-in-up">
+  <!-- Standardized Section Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-2 mb-1">
+      <h2 class="text-xl font-bold text-gray-900">Typography Settings</h2>
+      <div class="info-trigger"
+        data-tooltip="Choose a font and configure the visual tone and density to match your brand's personality.">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </div>
+    </div>
+    <p class="text-sm text-gray-500">Configure your typeface and semantic scaling logic.</p>
+  </div>
+
+  <form [formGroup]="form" class="flex flex-col gap-0">
+    <!-- Font Selection -->
+    <div class="grid grid-cols-1 gap-6">
+      <div class="form-group" id="font-primary">
+        <app-google-font-selector formControlName="primaryFont" label="Brand Font Family *"
+          placeholder="Search brand font...">
+        </app-google-font-selector>
+      </div>
+    </div>
+
+    <!-- Tone Selection -->
+    <div>
+      <div class="section-header mb-4">
+        <span class="block text-xs font-bold uppercase tracking-widest text-gray-400">Typography Tone</span>
+        <div class="info-trigger" data-tooltip="Controls the semantic weights and line-heights of your type system.">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        @for (tone of tones; track tone.id) {
+        <button type="button" (click)="setTone(tone.id)" [class.active]="form.get('tone')?.value === tone.id"
+          class="flex flex-col items-start p-4 text-left border border-border rounded-xl transition-all duration-200 hover:border-primary-500/50 hover:bg-gray-50 group semantic-card">
+          <span class="text-sm font-bold text-gray-900 mb-1 group-[.active]:text-primary-600">{{ tone.label }}</span>
+          <p class="text-[11px] leading-relaxed text-gray-500 font-medium">{{ tone.desc }}</p>
+
+          @if (form.get('tone')?.value === tone.id) {
+          <div class="mt-3 flex items-center gap-1.5 text-[10px] font-bold text-primary-600">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary-600"></span>
+            Active Scale
+          </div>
+          }
+        </button>
+        }
+      </div>
+    </div>
+
+    <!-- Density Selection -->
+    <div>
+      <div class="section-header mb-4">
+        <span class="block text-xs font-bold uppercase tracking-widest text-gray-400">System Density</span>
+        <div class="info-trigger"
+          data-tooltip="Adjusts the global scaling of all text elements. Compact is better for dashboards, Comfortable for reading.">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        @for (density of densities; track density.id) {
+        <button type="button" (click)="setDensity(density.id)"
+          [class.active]="form.get('density')?.value === density.id"
+          class="flex flex-col items-start p-4 text-left border border-border rounded-xl transition-all duration-200 hover:border-primary-500/50 hover:bg-gray-50 group semantic-card">
+          <span class="text-sm font-bold text-gray-900 mb-1 group-[.active]:text-primary-600">{{ density.label }}</span>
+          <p class="text-[11px] leading-relaxed text-gray-500 font-medium">{{ density.desc }}</p>
+
+          @if (form.get('density')?.value === density.id) {
+          <div class="mt-3 flex items-center gap-1.5 text-[10px] font-bold text-primary-600">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary-600"></span>
+            Selected Density
+          </div>
+          }
+        </button>
+        }
+      </div>
+    </div>
+
+    <!-- Preview Layout Selection -->
+    <div class="mt-4 pt-8 border-t border-gray-100">
+      <app-variant-selector [variants]="variants" [selectedVariant]="selectedVariant"
+        (variantSelected)="onVariantChange($event)"></app-variant-selector>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,62 @@
+<div class="px-4 py-0 animate-fade-in-up">
+  <!-- Standardized Section Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-2 mb-1">
+      <h2 class="text-xl font-bold text-gray-900">Brand Voice</h2>
+      <div class="info-trigger"
+        data-tooltip="Define the personality of your communications. Set clear rules for what your brand should and shouldn't sound like.">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </div>
+    </div>
+    <p class="text-sm text-gray-500">Establish how your brand speaks and interacts.</p>
+  </div>
+
+  <div class="section-header">
+    <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-0">Brand Messaging</span>
+    <div class="info-trigger"
+      data-tooltip="Establish the tone of voice and communication principles. Includes specific examples of how the brand should and should not speak.">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+      </svg>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="flex flex-col gap-4">
+    <div class="form-group">
+      <label class="form-label">Tone of Voice</label>
+      <span class="form-hint">Add words that describe how your brand sounds</span>
+      <app-chip-input formControlName="tone" placeholder="e.g. Professional, Friendly, Authoritative"></app-chip-input>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="form-group">
+        <label class="form-label">Do's ✓</label>
+        <textarea class="form-textarea dos-textarea" formControlName="dos"
+          placeholder="We DO:&#10;• Use active voice&#10;• Keep sentences concise&#10;• Address readers directly"
+          rows="6"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Don'ts ✗</label>
+        <textarea class="form-textarea donts-textarea" formControlName="donts"
+          placeholder="We DON'T:&#10;• Use jargon or slang&#10;• Write in passive voice&#10;• Make exaggerated claims"
+          rows="6"></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Writing Examples</label>
+      <textarea class="form-textarea" formControlName="examples"
+        placeholder="Provide sample copy that exemplifies your brand voice.&#10;&#10;Example headline: 'Simplify your workflow, amplify your results.'&#10;Example body: 'We believe great tools should feel invisible...'"
+        rows="6"></textarea>
+    </div>
+  </form>
+</div>

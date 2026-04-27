@@ -1,0 +1,209 @@
+<div class="px-4 py-0 animate-fade-in-up">
+  <!-- Standardized Section Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-2 mb-1">
+      <h2 class="text-xl font-bold text-gray-900">Review & Export</h2>
+      <div class="info-trigger"
+        data-tooltip="Review all sections for accuracy. Once satisfied, export your brand foundations as a structured JSON file for developers.">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </div>
+    </div>
+    <p class="text-sm text-gray-500">Finalize your brand foundations and generate a JSON token file.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Brand Basics -->
+    <div class="p-5 border border-border rounded-xl bg-white transition-all duration-200 review-card">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-6 h-6 flex items-center justify-center text-primary font-bold">◉</span>
+        <h4 class="text-sm font-bold text-gray-900">Brand Basics</h4>
+      </div>
+      <div class="flex flex-col gap-3">
+        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0 text-sm">
+          <span class="text-gray-400 font-medium whitespace-nowrap">Name</span>
+          <span class="text-gray-900 font-semibold text-right">{{ brandData.cover.name || '—' }}</span>
+        </div>
+        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0 text-sm">
+          <span class="text-gray-400 font-medium whitespace-nowrap">Tagline</span>
+          <span class="text-gray-900 font-semibold text-right">{{ brandData.cover.tagline || '—' }}</span>
+        </div>
+        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0 text-sm">
+          <span class="text-gray-400 font-medium whitespace-nowrap">Industry</span>
+          <span class="text-gray-900 font-semibold text-right">{{ brandData.cover.industry || '—' }}</span>
+        </div>
+        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0 text-sm">
+          <span class="text-gray-400 font-medium whitespace-nowrap">Year</span>
+          <span class="text-gray-900 font-semibold text-right">{{ brandData.cover.year }}</span>
+        </div>
+        @if (brandData.cover.personality.length > 0) {
+        <div class="flex flex-col gap-2 py-2 last:border-0 text-sm">
+          <span class="text-gray-400 font-medium">Personality</span>
+          <div class="flex flex-wrap gap-1.5">
+            @for (trait of brandData.cover.personality; track $index) {
+            <span
+              class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-bold uppercase tracking-wider">{{
+              trait }}</span>
+            }
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Variants Summary -->
+    <div class="p-5 border border-border rounded-xl bg-white transition-all duration-200 review-card">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-6 h-6 flex items-center justify-center text-primary font-bold">◈</span>
+        <h4 class="text-sm font-bold text-gray-900">Selected Variants</h4>
+      </div>
+      <div class="flex flex-col gap-3 text-sm">
+        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
+          <span class="text-gray-400 font-medium">Cover</span>
+          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
+            brandData.cover.variant }}</span>
+        </div>
+        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
+          <span class="text-gray-400 font-medium">Summary</span>
+          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
+            brandData.summary.variant }}</span>
+        </div>
+        @if (isSectionEnabled('logo')) {
+        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
+          <span class="text-gray-400 font-medium">Logo</span>
+          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
+            brandData.logo.variant }}</span>
+        </div>
+        }
+        @if (isSectionEnabled('colors')) {
+        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
+          <span class="text-gray-400 font-medium">Colors</span>
+          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
+            brandData.colors.variant }}</span>
+        </div>
+        }
+        @if (isSectionEnabled('typography')) {
+        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
+          <span class="text-gray-400 font-medium">Typography</span>
+          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
+            brandData.typography.variant }}</span>
+        </div>
+        }
+        @if (isSectionEnabled('iconography')) {
+        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
+          <span class="text-gray-400 font-medium">Iconography</span>
+          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
+            brandData.iconography.library }} ({{ brandData.iconography.variant }})</span>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Colors Summary -->
+    @if (isSectionEnabled('colors')) {
+    <div class="p-5 border border-border rounded-xl bg-white transition-all duration-200 review-card">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-6 h-6 flex items-center justify-center text-primary font-bold">◐</span>
+        <h4 class="text-sm font-bold text-gray-900">Color Palette</h4>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        @for (color of brandData.colors.palette; track $index) {
+        <div class="flex flex-col gap-1">
+          <div class="h-8 rounded shadow-sm border border-black/5" [style.background]="color.hex"></div>
+          <div class="flex flex-col min-w-0">
+            <span class="text-[10px] font-bold text-gray-900 truncate">{{ color.name }}</span>
+            <span class="text-[9px] font-mono text-gray-400">{{ color.hex }}</span>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+
+    <!-- Typography Summary -->
+    @if (isSectionEnabled('typography')) {
+    <div class="p-5 border border-border rounded-xl bg-white transition-all duration-200 review-card">
+      <div class="flex items-center gap-2 mb-4">
+        <span
+          class="w-6 h-6 flex items-center justify-center text-primary font-bold text-xs uppercase tracking-tight">Aa</span>
+        <h4 class="text-sm font-bold text-gray-900">Typography</h4>
+      </div>
+      <div class="flex flex-col gap-3 text-sm">
+        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0">
+          <span class="text-gray-400 font-medium">Font Family</span>
+          <span class="text-gray-900 font-semibold text-right">{{ brandData.typography.primaryFont }}</span>
+        </div>
+        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0">
+          <span class="text-gray-400 font-medium">Visual Tone</span>
+          <span class="text-gray-900 font-semibold text-right capitalize">{{ brandData.typography.tone }}</span>
+        </div>
+        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0 text-sm">
+          <span class="text-gray-400 font-medium whitespace-nowrap">Density</span>
+          <span class="text-gray-900 font-semibold text-right capitalize">{{ brandData.typography.density }}</span>
+        </div>
+      </div>
+    </div>
+    }
+
+
+    <!-- Iconography Summary -->
+    @if (isSectionEnabled('iconography')) {
+    <div class="p-5 border border-border rounded-xl bg-white transition-all duration-200 review-card">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-6 h-6 flex items-center justify-center text-primary font-bold">✦</span>
+        <h4 class="text-sm font-bold text-gray-900">Iconography</h4>
+      </div>
+      <div class="flex flex-col gap-3 text-sm">
+        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
+          <span class="text-gray-400 font-medium whitespace-nowrap">Library</span>
+          <span class="text-gray-900 font-semibold text-right">{{ brandData.iconography.library || '—' }}</span>
+        </div>
+        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
+          <span class="text-gray-400 font-medium whitespace-nowrap">Style</span>
+          <span class="text-gray-900 font-semibold text-right capitalize">{{ brandData.iconography.variant }}</span>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Completion Stats -->
+    <div class="p-5 border-2 border-primary/20 rounded-xl bg-primary/5 review-card">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-6 h-6 flex items-center justify-center text-primary font-bold">✓</span>
+        <h4 class="text-sm font-bold text-primary">Completion</h4>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col">
+          <span class="text-2xl font-black text-primary leading-tight">{{ completedSteps }}</span>
+          <span class="text-[10px] font-bold text-primary/60 uppercase tracking-wider">Sections filled</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-2xl font-black text-primary leading-tight">{{ brandData.colors.palette.length }}</span>
+          <span class="text-[10px] font-bold text-primary/60 uppercase tracking-wider">Colors defined</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-2xl font-black text-primary leading-tight">{{ uploadCount }}</span>
+          <span class="text-[10px] font-bold text-primary/60 uppercase tracking-wider">Assets uploaded</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Button -->
+  <div class="mt-12 pt-8 border-t border-border flex flex-col items-center">
+    <button class="btn btn-primary btn-lg flex items-center gap-3 px-8 transition-transform active:scale-95"
+      (click)="onExport()" id="export-json-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="16 18 22 12 16 6" />
+        <polyline points="8 6 2 12 8 18" />
+      </svg>
+      Export as JSON
+    </button>
+    <p class="mt-3 text-sm text-gray-400 font-medium italic">Generates a structured JSON file compatible with modern design system workflows</p>
+  </div>
+</div>

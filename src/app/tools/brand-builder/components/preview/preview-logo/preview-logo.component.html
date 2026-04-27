@@ -1,0 +1,95 @@
+<div class="flex flex-col logo-page">
+  <div class="mb-6 page-header">
+    <span class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase page-number">02</span>
+    <h2 class="text-[22px] font-extrabold mt-1 mb-0.5 tracking-tight page-title">Logo System</h2>
+    <p class="text-[10px] text-gray-500 page-subtitle">Usage guidelines and approved logo versions</p>
+  </div>
+
+  @if (data.logo.variant === 'grid') {
+  <div class="logo-grid-container">
+    <div class="grid grid-cols-3 gap-2 logo-grid">
+      @for (logo of uploadedLogos; track logo.key) {
+      <div class="bg-gray-100 rounded-lg flex flex-col items-center justify-center p-3 relative logo-cell"
+        [class.bg-black]="logo.key === 'monoWhite' || logo.key === 'monoBlack'">
+        <span class="absolute top-1.5 left-2 text-[6px] font-bold uppercase tracking-widest"
+          [class.text-gray-400]="logo.key !== 'monoWhite' && logo.key !== 'monoBlack'"
+          [class.text-gray-600]="logo.key === 'monoWhite' || logo.key === 'monoBlack'">
+          {{ logo.label }}
+        </span>
+        <img [src]="logo.url" [alt]="logo.label" class="max-w-[80%] max-h-[40px] object-contain" />
+        <div class="mt-2 flex gap-2 opacity-60">
+          <span class="text-[6px] font-mono text-gray-400">{{ logo.clearSpace }}px</span>
+          <span class="text-[6px] font-mono text-gray-400">{{ logo.minSize }}px</span>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  @if (data.logo.variant === 'centered') {
+  <div class="flex-1 flex flex-col logo-centered">
+    <div class="flex-1 flex items-center justify-center bg-gray-50 rounded-xl mb-3 logo-hero">
+      @if (data.logo.primary) {
+      <img [src]="data.logo.primary" alt="Primary Logo" class="max-w-[50%] max-h-[100px] object-contain" />
+      } @else {
+      <span class="text-[28px] font-black text-gray-200 uppercase tracking-tighter">{{ data.cover.name || 'LOGO'
+        }}</span>
+      }
+    </div>
+
+    <div class="flex gap-2 overflow-x-auto no-scrollbar logo-variations">
+      @for (logo of uploadedLogos; track logo.key) {
+      @if (logo.key !== 'primary') {
+      <div
+        class="flex-none w-[100px] bg-gray-100 rounded-lg p-3 text-center flex flex-col items-center gap-1.5 variation"
+        [class.bg-black]="logo.key === 'monoWhite'">
+        <img [src]="logo.url" [alt]="logo.label" class="max-w-[60px] max-h-[30px] object-contain" />
+        <span class="text-[7px] font-bold uppercase tracking-widest" [class.text-gray-400]="logo.key !== 'monoWhite'"
+          [class.text-gray-600]="logo.key === 'monoWhite'">{{ logo.label }}</span>
+      </div>
+      }
+      }
+    </div>
+  </div>
+  }
+
+  @if (data.logo.variant === 'documented') {
+  <div class="flex flex-col gap-4 logo-documented">
+    @for (logo of uploadedLogos; track logo.key; let first = $first) {
+    <div class="flex gap-4 min-h-[140px] doc-row">
+      <div class="flex-[1.5] rounded-xl flex items-center justify-center relative doc-main"
+        [class.bg-gray-100]="logo.key !== 'monoWhite'" [class.bg-black]="logo.key === 'monoWhite'">
+        <div class="relative doc-logo-area">
+          <img [src]="logo.url" [alt]="logo.label" class="max-w-[120px] max-h-[80px] object-contain" />
+          <!-- Measurement decorators -->
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 text-[7px] text-gray-400 font-mono">{{ logo.clearSpace
+            }}px</div>
+          <div class="absolute -right-7 top-1/2 -translate-y-1/2 text-[7px] text-gray-400 font-mono">{{ logo.clearSpace
+            }}px</div>
+        </div>
+      </div>
+      <div class="flex-1 flex flex-col justify-center gap-2 doc-sidebar">
+        <h4 class="text-[9px] font-black uppercase tracking-widest text-gray-900 border-b border-gray-100 pb-1">{{
+          logo.label }}</h4>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="doc-info">
+            <span class="text-[7px] font-bold uppercase text-gray-400 block">Clear Space</span>
+            <span class="text-[10px] font-bold text-gray-900">{{ logo.clearSpace }}px</span>
+          </div>
+          <div class="doc-info">
+            <span class="text-[7px] font-bold uppercase text-gray-400 block">Min. Size</span>
+            <span class="text-[10px] font-bold text-gray-900">{{ logo.minSize }}px</span>
+          </div>
+        </div>
+        @if (first) {
+        <p class="text-[8px] text-gray-500 leading-tight italic mt-1">
+          Maintain proportions and clear space for maximum brand impact.
+        </p>
+        }
+      </div>
+    </div>
+    }
+  </div>
+  }
+</div>

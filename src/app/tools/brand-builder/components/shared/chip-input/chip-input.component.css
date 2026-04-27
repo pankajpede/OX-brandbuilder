@@ -1,0 +1,19 @@
+/* Chip Input — focus-within state + animation */
+
+.chip-input-container:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+.chip-remove:hover {
+  opacity: 1;
+}
+
+.chip-input::placeholder {
+  color: var(--color-gray-400);
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

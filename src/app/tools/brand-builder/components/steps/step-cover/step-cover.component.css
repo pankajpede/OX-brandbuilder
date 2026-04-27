@@ -1,0 +1,31 @@
+/* Step Cover — Tailwind-complementary component CSS */
+/* Only styles that require complex selectors or can't be Tailwind classes */
+
+.template-card.is-selected {
+  border-color: var(--color-primary);
+  border-width: 2.5px;
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.10), var(--shadow-md);
+}
+
+.template-card.is-blurred {
+  opacity: 0.38;
+  filter: blur(0.5px);
+  transform: none;
+  box-shadow: none;
+}
+
+.template-card.is-blurred:hover {
+  opacity: 0.65;
+  filter: none;
+  transform: translateY(-1px);
+}
+
+.template-thumb:hover .thumb-overlay {
+  opacity: 1;
+}
+
+.btn-use:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}

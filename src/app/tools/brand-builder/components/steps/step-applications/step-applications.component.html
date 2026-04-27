@@ -1,0 +1,57 @@
+<div class="px-4 py-0 animate-fade-in-up">
+  <!-- Standardized Section Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-2 mb-1">
+      <h2 class="text-xl font-bold text-gray-900">Printable Assets</h2>
+      <div class="info-trigger"
+        data-tooltip="Manage your business cards, letterheads, and other stationery. These assets reflect your brand's physical presence and should follow strict quality standards.">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </div>
+    </div>
+    <p class="text-sm text-gray-500">Configure your brand's physical and digital print-ready collateral.</p>
+  </div>
+
+  <div class="section-header">
+    <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-0">Printable Collateral</span>
+    <div class="info-trigger"
+      data-tooltip="Preview how the identity translates to physical and digital printables. Select which variants to include in your final guide.">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+      </svg>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="flex flex-col gap-4">
+    <div class="form-group">
+      <label class="form-label">Business Card (Print-Ready)</label>
+      <app-file-upload label="Upload business card design" [value]="form.get('businessCard')?.value"
+        (fileChange)="onFileChange('businessCard', $event)"></app-file-upload>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Letterhead (Print-Ready)</label>
+      <app-file-upload label="Upload letterhead design" [value]="form.get('letterhead')?.value"
+        (fileChange)="onFileChange('letterhead', $event)"></app-file-upload>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Additional Printables / Assets</label>
+      <app-file-upload label="Upload additional printable assets" [value]="form.get('socialMedia')?.value"
+        (fileChange)="onFileChange('socialMedia', $event)"></app-file-upload>
+    </div>
+
+    <!-- Layout Selection Moved to Bottom -->
+    <div class="mt-8 pt-8 border-t border-gray-100">
+      <app-variant-selector [variants]="variants" [selectedVariant]="selectedVariant"
+        (variantSelected)="onVariantChange($event)"></app-variant-selector>
+    </div>
+  </form>
+</div>

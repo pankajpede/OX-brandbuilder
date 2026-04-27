@@ -1,0 +1,218 @@
+<div class="p-5 flex flex-col colors-page">
+  <div class="mb-5 page-header shrink-0">
+    <span class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase page-number">03</span>
+    <h2 class="text-[22px] font-extrabold mt-1 mb-0.5 tracking-tight page-title capitalize">{{ variantTitle }}</h2>
+    <p class="text-[10px] text-gray-500 page-subtitle">Brand colors with usage guidelines</p>
+  </div>
+
+  <div class="pr-2">
+    @for (cat of categories; track cat) {
+    <div class="mb-8">
+      <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-4 flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary/40"></span>
+        {{ cat }} SYSTEM
+      </h3>
+
+      <!-- List View / Tonal Palette (Auto-switches if numTones > 5) -->
+      @if (data.colors.variant === 'tonal-palette' || (data.colors.variant === 'cards' && data.colors.numTones > 5)) {
+      <div class="flex flex-col gap-8 mb-10">
+        @for (color of getColorsByCategory(cat); track color.hex) {
+        <div class="flex flex-col gap-2 animate-fade-in-up">
+          <!-- Key Color Label & Swatch -->
+          <div class="flex items-end justify-between px-1">
+            <div class="flex flex-col gap-1.5">
+              <span class="text-[10px] font-bold text-gray-900 uppercase tracking-tight">{{ color.name || 'Untitled' }}
+                Key Color</span>
+              <div class="w-32 h-14 rounded-lg shadow-sm border border-gray-100 cursor-pointer relative group/swatch"
+                [style.background]="color.hex" (click)="copyToClipboard(color.hex)"
+                [attr.data-tooltip]="'Click to copy: ' + color.hex">
+              </div>
+            </div>
+
+            <button (click)="copyAllTones(color)"
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-100 hover:bg-gray-100 transition-colors text-[9px] font-bold text-gray-600"
+              data-tooltip="Copy all shades to clipboard">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copy All Tones
+            </button>
+          </div>
+
+          <!-- Tonal Palette Scale -->
+          <div class="flex items-stretch h-14 rounded-lg border border-gray-100 shadow-sm bg-white">
+            <!-- 100 (White) -->
+            <div
+              class="flex-1 flex flex-col items-center justify-center bg-white min-w-[32px] cursor-pointer relative group/tone rounded-l-lg border-r border-gray-50"
+              (click)="copyToClipboard('#FFFFFF')" data-tooltip="#FFFFFF">
+              <span class="text-[8px] font-mono font-black text-gray-900">100</span>
+              
+              @if (copiedHex === '#FFFFFF') {
+              <div class="absolute inset-0 flex items-center justify-center bg-black/20 animate-fade-in pointer-events-none rounded-l-lg">
+                <span class="text-[6px] font-black text-white uppercase tracking-tighter">Copied</span>
+              </div>
+              }
+            </div>
+
+            @for (tone of (color.tones || []); track tone; let i = $index) {
+            <div
+              class="flex-1 flex flex-col items-center justify-center transition-all hover:flex-[1.5] relative group/tone cursor-pointer"
+              [style.background]="tone" (click)="copyToClipboard(tone)" [attr.data-tooltip]="tone.toUpperCase()">
+
+              <!-- Percentage Label -->
+              <span class="text-[8px] font-mono font-black transition-opacity"
+                [style.color]="isLightColor(tone) ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)'">
+                {{ getToneLabel(i, color.tones?.length || 0) }}
+              </span>
+
+              <!-- Subtle Overlay on hover -->
+              <div
+                class="absolute inset-0 bg-black/5 opacity-0 group-hover/tone:opacity-100 transition-opacity pointer-events-none">
+              </div>
+
+              <!-- Copied Feedback Overlay -->
+              @if (copiedHex === tone) {
+              <div class="absolute inset-0 flex items-center justify-center bg-black/20 animate-fade-in pointer-events-none">
+                <span class="text-[6px] font-black text-white uppercase tracking-tighter">Copied</span>
+              </div>
+              }
+            </div>
+            }
+
+            <!-- 0 (Black) -->
+            <div
+              class="flex-1 flex flex-col items-center justify-center bg-black min-w-[32px] cursor-pointer relative group/tone rounded-r-lg"
+              (click)="copyToClipboard('#000000')" data-tooltip="#000000">
+              <span class="text-[8px] font-mono font-black text-white">0</span>
+
+              @if (copiedHex === '#000000') {
+              <div class="absolute inset-0 flex items-center justify-center bg-white/20 animate-fade-in pointer-events-none rounded-r-lg">
+                <span class="text-[6px] font-black text-white uppercase tracking-tighter">Copied</span>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Original Card View (Only if numTones <= 5) -->
+      @if (data.colors.variant === 'cards' && data.colors.numTones <= 5) { <div class="grid grid-cols-2 gap-4 mb-8">
+        @for (color of getColorsByCategory(cat); track color.hex) {
+        <div
+          class="bg-white rounded-2xl border border-gray-100 shadow-sm group hover:shadow-md transition-all duration-300">
+          <div class="h-20 w-full rounded-t-2xl relative cursor-pointer group/main tooltip-large"
+            [style.background]="color.hex" (click)="copyToClipboard(color.hex)" [attr.data-tooltip]="color.hex">
+            <div class="absolute bottom-3 left-3 flex flex-col">
+              <span class="text-[10px] font-black uppercase tracking-widest"
+                [style.color]="isLightColor(color.hex) ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.8)'">
+                {{ color.name || 'Untitled' }}
+              </span>
+              <span class="text-[8px] font-mono font-bold"
+                [style.color]="isLightColor(color.hex) ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.6)'">
+                {{ color.hex }}
+              </span>
+            </div>
+
+            @if (copiedHex === color.hex) {
+            <div class="absolute inset-0 flex items-center justify-center bg-black/20 animate-fade-in pointer-events-none rounded-t-2xl">
+              <span class="text-[10px] font-black text-white uppercase tracking-widest">Copied</span>
+            </div>
+            }
+          </div>
+          <div class="p-3 flex gap-1.5">
+            @for (tone of (color.tones || []); track tone) {
+            <div
+              class="flex-1 h-8 rounded-lg shadow-inner border border-black/5 cursor-pointer relative group/cardtone tooltip-card"
+              [style.background]="tone" (click)="copyToClipboard(tone)" [attr.data-tooltip]="tone.toUpperCase()">
+              
+              @if (copiedHex === tone) {
+              <div class="absolute inset-0 flex items-center justify-center bg-black/20 animate-fade-in pointer-events-none rounded-lg">
+                <span class="text-[6px] font-black text-white uppercase tracking-tighter">Copied</span>
+              </div>
+              }
+            </div>
+            }
+          </div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- 3. Strips View -->
+    @if (data.colors.variant === 'strips') {
+    <div class="flex flex-col gap-3 mb-4">
+      @for (color of getColorsByCategory(cat); track color.hex) {
+      <div class="flex flex-col rounded-xl overflow-hidden border border-gray-100 bg-gray-50/30 group">
+        <div class="h-10 px-4 flex justify-between items-center" [style.background]="color.hex">
+          <div class="flex flex-col">
+            <span class="text-[10px] font-black tracking-tight"
+              [style.color]="isLightColor(color.hex) ? '#000' : '#fff'">{{ color.name || 'Untitled' }}</span>
+            <span class="text-[6px] font-mono font-bold opacity-60"
+              [style.color]="isLightColor(color.hex) ? '#000' : '#fff'">{{ color.token }}</span>
+          </div>
+          <div class="flex gap-4 text-[7px] font-mono font-bold"
+            [style.color]="isLightColor(color.hex) ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)'">
+            <span class="bg-black/5 px-1.5 py-0.5 rounded">{{ color.hex }}</span>
+            <span>RGB {{ color.rgb }}</span>
+            <span>CMYK {{ color.cmyk }}</span>
+          </div>
+        </div>
+        <div class="flex h-10">
+          @for (tone of (color.tones || []); track tone) {
+          <div class="flex-1 flex items-center justify-center transition-all hover:flex-[1.4]"
+            [style.background]="tone">
+            <span class="text-[7px] font-mono font-bold"
+              [style.color]="isLightColor(tone) ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.4)'">
+              {{ tone }}
+            </span>
+          </div>
+          }
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- 4. Palette Grid View -->
+    @if (data.colors.variant === 'palette-grid') {
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      @for (color of getColorsByCategory(cat); track color.hex; let i = $index) {
+      <div
+        class="rounded-xl p-4 flex flex-col justify-between min-h-[110px] relative overflow-hidden shadow-sm border border-black/5 group"
+        [style.background]="color.hex">
+
+        <div class="flex justify-between items-start" [style.color]="isLightColor(color.hex) ? '#000' : '#fff'">
+          <div class="flex flex-col">
+            <span class="text-[11px] font-black tracking-tight uppercase">{{ color.name || 'Untitled' }}</span>
+            <span class="text-[7px] font-mono font-bold opacity-70">{{ color.token }}</span>
+          </div>
+          <div class="flex flex-col items-end opacity-50 text-[6px] font-bold uppercase tracking-wider">
+            <span>{{ color.hex }}</span>
+            <span>RGB {{ color.rgb }}</span>
+          </div>
+        </div>
+
+        <div class="flex gap-1.5 mt-4">
+          @for (tone of (color.tones || []); track tone) {
+          <div
+            class="w-8 h-8 rounded-lg shadow-sm border border-black/10 flex items-center justify-center p-0.5 transition-transform group-hover:scale-105"
+            [style.background]="tone">
+            <span class="text-[6px] font-mono font-bold text-center"
+              [style.color]="isLightColor(tone) ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.4)'">
+              {{ tone.substring(1) }}
+            </span>
+          </div>
+          }
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>
+</div>

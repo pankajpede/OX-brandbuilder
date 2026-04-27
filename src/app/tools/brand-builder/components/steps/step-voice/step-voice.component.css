@@ -1,0 +1,17 @@
+/* Step Voice — colored textarea border states */
+
+.dos-textarea {
+  border-color: #dcfce7;
+}
+.dos-textarea:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+.donts-textarea {
+  border-color: #fee2e2;
+}
+.donts-textarea:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}

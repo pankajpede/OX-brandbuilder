@@ -1,0 +1,182 @@
+/* Preview Layout — PDF-precise pixel styles */
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.layout-page {
+
+    // padding: 8%; height: 100%; display: flex; flex-direction: column; }
+    .page-header {
+        margin-bottom: 16px;
+    }
+
+    .page-number {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: #a3a3a3;
+    }
+
+    .page-title {
+        font-size: 22px;
+        font-weight: 800;
+        margin: 4px 0;
+    }
+
+    .page-subtitle {
+        font-size: 10px;
+        color: #737373;
+    }
+
+    .layout-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .section-label {
+        display: block;
+        font-size: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #a3a3a3;
+        margin-bottom: 6px;
+    }
+
+    /* Grid */
+    .grid-display {
+        display: flex;
+        gap: 3px;
+        height: 40px;
+    }
+
+    .grid-column {
+        flex: 1;
+    }
+
+    .grid-fill {
+        height: 100%;
+        background: #f0f0f0;
+        border-radius: 2px;
+    }
+
+    /* Spacing */
+    .spacing-display {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+    }
+
+    .spacing-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .spacing-box {
+        background: #000;
+        border-radius: 2px;
+    }
+
+    .spacing-label {
+        font-size: 7px;
+        font-weight: 600;
+        color: #525252;
+    }
+
+    .spacing-value {
+        font-size: 7px;
+        color: #a3a3a3;
+        font-family: monospace;
+    }
+
+    /* Radius */
+    .radius-display {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .radius-demo {
+        width: 50px;
+        height: 50px;
+        border: 2px solid #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .radius-demo.large {
+        width: 80px;
+        height: 50px;
+    }
+
+    .radius-demo.button-demo {
+        width: 70px;
+        height: 28px;
+        background: #000;
+        color: #fff;
+    }
+
+    .radius-text {
+        font-size: 8px;
+        font-weight: 600;
+    }
+
+    /* Example Layout */
+    .example-layout {
+        flex: 1;
+        border: 1px solid #e5e5e5;
+        overflow: hidden;
+        min-height: 60px;
+    }
+
+    .example-header {
+        background: #000;
+        padding: 8px 12px;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .mock-nav {
+        width: 30px;
+        height: 6px;
+        background: #333;
+        border-radius: 3px;
+    }
+
+    .mock-nav.short {
+        width: 20px;
+    }
+
+    .example-body {
+        display: flex;
+        gap: 6px;
+        padding: 6px;
+        flex: 1;
+    }
+
+    .mock-sidebar {
+        width: 30%;
+        background: #f5f5f5;
+        min-height: 40px;
+    }
+
+    .mock-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .mock-block {
+        flex: 1;
+        background: #f5f5f5;
+        min-height: 16px;
+    }

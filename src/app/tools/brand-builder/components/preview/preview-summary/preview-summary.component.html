@@ -1,0 +1,14 @@
+<div class="w-full h-full bg-white preview-summary-wrap">
+  @if (data.summary.variant) {
+    <app-summary-template
+      [templateId]="data.summary.variant"
+      [data]="data"
+    ></app-summary-template>
+  } @else {
+    <!-- No template selected yet -->
+    <div class="w-full h-full flex flex-col items-center justify-center gap-4 text-center p-12 bg-gray-50 text-gray-400 no-template">
+      <div class="text-6xl font-black opacity-10 no-template-icon">◈</div>
+      <p class="text-sm font-bold no-template-text leading-relaxed">Select a summary template<br>from the Summary step</p>
+    </div>
+  }
+</div>

@@ -1,0 +1,129 @@
+<div class="px-4 py-0 animate-fade-in-up">
+  <!-- Standardized Section Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-2 mb-1">
+      <h2 class="text-xl font-bold text-gray-900">Color System</h2>
+      <div class="info-trigger"
+        data-tooltip="Colors build immediate brand recognition. Each color will automatically generate 5 shades for consistent design usage.">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </div>
+    </div>
+    <p class="text-sm text-gray-500">Define your primary and secondary color palettes.</p>
+  </div>
+
+  <!-- Tonal Scale Control -->
+  <div class="mb-8 p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+    <div class="flex flex-col gap-1">
+      <span class="text-sm font-bold text-gray-900">Tonal Scale Configuration</span>
+      <span class="text-[10px] text-gray-500">Adjust the number of generated tones per color (default: 9).</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <button type="button" (click)="updateNumTones(-2)" 
+              class="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+      <span class="text-sm font-black w-6 text-center">{{ brandService.getSection('colors').numTones }}</span>
+      <button type="button" (click)="updateNumTones(2)" 
+              class="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-0">Color Palette</span>
+    <div class="info-trigger"
+      data-tooltip="Define your primary and secondary brand colors. These will be used for all brand assets, UI elements, and document styling.">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+      </svg>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="flex flex-col gap-8 pb-10">
+    @for (cat of categories; track cat) {
+      <div class="category-section">
+        <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
+          <h3 class="text-sm font-black uppercase tracking-[0.15em] text-gray-900 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            {{ cat }} Colors
+          </h3>
+          <button type="button" class="text-[10px] font-bold text-gray-400 hover:text-primary uppercase tracking-widest transition-colors"
+                  (click)="addColor(cat)">
+            + Add {{ cat }}
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          @for (item of getColorsByCategory(cat); track item.index) {
+          <div [formGroupName]="'palette'">
+            <div [formGroupName]="item.index"
+              class="flex items-start gap-4 p-4 border border-border rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 color-card group">
+              
+              <div class="flex flex-col items-center gap-2 pt-1">
+                <input type="color" [formControlName]="'hex'" class="color-picker cursor-picker border-none p-0 w-8 h-8 rounded-full overflow-hidden" (input)="onHexChange(item.index)" />
+              </div>
+    
+              <div class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+                <div class="form-group">
+                  <label class="form-label text-[10px]">Title</label>
+                  <input class="form-input" formControlName="name" placeholder="e.g. Primary Dark" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label text-[10px]">Token</label>
+                  <input class="form-input font-mono text-gray-500 bg-gray-50/50" formControlName="token" placeholder="--color-token-500" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label text-[10px]">Hex Code</label>
+                  <input class="form-input font-mono" formControlName="hex" placeholder="#000000" (input)="onHexChange(item.index)" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label text-[10px]">RGB Components</label>
+                  <input class="form-input font-mono" formControlName="rgb" placeholder="0, 0, 0" (input)="onRgbChange(item.index)" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label text-[10px]">CMYK Breakdown</label>
+                  <input class="form-input font-mono" formControlName="cmyk" placeholder="0, 0, 0, 0" (input)="onCmykChange(item.index)" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label text-[10px]">Functional Usage</label>
+                  <input class="form-input" formControlName="usage" placeholder="e.g. Success feedback" />
+                </div>
+              </div>
+    
+              <button type="button"
+                class="flex items-center justify-center w-8 h-8 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all duration-200 shrink-0 opacity-0 group-hover:opacity-100"
+                (click)="removeColor(item.index)" aria-label="Remove color">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Layout Selection Moved to Bottom -->
+    <div class="mt-4 pt-8 border-t border-gray-100">
+      <app-variant-selector [variants]="variants" [selectedVariant]="selectedVariant"
+        (variantSelected)="onVariantChange($event)"></app-variant-selector>
+    </div>
+  </form>
+</div>

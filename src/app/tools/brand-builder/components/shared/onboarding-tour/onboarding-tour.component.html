@@ -1,0 +1,65 @@
+<div class="onboarding-tour-container" [class.show]="show">
+  <!-- Backdrop with Spotlight Effect -->
+  <div class="tour-backdrop" (click)="skip()">
+    <svg class="tour-mask" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <defs>
+        <mask id="spotlight-mask">
+          <rect width="100%" height="100%" fill="white" />
+          @if (targetRect) {
+          <rect [attr.x]="targetRect.left - 8" [attr.y]="targetRect.top - 8" [attr.width]="targetRect.width + 16"
+            [attr.height]="targetRect.height + 16" rx="8" fill="black" />
+          }
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill="rgba(0, 0, 0, 0.4)" mask="url(#spotlight-mask)" />
+    </svg>
+  </div>
+
+  <!-- Tour Popover -->
+  <div #popover class="tour-popover bg-white rounded-2xl shadow-2xl p-6 border border-gray-100 animate-tour-popover"
+    [ngStyle]="popoverStyle">
+
+    <!-- Header with Step Indicator -->
+    <div class="flex items-center justify-between mb-4">
+      <span
+        class="px-2.5 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-extrabold uppercase tracking-widest">
+        Step {{ currentIndex + 1 }} / {{ steps.length }}
+      </span>
+      <!-- <button (click)="skip()" class="text-gray-400 hover:text-black transition-colors" title="Skip Tour">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button> -->
+    </div>
+
+    <!-- Content -->
+    <h3 class="text-xl font-black tracking-tight text-gray-900 mb-2">{{ steps[currentIndex].title }}</h3>
+    <p class="text-gray-500 text-sm leading-relaxed mb-8 max-w-[280px]">
+      {{ steps[currentIndex].content }}
+    </p>
+
+    <!-- Navigation Buttons -->
+    <div class="flex items-center justify-between gap-4">
+      <button (click)="skip()"
+        class="text-xs font-bold text-gray-400 hover:text-gray-600 transition-all uppercase tracking-widest">
+        Skip Tour
+      </button>
+
+      <div class="flex gap-2">
+        @if (currentIndex > 0) {
+        <button (click)="prev()" class="btn btn-outline btn-sm px-4">
+          Back
+        </button>
+        }
+        <button (click)="next()" class="btn btn-primary btn-sm px-4 shadow-lg shadow-primary/20">
+          {{ currentIndex === steps.length - 1 ? 'Finish' : 'Next' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Triangle Pointer -->
+    @if (steps[currentIndex].position !== 'center' && targetRect) {
+    <div class="popover-arrow" [class]="'arrow-' + steps[currentIndex].position"></div>
+    }
+  </div>
+</div>

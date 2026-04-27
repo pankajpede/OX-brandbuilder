@@ -1,0 +1,258 @@
+/* Preview Logo — PDF-precise pixel styles */
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.logo-page {
+    /* padding: 8%; */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-header {
+    margin-bottom: 24px;
+}
+
+.page-number {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #a3a3a3;
+    text-transform: uppercase;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 4px 0;
+    letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+    font-size: 10px;
+    color: #737373;
+}
+
+/* Grid variant */
+.logo-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.logo-cell {
+    background: #f5f5f5;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    position: relative;
+}
+
+.logo-cell img {
+    max-width: 70%;
+    max-height: 50px;
+    object-fit: contain;
+}
+
+.logo-cell.dark-cell {
+    background: #000;
+}
+
+.cell-label {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #a3a3a3;
+}
+
+.cell-label.light-label {
+    color: #666;
+}
+
+.cell-placeholder {
+    font-size: 11px;
+    color: #ccc;
+}
+
+.cell-placeholder.light-label {
+    color: #666;
+}
+
+.logo-specs {
+    display: flex;
+    gap: 24px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.spec {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.spec-label {
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #a3a3a3;
+}
+
+.spec-value {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Centered variant */
+.logo-centered {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-hero {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.logo-hero img {
+    max-width: 50%;
+    max-height: 80px;
+    object-fit: contain;
+}
+
+.hero-placeholder {
+    font-size: 28px;
+    font-weight: 900;
+    color: #e5e5e5;
+}
+
+.logo-variations {
+    display: flex;
+    gap: 8px;
+}
+
+.variation {
+    flex: 1;
+    background: #f5f5f5;
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.variation img {
+    max-width: 50px;
+    max-height: 30px;
+    object-fit: contain;
+}
+
+.variation span {
+    font-size: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #a3a3a3;
+}
+
+.variation.dark-var {
+    background: #000;
+}
+
+.variation.dark-var span {
+    color: #666;
+}
+
+/* Documented variant */
+.logo-documented {
+    flex: 1;
+    display: flex;
+    gap: 16px;
+}
+
+.doc-main {
+    flex: 1.5;
+    background: #f5f5f5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.doc-logo-area {
+    position: relative;
+}
+
+.doc-logo-area img {
+    max-width: 120px;
+    max-height: 80px;
+    object-fit: contain;
+}
+
+.doc-placeholder {
+    font-size: 24px;
+    font-weight: 900;
+    color: #d4d4d4;
+}
+
+.doc-measurement {
+    position: absolute;
+    font-size: 7px;
+    color: #a3a3a3;
+    font-family: monospace;
+}
+
+.doc-measurement.top {
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.doc-measurement.right {
+    right: -28px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.doc-sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.doc-info h4 {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+}
+
+.doc-info p {
+    font-size: 8px;
+    color: #737373;
+    line-height: 1.5;
+}

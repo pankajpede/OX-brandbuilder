@@ -1,0 +1,271 @@
+@if (brandData) {
+<!-- ── Stepper ─────────────────────────────────────── -->
+<app-stepper [steps]="steps" [currentStep]="currentStep" (stepChange)="onStepChange($event)"
+  id="stepper-tour"></app-stepper>
+
+<!-- ── Main Content ────────────────────────────────── -->
+<main class="flex-1 flex overflow-hidden relative z-10">
+  <!-- Left Panel: Form -->
+  <div
+    class="border-r border-gray-100 flex flex-col overflow-hidden transition-all duration-300 relative z-10 max-lg:w-full"
+    [ngClass]="{
+        'w-1/2': viewMode === 'split' && currentStep > 0,
+        'w-full': viewMode === 'form-full' || currentStep === 0,
+        'w-0 opacity-0 border-r-0': viewMode === 'preview-full' && currentStep > 0,
+        'max-lg:hidden': (showPreviewMobile || viewMode === 'preview-full') && currentStep > 0
+      }">
+    <div class="flex-1 overflow-y-auto overflow-x-hidden" #formScrollContainer>
+      @switch (currentStep) {
+      @case (0) { <app-step-selection /> }
+      @case (1) { <app-step-cover /> }
+      @case (2) { <app-step-summary /> }
+      @case (3) { <app-step-logo /> }
+      @case (4) { <app-step-colors /> }
+      @case (5) { <app-step-typography /> }
+      @case (6) { <app-step-iconography /> }
+      @case (7) { <app-step-review /> }
+      }
+    </div>
+  </div>
+
+  <!-- Right Panel: Preview -->
+  @if (currentStep > 0) {
+  <div class="overflow-hidden transition-all duration-300 bg-gray-50 max-lg:w-full" [ngClass]="{
+        'w-1/2': viewMode === 'split',
+        'w-full': viewMode === 'preview-full',
+        'w-0 opacity-0 pointer-events-none': viewMode === 'form-full',
+        'max-lg:hidden': !showPreviewMobile || viewMode === 'form-full'
+      }" id="preview-tour">
+    <app-preview-container [data]="brandData" [currentStep]="currentStep"></app-preview-container>
+  </div>
+  }
+</main>
+
+<!-- ── Mobile Toggle ───────────────────────────────── -->
+@if (currentStep > 0) {
+<button
+  class="lg:hidden fixed bottom-24 right-4 z-20 flex items-center gap-2 px-5 py-3 bg-black text-white rounded-full font-bold shadow-xl hover:scale-105 active:scale-95 transition-all"
+  (click)="toggleMobileView()" id="mobile-toggle-btn">
+  @if (showPreviewMobile) {
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+    stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="7" height="7" />
+    <rect x="14" y="3" width="7" height="7" />
+    <rect x="14" y="14" width="7" height="7" />
+    <rect x="3" y="14" width="7" height="7" />
+  </svg>
+  Form
+  } @else {
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+    stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+    <line x1="8" y1="21" x2="16" y2="21" />
+    <line x1="12" y1="17" x2="12" y2="21" />
+  </svg>
+  Preview
+  }
+</button>
+}
+
+<!-- ── Footer Navigation ───────────────────────────── -->
+<footer class="flex items-center justify-between px-6 py-2 border-t border-gray-100 bg-white shrink-0">
+  <div class="flex items-center gap-1">
+    <button
+      class="inline-flex items-center gap-2 p-0 text-sm font-bold text-gray-300 hover:text-black rounded-full transition-all active:scale-95 tooltip-up"
+      (click)="startTour()" data-tooltip="How it works?">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+    </button>
+
+    <div class="w-px h-6 bg-gray-300 mx-2"></div>
+
+    <div class="flex items-center bg-gray-50 rounded-full p-1 border border-gray-100">
+      <button class="p-2 rounded-full transition-all active:scale-90 tooltip-up"
+        [ngClass]="viewMode === 'form-full' ? 'bg-white shadow-sm text-black' : 'text-gray-400 hover:text-gray-600'"
+        (click)="setViewMode('form-full')" data-tooltip="System Panel Only">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <line x1="9" y1="3" x2="9" y2="21" />
+        </svg>
+      </button>
+      <button class="p-2 rounded-full transition-all active:scale-90 tooltip-up"
+        [ngClass]="viewMode === 'split' ? 'bg-white shadow-sm text-black' : 'text-gray-400 hover:text-gray-600'"
+        (click)="setViewMode('split')" data-tooltip="Split View">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <line x1="12" y1="3" x2="12" y2="21" />
+        </svg>
+      </button>
+      <button class="p-2 rounded-full transition-all active:scale-90 tooltip-up"
+        [ngClass]="viewMode === 'preview-full' ? 'bg-white shadow-sm text-black' : 'text-gray-400 hover:text-gray-600'"
+        (click)="setViewMode('preview-full')" data-tooltip="Full Preview Mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <line x1="15" y1="3" x2="15" y2="21" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="w-px h-6 bg-gray-300 mx-2"></div>
+
+    <button
+      class="inline-flex items-center gap-2 p-3 text-sm font-bold text-gray-400 hover:text-error rounded-full transition-all active:scale-95 tooltip-up"
+      (click)="onReset()" data-tooltip="Reset">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 4v6h-6" />
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+      </svg>
+    </button>
+
+  </div>
+
+  <div class="flex items-center gap-4">
+    <div class="flex flex-col items-end min-w-[120px] hidden sm:flex" (mouseenter)="showProgressPopover = true"
+      (mouseleave)="showProgressPopover = false">
+      <div class="flex items-center justify-between w-full mb-1">
+        <span class="text-[12px] font-semibold text-gray-900 leading-none">Overall Progress</span>
+
+      </div>
+      <div class="w-full h-1.5 bg-gray-100 rounded-full cursor-help relative group">
+        <div class="h-full rounded-full transition-all duration-500 ease-out" [class]="brandService.progressColorClass"
+          [style.width.%]="brandService.completionPercentage"></div>
+
+        <!-- ── Progress Popover ────────────────────────── -->
+        @if (showProgressPopover) {
+        <div
+          class="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 z-[500] animate-[scaleUp_0.2s_ease-out]">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[11px] font-black uppercase tracking-widest text-gray-400">System Checklist</span>
+            <span class="text-xs font-bold"
+              [class]="brandService.completionPercentage === 100 ? 'text-success' : 'text-black'">
+              {{ brandService.completionPercentage }}%
+            </span>
+          </div>
+
+          <div class="space-y-3">
+            @for (field of brandService.pendingFields; track field.id) {
+            <div
+              class="flex items-start gap-3 group/item cursor-pointer p-2 -m-2 rounded-xl hover:bg-gray-50 transition-colors"
+              (click)="jumpToField(field)">
+              <div
+                class="w-4 h-4 rounded-full border-2 border-error/30 flex items-center justify-center shrink-0 mt-0.5 group-hover/item:border-error transition-colors">
+                <div class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></div>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-bold text-gray-700 leading-none mb-1 group-hover/item:text-black">{{
+                  field.label }}</span>
+                <span class="text-[10px] text-gray-400">{{ field.required ? 'Required Foundation' : 'Recommended'
+                  }}</span>
+              </div>
+            </div>
+            }
+
+            @if (brandService.isAllDataValid) {
+            <div class="text-center py-2">
+              <div
+                class="w-10 h-10 bg-success/10 text-success rounded-full flex items-center justify-center mx-auto mb-2 text-lg">
+                ✓</div>
+              <p class="text-[11px] font-bold text-success uppercase tracking-widest">System Ready</p>
+            </div>
+            }
+          </div>
+
+          <!-- Arrow -->
+          <div class="absolute top-full left-1/2 -translate-x-1/2 border-[8px] border-transparent border-t-white"></div>
+        </div>
+        }
+      </div>
+
+      <span class="text-[10px] font-black leading-none mt-1.5"
+        [class.text-error]="brandService.completionPercentage < 60"
+        [class.text-amber-500]="brandService.completionPercentage >= 60 && brandService.completionPercentage < 100"
+        [class.text-success]="brandService.completionPercentage === 100">
+        {{ brandService.completionPercentage }}%
+      </span>
+    </div>
+    <div class="w-px h-6 bg-gray-300 mx-2"></div>
+    <button
+      class="inline-flex items-center gap-2 p-3 text-sm font-bold bg-gray-100 text-gray-400 hover:text-black rounded-full transition-all active:scale-95 disabled:opacity-10 disabled:pointer-events-none hover:bg-gray-200"
+      [disabled]="currentStep === 0" (click)="onBack()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12" />
+        <polyline points="12 19 5 12 12 5" />
+      </svg>
+    </button>
+
+    @if (currentStep < steps.length - 1) { <button
+      class="inline-flex items-center gap-2 p-3 text-sm font-black uppercase tracking-widest text-white bg-black rounded-full transition-all shadow-md active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+      [class.animate-wave]="isCurrentStepValid" [disabled]="!isCurrentStepValid" (click)="onNext()" id="next-step-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
+      </button>
+      }
+
+      <div class="w-px h-6 bg-gray-300 mx-2"></div>
+      <button
+        class="group flex items-center gap-3 px-4 py-2 bg-black text-white rounded-full transition-all active:scale-95 disabled:grayscale disabled:opacity-20 disabled:pointer-events-none shadow-md hover:bg-gray-800 tooltip-up"
+        [disabled]="!brandService.isAllDataValid" (click)="onExport()"
+        [attr.data-tooltip]="brandService.isAllDataValid ? 'Export JSON Foundations' : 'Complete all required steps to export'">
+        <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+        </div>
+        <span class="text-[10px] font-black uppercase tracking-widest pr-1">Export JSON</span>
+      </button>
+  </div>
+</footer>
+
+<!-- ── Reset Confirmation Modal ────────────────────── -->
+@if (showResetModal) {
+<div class="fixed inset-0 z-[200] flex items-center justify-center p-6 animate-[fadeIn_0.2s_ease-out]">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeResetModal()"></div>
+  <div
+    class="bg-white rounded-[2rem] w-full max-w-md overflow-hidden relative z-10 shadow-2xl animate-[scaleUp_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">
+    <div class="p-8 text-center">
+      <div class="w-16 h-16 bg-error/10 text-error rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
+        ⚠
+      </div>
+      <h3 class="text-2xl font-black mb-2">Reset Design System?</h3>
+      <p class="text-gray-500 text-sm leading-relaxed">
+        This will permanently delete all your current progress. This action cannot be undone.
+      </p>
+    </div>
+
+    <div class="flex items-stretch bg-gray-50/50">
+      <button type="button"
+        class="flex-1 px-6 py-5 text-sm font-bold text-gray-500 hover:text-error transition-all border-r border-gray-100 hover:bg-white"
+        (click)="confirmReset()">
+        Yes, Reset
+      </button>
+      <button type="button"
+        class="flex-1 px-6 py-5 text-sm font-black uppercase tracking-widest text-white bg-black hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+        (click)="closeResetModal()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- ── Onboarding Tour ─────────────────────────────── -->
+@if (isTourActive) {
+<app-onboarding-tour [steps]="tourSteps" (completed)="onTourComplete()"
+  (skipped)="onTourComplete()"></app-onboarding-tour>
+}
+}

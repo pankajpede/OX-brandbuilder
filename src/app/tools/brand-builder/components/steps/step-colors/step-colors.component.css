@@ -1,0 +1,16 @@
+/* Step Colors — Tailwind-complementary component CSS */
+
+.color-picker {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+.color-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.color-remove:hover {
+  background: var(--color-gray-100);
+  color: var(--color-error);
+}

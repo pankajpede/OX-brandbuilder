@@ -1,0 +1,65 @@
+<div class="font-selector-wrapper">
+  <label class="form-label" *ngIf="label">{{ label }}</label>
+  
+  <div class="selector-trigger" (click)="toggleDropdown()" [class.is-open]="isOpen">
+    <div class="selected-info">
+      <span *ngIf="selectedValue" class="font-display-name" [style.font-family]="selectedValue">
+        {{ selectedValue }}
+      </span>
+      <span *ngIf="!selectedValue" class="text-gray-400 text-sm">
+        {{ placeholder }}
+      </span>
+    </div>
+    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m6 9 6 6 6-6"/>
+    </svg>
+  </div>
+
+  <div class="selector-dropdown" *ngIf="isOpen">
+    <!-- Search & Filters -->
+    <div class="dropdown-header">
+      <div class="search-box">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input type="text" 
+               class="font-search-input" 
+               [placeholder]="placeholder" 
+               [(ngModel)]="searchQuery" 
+               (ngModelChange)="onSearchChange()">
+      </div>
+      
+      <div class="category-filters">
+        <button *ngFor="let cat of categories" 
+                class="cat-badge" 
+                [class.active]="selectedCategory === cat.id"
+                (click)="setCategory(cat.id)">
+          {{ cat.label }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Font List -->
+    <div class="font-list no-scrollbar">
+      <div *ngFor="let font of filteredFonts" 
+           class="font-item" 
+           [class.selected]="selectedValue === font.family"
+           (click)="selectFont(font)">
+        <div class="font-info">
+          <span class="family-name">{{ font.family }}</span>
+          <span class="category-tag">{{ font.category }}</span>
+        </div>
+        <div class="font-preview" [style.font-family]="font.family">
+          Sentence preview of {{ font.family }}
+        </div>
+      </div>
+      
+      <div *ngIf="filteredFonts.length === 0" class="empty-state">
+        No fonts found
+      </div>
+    </div>
+  </div>
+
+  <!-- Backdrop to close -->
+  <div class="dropdown-backdrop" *ngIf="isOpen" (click)="toggleDropdown()"></div>
+</div>

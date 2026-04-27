@@ -1,0 +1,9 @@
+/* Step Layout — radius option active state */
+
+.radius-option:hover {
+  border-color: var(--color-gray-400);
+}
+
+.radius-option.active {
+  border-color: var(--color-primary);
+}

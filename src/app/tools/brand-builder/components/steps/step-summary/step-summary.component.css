@@ -1,0 +1,53 @@
+/* Step Summary — Tailwind-complementary component CSS */
+
+.toggle-card:hover {
+  background: var(--color-gray-100);
+  border-color: var(--color-gray-300);
+}
+
+.toggle-card.is-enabled {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.toggle-card.is-enabled:hover {
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+.toggle-card input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.template-card.is-selected {
+  border-color: var(--color-primary);
+  border-width: 2.5px;
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.10), var(--shadow-md);
+}
+
+.template-card.is-blurred {
+  opacity: 0.38;
+  filter: blur(0.5px);
+  transform: none;
+  box-shadow: none;
+}
+
+.template-card.is-blurred:hover {
+  opacity: 0.65;
+  filter: none;
+  transform: translateY(-1px);
+}
+
+.template-thumb:hover .thumb-overlay {
+  opacity: 1;
+}
+
+.btn-use:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}

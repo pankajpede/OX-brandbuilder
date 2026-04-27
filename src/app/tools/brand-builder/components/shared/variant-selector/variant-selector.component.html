@@ -1,0 +1,35 @@
+<div class="mb-8">
+  <div class="mb-4">
+    <h4 class="text-sm font-bold text-gray-900 mb-1">Choose a Layout Variant</h4>
+    <p class="text-[11px] font-medium text-gray-400">Select how this section will appear in your brand book</p>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 variant-grid">
+    @for (variant of variants; track variant.id) {
+    <button
+      class="flex flex-col gap-0 border-2 border-border rounded-xl overflow-hidden bg-white text-left transition-all duration-300 group hover:border-gray-400 hover:-translate-y-1 hover:shadow-md variant-card"
+      [class.selected]="variant.id === selectedVariant" (click)="selectVariant(variant.id)" type="button">
+      <div class="relative aspect-video bg-gray-50 overflow-hidden border-b border-border variant-thumbnail">
+        <img [src]="variant.thumbnail" [alt]="variant.name"
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        @if (variant.id === selectedVariant) {
+        <div
+          class="absolute top-2 right-2 bg-primary/10 flex items-center justify-center animate-[scaleIn_0.2s_ease-out] variant-check">
+          <div class="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center shadow-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+        </div>
+        }
+      </div>
+      <div class="p-4 bg-white flex flex-col gap-1 variant-info">
+        <span class="text-xs font-bold text-gray-900 variant-name transition-colors group-hover:text-primary">{{
+          variant.name }}</span>
+        <span class="text-[10px] font-medium text-gray-400 leading-relaxed variant-desc">{{ variant.description
+          }}</span>
+      </div>
+    </button>
+    }
+  </div>
+</div>

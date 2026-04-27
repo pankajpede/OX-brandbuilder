@@ -1,0 +1,7 @@
+/* Step Imagery — add image button hover */
+
+.add-image-btn:hover {
+  border-color: var(--color-gray-400);
+  background: var(--color-gray-50);
+  color: var(--color-gray-500);
+}

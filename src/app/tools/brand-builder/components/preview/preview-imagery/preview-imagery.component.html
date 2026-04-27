@@ -1,0 +1,30 @@
+<div class="p-5 flex flex-col imagery-page">
+  <div class="mb-4 page-header">
+    <span class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase page-number">05</span>
+    <h2 class="text-[22px] font-extrabold mt-1 mb-0.5 tracking-tight page-title">Imagery</h2>
+    <p class="text-[10px] text-gray-500 page-subtitle">Visual style and photography guidelines</p>
+  </div>
+
+  @if (data.imagery.style) {
+  <div class="mb-4 p-3 bg-gray-50 rounded-lg style-description border border-gray-100">
+    <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 mb-1 block style-label">Style
+      Direction</span>
+    <p class="text-[10px] text-gray-600 leading-relaxed style-text">{{ data.imagery.style }}</p>
+  </div>
+  }
+
+  <div class="flex-1 gap-1.5 imagery-display" [class]="'layout-' + data.imagery.variant">
+    @for (sample of filteredSamples; track $index; let i = $index) {
+    <div class="rounded-lg overflow-hidden bg-gray-100 image-slot" [class]="'slot-' + i">
+      <img [src]="sample" alt="Brand imagery sample" class="w-full h-full object-cover" />
+    </div>
+    }
+
+    @if (filteredSamples.length === 0) {
+    <div class="grid-column-1/-1 flex flex-col items-center justify-center gap-2 text-gray-300 py-12 no-images">
+      <span class="text-3xl no-images-icon">▣</span>
+      <span class="text-[11px] font-bold">Upload sample images to preview</span>
+    </div>
+    }
+  </div>
+</div>

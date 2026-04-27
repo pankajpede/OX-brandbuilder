@@ -1,0 +1,47 @@
+<div class="p-5 flex flex-col gap-4 voice-page">
+  <div class="mb-1 page-header">
+    <span class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase page-number">06</span>
+    <h2 class="text-[22px] font-extrabold mt-1 mb-0.5 tracking-tight page-title">Brand Voice</h2>
+    <p class="text-[10px] text-gray-500 page-subtitle">Tone, messaging, and writing guidelines</p>
+  </div>
+
+  @if (data.voice.tone.length > 0) {
+  <div class="tone-section">
+    <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 mb-2 block section-label">Tone of
+      Voice</span>
+    <div class="flex flex-wrap gap-1.5 tone-grid">
+      @for (t of data.voice.tone; track t) {
+      <div
+        class="px-3 py-1 bg-black text-white rounded-full text-[9px] font-bold letter-spacing-wide tracking-tight tone-chip">
+        {{ t }}</div>
+      }
+    </div>
+  </div>
+  }
+
+  <div class="flex gap-2 flex-1 dos-donts-section">
+    <div class="flex-1 rounded-lg p-3 bg-success/5 border-l-[3px] border-success dos-panel">
+      <span class="text-[9px] font-black text-success mb-2 block uppercase tracking-wider panel-title dos-title">✓ We
+        Do</span>
+      <p class="text-[8px] text-gray-600 leading-relaxed whitespace-pre-line panel-content">{{ data.voice.dos || 'Define
+        what your brand voice does...' }}</p>
+    </div>
+    <div class="flex-1 rounded-lg p-3 bg-error/5 border-l-[3px] border-error donts-panel shadow-sm">
+      <span class="text-[9px] font-black text-error mb-2 block uppercase tracking-wider panel-title donts-title">✗ We
+        Don't</span>
+      <p class="text-[8px] text-gray-600 leading-relaxed whitespace-pre-line panel-content">{{ data.voice.donts ||
+        'Define what your brand voice avoids...' }}</p>
+    </div>
+  </div>
+
+  @if (data.voice.examples) {
+  <div class="p-3 bg-gray-50 rounded-lg examples-section border border-gray-100">
+    <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 mb-2 block section-label">Writing
+      Examples</span>
+    <div class="examples-content">
+      <p class="text-[9px] text-gray-600 leading-relaxed font-italic italic whitespace-pre-line">{{ data.voice.examples
+        }}</p>
+    </div>
+  </div>
+  }
+</div>

@@ -1,0 +1,118 @@
+.stepper {
+  position: relative;
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.stepper-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-gray-200);
+}
+
+.stepper-progress {
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stepper-steps {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.stepper-step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--color-gray-50);
+  }
+
+  &.active {
+    background: var(--color-primary);
+    color: var(--color-white);
+
+    .step-indicator {
+      background: var(--color-white);
+      color: var(--color-primary);
+    }
+  }
+
+  &.completed {
+    cursor: pointer;
+
+    .step-indicator {
+      background: var(--color-primary);
+      color: var(--color-white);
+    }
+  }
+
+  &.upcoming {
+    opacity: 0.5;
+  }
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  flex-shrink: 0;
+  background: var(--color-gray-100);
+  color: var(--color-gray-600);
+  transition: all var(--transition-base);
+}
+
+.step-label {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.step-title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.step-subtitle {
+  font-size: var(--text-xs);
+  opacity: 0.6;
+  line-height: 1.2;
+}
+
+@media (max-width: 1024px) {
+  .step-label {
+    display: none;
+  }
+
+  .stepper-step {
+    padding: var(--space-2);
+  }
+
+  .stepper-steps {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,70 @@
+<div class="px-4 py-0 animate-fade-in-up">
+  <!-- Standardized Section Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-2 mb-1">
+      <h2 class="text-xl font-bold text-gray-900">Imagery Style</h2>
+      <div class="info-trigger"
+        data-tooltip="Visual imagery creates emotional connection. Describe the mood, lighting, and style of images to be used across the brand.">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </div>
+    </div>
+    <p class="text-sm text-gray-500">Define photography and illustration principles.</p>
+  </div>
+
+  <div class="section-header">
+    <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-0">Visual Imagery</span>
+    <div class="info-trigger"
+      data-tooltip="Define photography, illustration, and iconography style. This helps maintain a cohesive visual language and mood for the brand.">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+      </svg>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="flex flex-col gap-4">
+    <div class="form-group">
+      <label class="form-label">Image Style Description</label>
+      <textarea class="form-textarea" formControlName="style"
+        placeholder="Describe the photographic or illustrative style. E.g. 'Clean, bright product photography with soft shadows and neutral backgrounds'"
+        rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Sample Images</label>
+      <span class="form-hint">Upload up to 6 images that represent your brand's visual style</span>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        @for (sample of samples; track $index; let i = $index) {
+        <div>
+          <app-file-upload [label]="'Image ' + (i + 1)" [value]="sample"
+            (fileChange)="onSampleChange(i, $event)"></app-file-upload>
+        </div>
+        }
+        @if (samples.length < 6) { <button type="button"
+          class="flex flex-col items-center justify-center gap-2 min-h-[120px] border-2 border-dashed border-border rounded-lg text-gray-400 cursor-pointer transition-all duration-200 add-image-btn"
+          (click)="addSampleSlot()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          <span class="text-xs font-semibold">Add Image</span>
+          </button>
+          }
+      </div>
+    </div>
+
+    <!-- Layout Selection Moved to Bottom -->
+    <div class="mt-8 pt-8 border-t border-gray-100">
+      <app-variant-selector [variants]="variants" [selectedVariant]="selectedVariant"
+        (variantSelected)="onVariantChange($event)"></app-variant-selector>
+    </div>
+  </form>
+</div>

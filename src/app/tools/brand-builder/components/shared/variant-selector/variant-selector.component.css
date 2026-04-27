@@ -1,0 +1,23 @@
+/* Variant Selector — selected state + animation */
+
+.variant-card:hover {
+  border-color: var(--color-gray-400);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.variant-card.selected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .variant-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

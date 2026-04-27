@@ -1,0 +1,40 @@
+/* Stepper — component CSS for complex states */
+
+.stepper-steps::-webkit-scrollbar {
+  display: none;
+}
+
+.stepper-step:hover {
+  background: var(--color-gray-50);
+}
+
+.stepper-step.active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.stepper-step.active .step-indicator {
+  background: #fff;
+  color: var(--color-primary);
+}
+
+.stepper-step.completed .step-indicator {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.stepper-step.upcoming {
+  opacity: 0.5;
+}
+
+@media (max-width: 1024px) {
+  .step-label {
+    display: none;
+  }
+  .stepper-step {
+    padding: 0.5rem;
+  }
+  .stepper-steps {
+    justify-content: center;
+  }
+}

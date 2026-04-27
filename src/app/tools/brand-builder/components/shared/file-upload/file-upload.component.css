@@ -1,0 +1,22 @@
+/* File Upload — complex states */
+
+.upload-zone:hover {
+  border-color: var(--color-gray-400);
+  background: var(--color-gray-50);
+}
+
+.upload-zone.drag-over {
+  border-color: var(--color-primary);
+  background: var(--color-gray-50);
+  border-style: solid;
+}
+
+.upload-zone.has-file {
+  border-style: solid;
+  border-color: var(--color-border);
+  padding: 0.5rem;
+}
+
+.upload-preview:hover .upload-remove {
+  opacity: 1;
+}
