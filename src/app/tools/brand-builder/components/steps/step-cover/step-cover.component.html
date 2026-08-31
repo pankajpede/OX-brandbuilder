@@ -51,13 +51,9 @@
     </div>
 
     <div class="form-group">
-      <label class="form-label">Brand Description <span class="text-red-500">*</span></label>
+      <label class="form-label">Brand Description</label>
       <textarea class="form-textarea" formControlName="description"
-        placeholder="Describe what your brand does and stands for..." rows="2"
-        [class.is-invalid]="isInvalid('description')"></textarea>
-      @if (isInvalid('description')) {
-      <span class="form-error">Description is required</span>
-      }
+        placeholder="Describe what your brand does and stands for..." rows="2"></textarea>
     </div>
 
     <div class="form-group" id="industry-select">

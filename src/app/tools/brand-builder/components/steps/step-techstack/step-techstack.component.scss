@@ -1,0 +1,9 @@
+.info-trigger {
+  cursor: help;
+  color: #9ca3af;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #000;
+  }
+}

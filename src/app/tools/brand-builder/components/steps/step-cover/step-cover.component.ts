@@ -81,7 +81,7 @@ export class StepCoverComponent implements OnInit, OnDestroy, AfterViewInit {
     this.form = this.fb.group({
       name:        [data.name,        Validators.required],
       tagline:     [data.tagline],
-      description: [data.description, Validators.required],
+      description: [data.description],
       industry:    [data.industry    || []],
       audience:    [data.audience    || []],
       personality: [data.personality || []],

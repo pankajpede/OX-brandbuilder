@@ -1,0 +1,134 @@
+<div id="pdf-export-container" class="fixed -left-[9999px] -top-[9999px] z-[-9999]">
+  <!-- ── Page 1: Dedicated Cover Page (800px x 565px A4 Landscape Aspect Ratio) ── -->
+  <div 
+    class="pdf-page pdf-cover-page relative w-[800px] h-[565px] bg-white overflow-hidden rounded-none shadow-none"
+    [style.--color-primary]="primaryColor"
+    [style.--primary]="primaryColor"
+    style="width: 800px; height: 565px;">
+    <app-cover-template
+      [templateId]="coverTemplateId"
+      [data]="brandData"
+    ></app-cover-template>
+  </div>
+
+  <!-- ── Page 2: Dedicated Summary & Index Page (800px x 565px A4 Landscape Aspect Ratio) ── -->
+  <div 
+    class="pdf-page pdf-summary-page relative w-[800px] h-[565px] bg-white overflow-hidden rounded-none shadow-none"
+    [style.--color-primary]="primaryColor"
+    [style.--primary]="primaryColor"
+    style="width: 800px; height: 565px;">
+    
+    @switch (summaryTemplateId) {
+      @case ('s2') {
+        <!-- S2: Bold Left Accent Dedicated PDF Template -->
+        <div class="w-full h-full bg-white text-black p-0 flex relative overflow-hidden">
+          <div class="w-[20%] h-full shrink-0" [style.backgroundColor]="primaryColor"></div>
+          <div class="flex-1 p-8 pb-6 flex flex-col justify-between min-w-0 h-full box-border">
+            <div class="mb-3 shrink-0">
+              <span class="text-[9px] font-black uppercase tracking-widest mb-1 block leading-normal whitespace-nowrap shrink-0" [style.color]="primaryColor">Brand Guidelines</span>
+              <h1 class="text-3xl font-black tracking-tighter text-gray-900 uppercase leading-none pb-1">Index</h1>
+            </div>
+            
+            <div class="flex-1 flex flex-col justify-start gap-3.5 min-h-0 py-1">
+              @for (item of tocItems; track item.num) {
+                <div class="flex items-center gap-3.5 group py-0.5">
+                  <div 
+                    class="w-6 h-6 rounded-full text-[10px] font-black text-white shrink-0 text-center shadow-xs"
+                    [style.backgroundColor]="primaryColor"
+                    style="width: 24px; height: 24px; line-height: 24px; text-align: center; border-radius: 50%; display: block; padding: 0; margin: 0; flex-shrink: 0;">
+                    {{ item.num }}
+                  </div>
+                  <div class="flex flex-col min-w-0 flex-1 gap-0">
+                    <span class="text-xs font-black text-gray-900 uppercase tracking-tight leading-none mb-0.5 whitespace-nowrap shrink-0">{{ item.label }}</span>
+                    <span class="text-[9.5px] font-medium text-gray-500 italic leading-tight pt-0 whitespace-nowrap shrink-0">{{ item.sub }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="flex justify-between items-center pt-3 pb-2 border-t border-gray-100 mt-auto shrink-0">
+              <span class="text-[10px] font-black uppercase text-gray-900 whitespace-nowrap shrink-0 leading-normal">{{ brandName }}</span>
+              <span class="text-[9px] font-bold font-mono text-gray-400 leading-normal whitespace-nowrap shrink-0">{{ currentYear }}</span>
+            </div>
+          </div>
+        </div>
+      }
+      @default {
+        <app-summary-template
+          [templateId]="summaryTemplateId"
+          [data]="brandData"
+        ></app-summary-template>
+      }
+    }
+  </div>
+
+  <!-- ── Page 3+: Dedicated Logo System Pages (800px x 565px A4 Landscape Aspect Ratio) ── -->
+  @for (chunk of logoPageChunks; track chunk.pageNum) {
+    <div 
+      class="pdf-page pdf-logo-page relative w-[800px] h-[565px] bg-white overflow-hidden rounded-none shadow-none"
+      [style.--color-primary]="primaryColor"
+      [style.--primary]="primaryColor"
+      style="width: 800px; height: 565px;">
+      <app-preview-logo 
+        [data]="brandData" 
+        [itemsOverride]="chunk.items" 
+        [pageNumber]="chunk.pageNum">
+      </app-preview-logo>
+    </div>
+  }
+
+  <!-- ── Page 4+: Dedicated Color System Pages (800px x 565px A4 Landscape Aspect Ratio) ── -->
+  @for (chunk of colorPageChunks; track chunk.pageNum) {
+    <div 
+      class="pdf-page pdf-colors-page relative w-[800px] h-[565px] bg-white overflow-hidden rounded-none shadow-none"
+      [style.--color-primary]="primaryColor"
+      [style.--primary]="primaryColor"
+      style="width: 800px; height: 565px;">
+      <app-preview-colors 
+        [data]="brandData" 
+        [paletteOverride]="chunk.items" 
+        [pageNumber]="chunk.pageNum"
+        [isPdfView]="true">
+      </app-preview-colors>
+    </div>
+  }
+
+  <!-- ── Page 5+: Dedicated Typography System Page (800px x 565px A4 Landscape Aspect Ratio) ── -->
+  <div 
+    class="pdf-page pdf-typography-page relative w-[800px] h-[565px] bg-white overflow-hidden rounded-none shadow-none"
+    [style.--color-primary]="primaryColor"
+    [style.--primary]="primaryColor"
+    style="width: 800px; height: 565px;">
+    <app-preview-typography 
+      [data]="brandData"
+      [pageNumber]="typographyPageNum"
+      [isPdfView]="true">
+    </app-preview-typography>
+  </div>
+
+  <!-- ── Page 6+: Dedicated Iconography System Page (800px x 565px A4 Landscape Aspect Ratio) ── -->
+  <div 
+    class="pdf-page pdf-iconography-page relative w-[800px] h-[565px] bg-white overflow-hidden rounded-none shadow-none"
+    [style.--color-primary]="primaryColor"
+    [style.--primary]="primaryColor"
+    style="width: 800px; height: 565px;">
+    <app-preview-iconography 
+      [data]="brandData"
+      [pageNumber]="iconographyPageNum"
+      [isPdfView]="true">
+    </app-preview-iconography>
+  </div>
+
+  <!-- ── Page 7+: Dedicated Tech Stack & Architecture Page (800px x 565px A4 Landscape Aspect Ratio) ── -->
+  <div 
+    class="pdf-page pdf-techstack-page relative w-[800px] h-[565px] bg-white overflow-hidden rounded-none shadow-none"
+    [style.--color-primary]="primaryColor"
+    [style.--primary]="primaryColor"
+    style="width: 800px; height: 565px;">
+    <app-preview-techstack 
+      [data]="brandData"
+      [pageNumber]="techstackPageNum"
+      [isPdfView]="true">
+    </app-preview-techstack>
+  </div>
+</div>

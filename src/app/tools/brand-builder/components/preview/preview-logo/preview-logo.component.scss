@@ -39,43 +39,45 @@
 .logo-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
 .logo-cell {
-  background: #f5f5f5;
-  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 10px 8px;
   position: relative;
 
   img {
-    max-width: 70%;
-    max-height: 50px;
+    max-width: 75%;
+    max-height: 36px;
     object-fit: contain;
   }
 
   &.dark-cell {
     background: #000;
+    border-color: #111827;
   }
 }
 
 .cell-label {
-  position: absolute;
-  top: 8px;
-  left: 10px;
-  font-size: 8px;
-  font-weight: 700;
+  width: 100%;
+  text-align: center;
+  font-size: 7.5px;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #a3a3a3;
+  color: #111827;
+  margin-bottom: 4px;
 
   &.light-label {
-    color: #666;
+    color: #ffffff;
   }
 }
 
@@ -127,7 +129,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fafafa;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
   margin-bottom: 12px;
 
@@ -151,8 +154,9 @@
 
 .variation {
   flex: 1;
-  background: #f5f5f5;
-  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   padding: 12px;
   text-align: center;
   display: flex;
@@ -167,18 +171,19 @@
   }
 
   span {
-    font-size: 8px;
-    font-weight: 600;
+    font-size: 7.5px;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #a3a3a3;
+    color: #111827;
   }
 
   &.dark-var {
     background: #000;
+    border-color: #111827;
 
     span {
-      color: #666;
+      color: #ffffff;
     }
   }
 }
@@ -187,12 +192,14 @@
 .logo-documented {
   flex: 1;
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .doc-main {
-  flex: 1.5;
-  background: #f5f5f5;
+  flex: 1.4;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -204,8 +211,8 @@
   position: relative;
 
   img {
-    max-width: 120px;
-    max-height: 80px;
+    max-width: 100px;
+    max-height: 50px;
     object-fit: contain;
   }
 }

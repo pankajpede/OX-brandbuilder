@@ -1,7 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, Router, NavigationEnd } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
+import { BrandService } from './tools/brand-builder/services/brand.service';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ import { filter } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   private router = inject(Router);
+  public brandService = inject(BrandService);
   activeTool: string | null = null;
 
   ngOnInit() {
@@ -32,5 +34,9 @@ export class AppComponent implements OnInit {
 
   goHome() {
     this.router.navigate(['/']);
+  }
+
+  goToBuilderType() {
+    this.brandService.goToStep(0);
   }
 }

@@ -1,111 +1,194 @@
-<div class="p-5 flex flex-col applications-page">
-  <div class="flex flex-col mb-4">
-    <span class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-0.5">Section 07</span>
-    <h2 class="text-[22px] font-extrabold mt-1 mb-0.5 tracking-tight page-title">Printable Assets</h2>
-    <div class="h-1 w-10 bg-black mt-2"></div>
-  </div>
+@if (isPdfView) {
+  <div class="px-5 py-4 bg-white flex flex-col justify-start gap-2.5 box-border applications-page text-gray-900 overflow-hidden">
+    <!-- Standard Page Header -->
+    <div class="mb-1 page-header shrink-0">
+      <span class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase page-number">{{ pageNumber }}</span>
+      <h2 class="text-[20px] font-extrabold mt-0.5 mb-0.5 tracking-tight page-title capitalize">Brand Applications</h2>
+      <p class="text-[10px] text-gray-500 page-subtitle leading-normal pb-0.5 overflow-visible">Printable assets, business cards, letterhead & digital collateral</p>
+    </div>
 
-  <div class="flex-1 apps-display" [class]="'layout-' + data.printables.variant">
-    @if (data.printables.variant === 'professional') {
-    <div class="grid grid-cols-2 gap-6 h-full items-center">
-      <!-- Business Card -->
-      <div class="flex flex-col gap-2">
-        <div class="aspect-[1.75/1] bg-gray-50 border border-gray-100 rounded shadow-sm overflow-hidden flex items-center justify-center">
-          @if (data.printables.businessCard) {
-          <img [src]="data.printables.businessCard" alt="Business Card" class="w-full h-full object-cover" />
+    <!-- PDF Brand Applications Layout -->
+    <div class="grid grid-cols-2 gap-4 py-1 overflow-visible">
+      <!-- Business Card Asset -->
+      <div class="flex flex-col gap-2 bg-gray-50/60 p-3 rounded-xl border border-gray-100 overflow-visible">
+        <span class="text-[8px] font-mono font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-0.5 leading-normal overflow-visible">Business Card • 3.5" x 2"</span>
+        <div class="aspect-[1.75/1] bg-white border border-gray-200 rounded-lg shadow-xs overflow-hidden flex items-center justify-center relative">
+          @if (data?.printables?.businessCard) {
+            <img [src]="data.printables.businessCard" alt="Business Card" class="w-full h-full object-cover" />
           } @else {
-          <div class="flex flex-col items-center opacity-20">
-            <span class="text-4xl font-thin">📇</span>
-            <span class="text-[10px] font-bold uppercase mt-2">Business Card</span>
+            <div class="flex flex-col items-center justify-center p-3 text-center">
+              <span class="text-2xl font-black text-primary/40 mb-1">📇</span>
+              <span class="text-[10px] font-black uppercase text-gray-800 tracking-tight leading-normal overflow-visible">{{ data?.cover?.name || 'Brand Name' }}</span>
+              <span class="text-[7.5px] font-mono text-gray-400 mt-0.5 leading-normal overflow-visible">Identity Card Template</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Letterhead Asset -->
+      <div class="flex flex-col gap-2 bg-gray-50/60 p-3 rounded-xl border border-gray-100 overflow-visible">
+        <span class="text-[8px] font-mono font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-0.5 leading-normal overflow-visible">Official Letterhead • A4</span>
+        <div class="h-[145px] bg-white border border-gray-200 rounded-lg shadow-xs overflow-hidden flex items-center justify-center relative p-3">
+          @if (data?.printables?.letterhead) {
+            <img [src]="data.printables.letterhead" alt="Letterhead" class="w-full h-full object-cover" />
+          } @else {
+            <div class="flex flex-col items-start justify-between w-full h-full border border-gray-100 p-2.5 rounded bg-gray-50/30">
+              <div class="flex items-center justify-between w-full border-b border-gray-100 pb-1">
+                <span class="text-[9px] font-black uppercase tracking-tight text-gray-900 leading-normal overflow-visible">{{ data?.cover?.name || 'Brand Name' }}</span>
+                <span class="text-[7px] font-mono text-gray-400 leading-normal overflow-visible">DOCUMENT HEAD</span>
+              </div>
+              <div class="flex flex-col gap-1 w-full my-1">
+                <div class="h-1 bg-gray-200 rounded-full w-full"></div>
+                <div class="h-1 bg-gray-100 rounded-full w-4/5"></div>
+                <div class="h-1 bg-gray-100 rounded-full w-3/4"></div>
+              </div>
+              <div class="flex items-center justify-between w-full border-t border-gray-100 pt-1 text-[6.5px] text-gray-400 font-mono">
+                <span>www.brand.com</span>
+                <span>CONFIDENTIAL</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="p-5 flex flex-col applications-page">
+    <div class="flex flex-col mb-4">
+      <span class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-0.5">Section 07</span>
+      <h2 class="text-[22px] font-extrabold mt-1 mb-0.5 tracking-tight page-title">Printable & Brand Assets</h2>
+      <div class="h-1 w-10 bg-black mt-2"></div>
+    </div>
+
+    <div class="flex-1 apps-display" [class]="'layout-' + data?.printables?.variant">
+      @if (data?.printables?.variant === 'professional' || !data?.printables?.variant) {
+      <div class="grid grid-cols-2 gap-6 h-full items-center">
+        <!-- Business Card -->
+        <div class="flex flex-col gap-2 transition-all duration-300 cursor-pointer"
+          [class.opacity-35]="activeHoveredIndex !== null && activeHoveredIndex !== 0"
+          [class.scale-[1.02]="activeHoveredIndex === 0"
+          (mouseenter)="setHoveredIndex(0)"
+          (mouseleave)="setHoveredIndex(null)">
+          <div class="aspect-[1.75/1] bg-gray-50 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden flex items-center justify-center">
+            @if (data?.printables?.businessCard) {
+            <img [src]="data.printables.businessCard" alt="Business Card" class="w-full h-full object-cover" />
+            } @else {
+            <div class="flex flex-col items-center opacity-30">
+              <span class="text-4xl font-thin">📇</span>
+              <span class="text-[10px] font-bold uppercase mt-2">Business Card</span>
+            </div>
+            }
+          </div>
+          <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest text-center">Standard 3.5" x 2"</span>
+        </div>
+
+        <!-- Letterhead -->
+        <div class="flex flex-col gap-2 transition-all duration-300 cursor-pointer"
+          [class.opacity-35]="activeHoveredIndex !== null && activeHoveredIndex !== 1"
+          [class.scale-[1.02]="activeHoveredIndex === 1"
+          (mouseenter)="setHoveredIndex(1)"
+          (mouseleave)="setHoveredIndex(null)">
+          <div class="aspect-[1/1.4] bg-gray-50 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden flex items-center justify-center">
+            @if (data?.printables?.letterhead) {
+            <img [src]="data.printables.letterhead" alt="Letterhead" class="w-full h-full object-cover" />
+            } @else {
+            <div class="flex flex-col items-center opacity-30">
+              <span class="text-4xl font-thin">📄</span>
+              <span class="text-[10px] font-bold uppercase mt-2">Letterhead</span>
+            </div>
+            }
+          </div>
+          <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest text-center">A4 / US Letter</span>
+        </div>
+      </div>
+      }
+
+      @if (data?.printables?.variant === 'digital') {
+      <div class="grid grid-cols-1 gap-6 h-full">
+        <div class="flex-1 bg-gray-50 border border-gray-100 rounded-xl p-4 flex flex-col gap-4 transition-all duration-300 cursor-pointer"
+          [class.opacity-35]="activeHoveredIndex !== null && activeHoveredIndex !== 2"
+          [class.scale-[1.01]="activeHoveredIndex === 2"
+          (mouseenter)="setHoveredIndex(2)"
+          (mouseleave)="setHoveredIndex(null)">
+          <!-- Social Header -->
+          <div class="h-20 bg-gray-100 rounded relative overflow-hidden flex items-center justify-center">
+            @if (data?.printables?.socialMedia) {
+            <img [src]="data.printables.socialMedia" alt="Social" class="w-full h-full object-cover" />
+            } @else {
+            <span class="text-xs font-bold text-gray-300">Social Media Template</span>
+            }
+          </div>
+          <div class="grid grid-cols-4 gap-2">
+            <div class="aspect-square bg-gray-200 rounded"></div>
+            <div class="aspect-square bg-gray-200 rounded"></div>
+            <div class="aspect-square bg-gray-200 rounded"></div>
+            <div class="aspect-square bg-gray-200 rounded"></div>
+          </div>
+        </div>
+        <div class="h-24 flex items-center gap-4 transition-all duration-300 cursor-pointer"
+          [class.opacity-35]="activeHoveredIndex !== null && activeHoveredIndex !== 3"
+          [class.scale-[1.01]="activeHoveredIndex === 3"
+          (mouseenter)="setHoveredIndex(3)"
+          (mouseleave)="setHoveredIndex(null)">
+          <div class="w-20 h-full bg-gray-50 border border-gray-100 rounded flex items-center justify-center">
+            @if (data?.printables?.businessCard) {
+            <img [src]="data.printables.businessCard" alt="Card" class="w-full h-full object-cover" />
+            } @else {
+            <span class="text-[10px] text-gray-300">Avatar</span>
+            }
+          </div>
+          <div class="flex-1 flex flex-col gap-2">
+            <div class="h-3 w-1/3 bg-gray-200 rounded-full"></div>
+            <div class="h-2 w-2/3 bg-gray-100 rounded-full"></div>
+            <div class="h-2 w-1/2 bg-gray-100 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+      }
+
+      @if (data?.printables?.variant === 'showcase') {
+      <div class="relative h-full flex items-center justify-center p-8">
+        <div class="relative w-full aspect-video bg-gray-900 rounded-xl shadow-2xl overflow-hidden transition-all duration-300"
+          [class.opacity-35]="activeHoveredIndex !== null && activeHoveredIndex !== 4"
+          (mouseenter)="setHoveredIndex(4)"
+          (mouseleave)="setHoveredIndex(null)">
+          @if (data?.printables?.letterhead) {
+          <img [src]="data.printables.letterhead" alt="Letterhead" class="w-full h-full object-cover opacity-80" />
+          } @else {
+          <div class="w-full h-full flex items-center justify-center opacity-30 text-white">
+            <span class="text-lg font-bold">Brand Showcase</span>
           </div>
           }
-        </div>
-        <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest text-center">Standard 3.5" x 2"</span>
-      </div>
-
-      <!-- Letterhead -->
-      <div class="flex flex-col gap-2">
-        <div class="aspect-[1/1.4] bg-gray-50 border border-gray-100 rounded shadow-sm overflow-hidden flex items-center justify-center">
-          @if (data.printables.letterhead) {
-          <img [src]="data.printables.letterhead" alt="Letterhead" class="w-full h-full object-cover" />
-          } @else {
-          <div class="flex flex-col items-center opacity-20">
-            <span class="text-4xl font-thin">📄</span>
-            <span class="text-[10px] font-bold uppercase mt-2">Letterhead</span>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8">
+            <h3 class="text-white font-bold text-xl">{{ data?.cover?.name }}</h3>
+            <p class="text-white/60 text-sm">{{ data?.cover?.tagline }}</p>
           </div>
-          }
         </div>
-        <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest text-center">A4 / US Letter</span>
+        <!-- Floating items -->
+        <div class="absolute top-4 right-4 w-32 aspect-[1.75/1] bg-white rounded shadow-xl rotate-12 flex items-center justify-center overflow-hidden border border-gray-100 transition-all duration-300 cursor-pointer"
+          [class.opacity-35]="activeHoveredIndex !== null && activeHoveredIndex !== 5"
+          [class.scale-105]="activeHoveredIndex === 5"
+          (mouseenter)="setHoveredIndex(5)"
+          (mouseleave)="setHoveredIndex(null)">
+            @if (data?.printables?.businessCard) {
+            <img [src]="data.printables.businessCard" alt="Card" class="w-full h-full object-cover" />
+            } @else {
+            <span class="text-[10px] font-bold">CARD</span>
+            }
+        </div>
+        <div class="absolute bottom-4 left-4 w-24 aspect-square bg-white rounded shadow-xl -rotate-12 flex items-center justify-center overflow-hidden border border-white p-2 transition-all duration-300 cursor-pointer"
+          [class.opacity-35]="activeHoveredIndex !== null && activeHoveredIndex !== 6"
+          [class.scale-105]="activeHoveredIndex === 6"
+          (mouseenter)="setHoveredIndex(6)"
+          (mouseleave)="setHoveredIndex(null)">
+            @if (data?.printables?.socialMedia) {
+            <img [src]="data.printables.socialMedia" alt="Social" class="w-full h-full object-cover" />
+            } @else {
+            <div class="w-full h-full bg-gray-100 rounded"></div>
+            }
+        </div>
       </div>
+      }
     </div>
-    }
-
-    @if (data.printables.variant === 'digital') {
-    <div class="grid grid-cols-1 gap-6 h-full">
-      <div class="flex-1 bg-gray-50 border border-gray-100 rounded p-4 flex flex-col gap-4">
-        <!-- Social Header -->
-        <div class="h-20 bg-gray-100 rounded relative overflow-hidden flex items-center justify-center">
-          @if (data.printables.socialMedia) {
-          <img [src]="data.printables.socialMedia" alt="Social" class="w-full h-full object-cover" />
-          } @else {
-          <span class="text-xs font-bold text-gray-300">Social Media Template</span>
-          }
-        </div>
-        <div class="grid grid-cols-4 gap-2">
-          <div class="aspect-square bg-gray-200 rounded"></div>
-          <div class="aspect-square bg-gray-200 rounded"></div>
-          <div class="aspect-square bg-gray-200 rounded"></div>
-          <div class="aspect-square bg-gray-200 rounded"></div>
-        </div>
-      </div>
-      <div class="h-24 flex items-center gap-4">
-        <div class="w-20 h-full bg-gray-50 border border-gray-100 rounded flex items-center justify-center">
-           @if (data.printables.businessCard) {
-          <img [src]="data.printables.businessCard" alt="Card" class="w-full h-full object-cover" />
-          } @else {
-          <span class="text-[10px] text-gray-300">Avatar</span>
-          }
-        </div>
-        <div class="flex-1 flex flex-col gap-2">
-          <div class="h-3 w-1/3 bg-gray-200 rounded-full"></div>
-          <div class="h-2 w-2/3 bg-gray-100 rounded-full"></div>
-          <div class="h-2 w-1/2 bg-gray-100 rounded-full"></div>
-        </div>
-      </div>
-    </div>
-    }
-
-    @if (data.printables.variant === 'showcase') {
-    <div class="relative h-full flex items-center justify-center p-8">
-      <div class="relative w-full aspect-video bg-gray-900 rounded-xl shadow-2xl overflow-hidden">
-        @if (data.printables.letterhead) {
-        <img [src]="data.printables.letterhead" alt="Letterhead" class="w-full h-full object-cover opacity-80" />
-        } @else {
-        <div class="w-full h-full flex items-center justify-center opacity-30 text-white">
-          <span class="text-lg font-bold">Brand Showcase</span>
-        </div>
-        }
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8">
-          <h3 class="text-white font-bold text-xl">{{ data.cover.name }}</h3>
-          <p class="text-white/60 text-sm">{{ data.cover.tagline }}</p>
-        </div>
-      </div>
-      <!-- Floating items -->
-      <div class="absolute top-4 right-4 w-32 aspect-[1.75/1] bg-white rounded shadow-xl rotate-12 flex items-center justify-center overflow-hidden border border-gray-100">
-          @if (data.printables.businessCard) {
-          <img [src]="data.printables.businessCard" alt="Card" class="w-full h-full object-cover" />
-          } @else {
-          <span class="text-[10px] font-bold">CARD</span>
-          }
-      </div>
-      <div class="absolute bottom-4 left-4 w-24 aspect-square bg-white rounded shadow-xl -rotate-12 flex items-center justify-center overflow-hidden border border-white p-2">
-          @if (data.printables.socialMedia) {
-          <img [src]="data.printables.socialMedia" alt="Social" class="w-full h-full object-cover" />
-          } @else {
-          <div class="w-full h-full bg-gray-100 rounded"></div>
-          }
-      </div>
-    </div>
-    }
   </div>
-</div>
+}

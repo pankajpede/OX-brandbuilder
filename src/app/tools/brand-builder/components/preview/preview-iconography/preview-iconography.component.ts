@@ -12,6 +12,8 @@ import { VariantService } from '../../../services/variant.service';
 })
 export class PreviewIconographyComponent {
   @Input() data!: BrandData;
+  @Input() pageNumber: string = '06';
+  @Input() isPdfView: boolean = false;
 
   constructor(private variantService: VariantService) {}
 
@@ -20,18 +22,26 @@ export class PreviewIconographyComponent {
   }
 
   get libraryName(): string {
-    const libId = this.data.iconography.library;
+    const libId = this.data?.iconography?.library;
     const lib = this.variantService.getVariant('iconography', libId);
     return lib ? lib.name : 'Selected Library';
   }
 
+  get iconographyVersion(): string {
+    return this.data?.iconography?.version || '1.0.0';
+  }
+
+  get iconographyLibrary(): string {
+    return this.data?.iconography?.library || '';
+  }
+
   get sampleIcons(): string[] {
-    return this.data.iconography.samples || [];
+    return this.data?.iconography?.samples || [];
   }
 
   getIconPath(iconName: string, style: string): string {
-    const library = this.data.iconography.library;
-    const version = this.data.iconography.version;
+    const library = this.data?.iconography?.library;
+    const version = this.data?.iconography?.version;
     const normalizedStyle = style.toLowerCase();
     
     if (library === 'feather') {
@@ -47,14 +57,11 @@ export class PreviewIconographyComponent {
     }
 
     if (library === 'react-icons') {
-      // Map FiName to name.svg in feather folder
       const featherName = iconName.replace(/^Fi/, '').split(/(?=[A-Z0-9])/).join('-').toLowerCase();
-      // Handle trash-2 specific mapping if needed
       const fileName = featherName === 'trash2' ? 'trash-2' : featherName;
       return `icons/feather/${fileName}.svg`;
     }
     
-    // Handle specific filename mapping for Trash in Regular style
     let fileName = iconName;
     if (library === 'font-awesome' && normalizedStyle === 'regular' && iconName === 'trash') {
       fileName = version === '5.0' ? 'trash-alt' : 'trash-can';
@@ -65,18 +72,17 @@ export class PreviewIconographyComponent {
 
   onIconError(event: any, iconName: string, style: string) {
     const img = event.target as HTMLImageElement;
-    const library = this.data.iconography.library;
-    const version = this.data.iconography.version;
+    const library = this.data?.iconography?.library;
+    const version = this.data?.iconography?.version;
     const currentStyle = style.toLowerCase();
 
-    // If we were trying regular/brands and failed, fallback to solid
     if (library === 'font-awesome' && currentStyle !== 'solid' && !img.src.includes('/solid/')) {
       img.src = `icons/font-awesome/${version}/solid/${iconName}.svg`;
     }
   }
 
   getAvailableStyles(): string[] {
-    const libId = this.data.iconography.library;
+    const libId = this.data?.iconography?.library;
     if (libId === 'font-awesome') {
       return ['Solid', 'Regular', 'Brands'];
     } else if (libId === 'feather') {
@@ -95,11 +101,11 @@ export class PreviewIconographyComponent {
     if (style.toLowerCase() === 'brands') {
       return ['facebook', 'twitter', 'instagram', 'github', 'linkedin', 'youtube', 'whatsapp', 'google'];
     }
-    return this.data.iconography.samples || [];
+    return this.data?.iconography?.samples || [];
   }
 
   getLibraryLogo(): string {
-    const libId = this.data.iconography.library;
+    const libId = this.data?.iconography?.library;
     if (libId === 'react-icons') {
       return 'icons/feather/react-icon-logo.svg';
     }
@@ -112,8 +118,8 @@ export class PreviewIconographyComponent {
   }
 
   getInstallCommand(): string {
-    const libId = this.data.iconography.library;
-    const version = this.data.iconography.version;
+    const libId = this.data?.iconography?.library;
+    const version = this.data?.iconography?.version;
     const mapping: Record<string, string> = {
       'lucide-icons': 'npm install lucide',
       'feather': 'npm install feather-icons',
@@ -125,7 +131,7 @@ export class PreviewIconographyComponent {
   }
 
   getRepoUrl(): string {
-    const libId = this.data.iconography.library;
+    const libId = this.data?.iconography?.library;
     const mapping: Record<string, string> = {
       'lucide-icons': 'https://github.com/lucide-icons/lucide',
       'feather': 'https://github.com/feathericons/feather',

@@ -1,46 +1,57 @@
 @switch (templateId) {
-  @case ('s1') { <ng-container [ngTemplateOutlet]="s1"></ng-container> }
-  @case ('s2') { <ng-container [ngTemplateOutlet]="s2"></ng-container> }
-  @case ('s3') { <ng-container [ngTemplateOutlet]="s3"></ng-container> }
-  @case ('s4') { <ng-container [ngTemplateOutlet]="s4"></ng-container> }
-  @case ('s5') { <ng-container [ngTemplateOutlet]="s5"></ng-container> }
+@case ('s1') { <ng-container [ngTemplateOutlet]="s1"></ng-container> }
+@case ('s2') { <ng-container [ngTemplateOutlet]="s2"></ng-container> }
+@case ('s3') { <ng-container [ngTemplateOutlet]="s3"></ng-container> }
+@case ('s4') { <ng-container [ngTemplateOutlet]="s4"></ng-container> }
+@case ('s5') { <ng-container [ngTemplateOutlet]="s5"></ng-container> }
 }
 
 <!-- ── S1: Clean Numbered List ──────────────────────────── -->
 <ng-template #s1>
-  <div class="w-full h-full bg-white text-black p-[8%] flex flex-col justify-between relative overflow-hidden tpl tpl-s1 border border-gray-100">
-    <div class="flex justify-between items-center mb-8 s1-header">
-      <div class="flex items-center gap-2 s1-brand">
-        <svg width="16" height="12" viewBox="0 0 20 14" fill="none">
-          <circle cx="3" cy="3" r="2.5" fill="#4f46e5" opacity="0.9"/>
-          <circle cx="10" cy="3" r="2.5" fill="#4f46e5" opacity="0.9"/>
-          <circle cx="17" cy="3" r="2.5" fill="#4f46e5" opacity="0.9"/>
-          <circle cx="3" cy="11" r="2.5" fill="#4f46e5" opacity="0.5"/>
-          <circle cx="10" cy="11" r="2.5" fill="#4f46e5" opacity="0.5"/>
+  <div
+    class="w-full h-full bg-white text-black p-8 flex flex-col justify-between relative overflow-hidden tpl tpl-s1 border border-gray-100">
+    <div class="flex justify-between items-center mb-2 s1-header shrink-0">
+      <div class="flex items-center gap-2 s1-brand whitespace-nowrap shrink-0">
+        <svg width="16" height="12" viewBox="0 0 20 14" fill="none" class="shrink-0">
+          <circle cx="3" cy="3" r="2.5" [attr.fill]="primaryColor" opacity="0.9" />
+          <circle cx="10" cy="3" r="2.5" [attr.fill]="primaryColor" opacity="0.9" />
+          <circle cx="17" cy="3" r="2.5" [attr.fill]="primaryColor" opacity="0.9" />
+          <circle cx="3" cy="11" r="2.5" [attr.fill]="primaryColor" opacity="0.5" />
+          <circle cx="10" cy="11" r="2.5" [attr.fill]="primaryColor" opacity="0.5" />
         </svg>
-        <span class="text-[9px] font-black uppercase tracking-widest text-gray-900 s1-brand-name">{{ brandName }}</span>
+        <span
+          class="text-[10px] font-black uppercase tracking-widest text-gray-900 s1-brand-name leading-normal whitespace-nowrap shrink-0">{{
+          brandName }}</span>
       </div>
-      <span class="text-[9px] font-bold uppercase tracking-widest text-gray-400 s1-page">Table of Contents</span>
+      <span
+        class="text-[9px] font-bold uppercase tracking-widest text-gray-400 s1-page leading-normal whitespace-nowrap shrink-0">Table
+        of Contents</span>
     </div>
 
-    <div class="mb-6 s1-title-block">
-      <h1 class="text-[32px] font-black tracking-tight text-gray-900 mb-2 s1-title uppercase">Contents</h1>
-      <div class="w-12 h-1 bg-primary s1-divider"></div>
+    <div class="mb-2 s1-title-block shrink-0">
+      <h1 class="text-2xl font-black tracking-tight text-gray-900 mb-1 s1-title uppercase leading-normal pb-1">Contents
+      </h1>
+      <div class="w-10 h-0.5 s1-divider" [style.backgroundColor]="primaryColor"></div>
     </div>
 
-    <div class="flex-1 flex flex-col gap-3 s1-list">
+    <div class="flex-1 flex flex-col justify-evenly gap-1 s1-list min-h-0 py-1">
       @for (item of tocItems; track item.num) {
-        <div class="flex items-end gap-2 group cursor-default s1-item">
-          <span class="text-[11px] font-black text-primary s1-num">{{ item.num }}</span>
-          <span class="text-[12px] font-bold text-gray-900 uppercase tracking-tight s1-label">{{ item.label }}</span>
-          <span class="flex-1 border-b border-dotted border-gray-300 mb-1 s1-dots group-hover:border-primary transition-colors"></span>
-          <span class="text-[10px] font-black text-gray-400 s1-pg">{{ item.page }}</span>
-        </div>
+      <div class="flex items-end gap-2 group cursor-default s1-item py-1">
+        <span class="text-xs font-black s1-num leading-normal shrink-0" [style.color]="primaryColor">{{ item.num
+          }}</span>
+        <span
+          class="text-xs font-bold text-gray-900 uppercase tracking-tight s1-label leading-normal pb-0.5 whitespace-nowrap shrink-0">{{
+          item.label }}</span>
+        <span class="flex-1 border-b border-dotted border-gray-300 mb-1 s1-dots min-w-[20px]"></span>
+        <span class="text-[10px] font-black text-gray-400 s1-pg leading-normal shrink-0">{{ item.page }}</span>
+      </div>
       }
     </div>
 
-    <div class="pt-4 border-t border-gray-100 mt-6 s1-footer">
-      <span class="text-[8px] font-bold text-gray-400 uppercase tracking-widest s1-footer-text">Brand Guidelines — {{ brandName }}</span>
+    <div class="pt-2 border-t border-gray-100 mt-auto s1-footer shrink-0">
+      <span
+        class="text-[8px] font-bold text-gray-400 uppercase tracking-widest s1-footer-text leading-normal whitespace-nowrap shrink-0">Brand
+        Guidelines — {{ brandName }}</span>
     </div>
   </div>
 </ng-template>
@@ -48,26 +59,41 @@
 <!-- ── S2: Bold Left Accent ──────────────────────────────── -->
 <ng-template #s2>
   <div class="w-full h-full bg-white text-black p-0 flex relative overflow-hidden tpl tpl-s2">
-    <div class="w-[30%] h-full bg-primary s2-accent"></div>
-    <div class="flex-1 p-[10%] flex flex-col justify-between s2-content">
-      <div class="mb-10 s2-top">
-        <span class="text-[10px] font-black text-primary uppercase tracking-widest mb-1 block s2-label-sm">Brand Guidelines</span>
-        <h1 class="text-[48px] font-black tracking-tighter text-gray-900 s2-title uppercase leading-none">Index</h1>
+    <div class="w-[20%] h-full s2-accent shrink-0" [style.backgroundColor]="primaryColor"></div>
+    <div class="flex-1 p-8 flex flex-col justify-between s2-content min-w-0">
+      <div class="mb-3 s2-top shrink-0">
+        <span
+          class="text-[9px] font-black uppercase tracking-widest mb-1 block s2-label-sm leading-normal whitespace-nowrap shrink-0"
+          [style.color]="primaryColor">Brand Guidelines</span>
+        <h1 class="text-3xl font-black tracking-tighter text-gray-900 s2-title uppercase leading-normal pb-1">Index</h1>
       </div>
-      <div class="flex-1 flex flex-col gap-5 s2-list">
+
+      <div class="flex-1 flex flex-col justify-evenly gap-1.5 s2-list min-h-0 py-1">
         @for (item of tocItems; track item.num) {
-          <div class="flex items-center gap-4 group s2-item">
-            <div class="w-8 h-8 rounded-full border-2 border-primary/20 flex items-center justify-center text-[10px] font-black text-primary group-hover:bg-primary group-hover:text-white transition-all s2-num-circle">{{ item.num }}</div>
-            <div class="flex flex-col s2-item-info">
-              <span class="text-[13px] font-black text-gray-900 uppercase tracking-tight s2-item-label">{{ item.label }}</span>
-              <span class="text-[9px] font-medium text-gray-400 italic s2-item-sub">{{ item.sub }}</span>
-            </div>
+        <div class="flex items-center gap-3 group s2-item py-1">
+          <div
+            class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black text-white s2-num-circle shrink-0 shadow-xs"
+            [style.backgroundColor]="primaryColor">
+            {{ item.num }}
           </div>
+          <div class="flex flex-col s2-item-info min-w-0 flex-1">
+            <span
+              class="text-xs font-black text-gray-900 uppercase tracking-tight s2-item-label leading-normal pb-0.5 whitespace-nowrap shrink-0">{{
+              item.label }}</span>
+            <span
+              class="text-[10px] font-medium text-gray-500 italic s2-item-sub leading-normal pb-0.5 whitespace-nowrap shrink-0">{{
+              item.sub }}</span>
+          </div>
+        </div>
         }
       </div>
-      <div class="flex justify-between items-end pt-6 border-t border-gray-100 s2-footer">
-        <span class="text-[11px] font-black uppercase text-gray-900 s2-brand">{{ brandName }}</span>
-        <span class="text-[10px] font-bold font-mono text-gray-400 s2-year">{{ year }}</span>
+
+      <div class="flex justify-between items-center pt-3 border-t border-gray-100 mt-auto s2-footer shrink-0">
+        <span
+          class="text-[10px] font-black uppercase text-gray-900 s2-brand whitespace-nowrap shrink-0 leading-normal">{{
+          brandName }}</span>
+        <span class="text-[9px] font-bold font-mono text-gray-400 s2-year leading-normal whitespace-nowrap shrink-0">{{
+          year }}</span>
       </div>
     </div>
   </div>
@@ -75,20 +101,41 @@
 
 <!-- ── S3: Grid Cards ─────────────────────────────────────── -->
 <ng-template #s3>
-  <div class="w-full h-full bg-gray-50 text-black p-[8%] flex flex-col gap-6 relative overflow-hidden tpl tpl-s3">
-    <div class="flex justify-between items-end mb-4 s3-header">
-      <h1 class="text-[36px] font-black leading-[0.9] text-gray-900 uppercase tracking-tighter shadow-sm s3-title">Table of<br>Contents</h1>
-      <span class="px-3 py-1 bg-white border border-gray-200 rounded-full text-[9px] font-black uppercase tracking-widest text-primary shadow-sm s3-brand-tag">{{ brandName }} Brand Guide</span>
+  <div
+    class="w-full h-full bg-gray-50 text-black p-8 flex flex-col justify-between relative overflow-hidden tpl tpl-s3">
+    <div class="flex justify-between items-center mb-3 s3-header shrink-0">
+      <h1
+        class="text-2xl font-black leading-normal text-gray-900 uppercase tracking-tighter s3-title pb-1 whitespace-nowrap shrink-0">
+        Table of Contents</h1>
+      <span
+        class="px-2.5 py-0.5 bg-white border border-gray-200 rounded-full text-[9px] font-black uppercase tracking-widest shadow-xs s3-brand-tag leading-normal whitespace-nowrap shrink-0"
+        [style.color]="primaryColor">
+        {{ brandName }} Brand Guide
+      </span>
     </div>
-    <div class="flex-1 grid grid-cols-2 gap-3 s3-grid">
+
+    <div class="flex-1 grid grid-cols-2 gap-2.5 s3-grid min-h-0 py-1">
       @for (item of tocItems; track item.num) {
-        <div class="bg-white border border-gray-200 rounded-xl p-4 flex flex-col justify-between group hover:border-primary hover:-translate-y-1 transition-all shadow-sm s3-card overflow-hidden relative">
-          <div class="absolute -right-2 -top-2 text-6xl font-black text-gray-50 opacity-10 group-hover:text-primary group-hover:opacity-5 transition-all">{{ item.num }}</div>
-          <span class="text-[20px] font-black text-primary opacity-20 mb-2 s3-card-num">{{ item.num }}</span>
-          <span class="text-[13px] font-black text-gray-900 uppercase tracking-tight s3-card-label relative z-10">{{ item.label }}</span>
-          <span class="absolute bottom-3 right-3 text-xl opacity-20 s3-card-icon">{{ item.icon }}</span>
+      <div
+        class="bg-white border border-gray-200 rounded-lg p-2.5 flex flex-col justify-between shadow-xs s3-card relative overflow-hidden">
+        <div class="flex items-center justify-between mb-0.5">
+          <span class="text-xs font-black s3-card-num leading-normal shrink-0" [style.color]="primaryColor">{{ item.num
+            }}</span>
+          <span class="text-xs opacity-40 s3-card-icon leading-normal shrink-0">{{ item.icon }}</span>
         </div>
+        <span
+          class="text-xs font-black text-gray-900 uppercase tracking-tight s3-card-label leading-normal pb-0.5 whitespace-nowrap shrink-0 relative z-10">{{
+          item.label }}</span>
+        <span class="text-[9px] font-medium text-gray-500 leading-normal whitespace-nowrap shrink-0 pb-0.5">{{ item.sub
+          }}</span>
+      </div>
       }
+    </div>
+
+    <div
+      class="pt-2 border-t border-gray-200 mt-auto flex justify-between items-center text-[9px] font-bold text-gray-400 uppercase tracking-widest shrink-0 leading-normal">
+      <span class="whitespace-nowrap shrink-0">{{ brandName }}</span>
+      <span class="whitespace-nowrap shrink-0">Page 02</span>
     </div>
   </div>
 </ng-template>
@@ -96,31 +143,45 @@
 <!-- ── S4: Two-Column Split ────────────────────────────────── -->
 <ng-template #s4>
   <div class="w-full h-full bg-white text-black p-0 flex relative overflow-hidden tpl tpl-s4">
-    <div class="flex-1 bg-black text-white p-[10%] flex flex-col justify-between s4-left">
-      <div class="flex items-center gap-2 s4-logo-wrap">
-        <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
-          <circle cx="3" cy="3" r="2.5" fill="#fff" opacity="0.9"/>
-          <circle cx="10" cy="3" r="2.5" fill="#fff" opacity="0.9"/>
-          <circle cx="17" cy="3" r="2.5" fill="#fff" opacity="0.9"/>
-          <circle cx="3" cy="11" r="2.5" fill="#fff" opacity="0.5"/>
-          <circle cx="10" cy="11" r="2.5" fill="#fff" opacity="0.5"/>
+    <div class="flex-[1] bg-slate-900 text-white p-8 flex flex-col justify-between s4-left shrink-0">
+      <div class="flex items-center gap-2 s4-logo-wrap whitespace-nowrap shrink-0">
+        <svg width="18" height="12" viewBox="0 0 20 14" fill="none" class="shrink-0">
+          <circle cx="3" cy="3" r="2.5" fill="#fff" opacity="0.9" />
+          <circle cx="10" cy="3" r="2.5" fill="#fff" opacity="0.9" />
+          <circle cx="17" cy="3" r="2.5" fill="#fff" opacity="0.9" />
+          <circle cx="3" cy="11" r="2.5" fill="#fff" opacity="0.5" />
+          <circle cx="10" cy="11" r="2.5" fill="#fff" opacity="0.5" />
         </svg>
-        <span class="text-[10px] font-black uppercase tracking-widest s4-brand">{{ brandName }}</span>
+        <span
+          class="text-[9px] font-black uppercase tracking-widest s4-brand whitespace-nowrap shrink-0 leading-normal">{{
+          brandName }}</span>
       </div>
-      <h1 class="text-[44px] font-black leading-[0.9] uppercase tracking-tighter s4-title italic">Brand<br>Guide<br>Index</h1>
-      <span class="text-[40px] font-black text-white/10 leading-none s4-year">{{ year }}</span>
+      <h1 class="text-2xl font-black text-white leading-tight uppercase tracking-tighter s4-title italic pb-1">
+        Brand<br>Guide<br>Index</h1>
+      <span class="text-xl font-black text-white/20 leading-none s4-year whitespace-nowrap shrink-0">{{ year }}</span>
     </div>
-    <div class="flex-[1.5] p-[10%] flex flex-col justify-center s4-right bg-white shadow-2xl z-10">
-      <div class="flex flex-col gap-6 s4-list overflow-y-auto no-scrollbar">
+
+    <div class="flex-[1.5] p-8 flex flex-col justify-between s4-right bg-white min-w-0">
+      <div class="flex-1 flex flex-col justify-evenly gap-1 s4-list min-h-0 py-1">
         @for (item of tocItems; track item.num) {
-          <div class="flex items-baseline gap-4 group s4-item">
-            <span class="text-[12px] font-black text-gray-300 group-hover:text-black transition-colors s4-num">{{ item.num }}</span>
-            <div class="flex flex-col s4-item-text">
-              <span class="text-[15px] font-black text-gray-900 uppercase tracking-tight s4-item-label">{{ item.label }}</span>
-              <span class="text-[10px] font-medium text-gray-400 s4-item-sub">{{ item.sub }}</span>
+        <div class="flex items-center gap-2.5 group s4-item py-1">
+          <span class="text-xs font-black s4-num shrink-0 leading-normal" [style.color]="primaryColor">{{ item.num }}</span>
+          <div class="flex flex-col s4-item-text min-w-0 flex-1">
+              <span
+                class="text-xs font-black text-gray-900 uppercase tracking-tight s4-item-label leading-normal pb-0.5 whitespace-nowrap shrink-0">{{
+                item.label }}</span>
+              <span
+                class="text-[9px] font-medium text-gray-500 s4-item-sub leading-normal pb-0.5 whitespace-nowrap shrink-0">{{
+                item.sub }}</span>
             </div>
-          </div>
+        </div>
         }
+      </div>
+
+      <div
+        class="pt-2 border-t border-gray-100 mt-auto flex justify-between items-center text-[9px] font-bold text-gray-400 uppercase tracking-widest shrink-0 leading-normal">
+        <span class="whitespace-nowrap shrink-0">Contents</span>
+        <span class="whitespace-nowrap shrink-0">Page 02</span>
       </div>
     </div>
   </div>
@@ -128,27 +189,40 @@
 
 <!-- ── S5: Minimal Centered ────────────────────────────────── -->
 <ng-template #s5>
-  <div class="w-full h-full bg-white text-black p-[10%] flex flex-col items-center justify-between relative overflow-hidden tpl tpl-s5">
-    <div class="w-full flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-gray-400 s5-top-bar">
-      <span class="s5-brand">{{ brandName }}</span>
-      <span class="s5-doc">Brand Guidelines</span>
+  <div
+    class="w-full h-full bg-white text-black p-8 flex flex-col items-center justify-between relative overflow-hidden tpl tpl-s5">
+    <div
+      class="w-full flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-gray-400 s5-top-bar shrink-0 leading-normal">
+      <span class="s5-brand whitespace-nowrap shrink-0">{{ brandName }}</span>
+      <span class="s5-doc whitespace-nowrap shrink-0">Brand Guidelines</span>
     </div>
-    
-    <div class="w-full max-w-[300px] flex flex-col items-center s5-center">
-      <h1 class="text-[28px] font-black text-gray-900 tracking-[0.2em] mb-4 s5-heading uppercase">Contents</h1>
-      <div class="w-full h-px bg-gray-900 mb-8 s5-rule"></div>
-      <div class="w-full flex flex-col gap-4 s5-list">
+
+    <div class="w-full max-w-[360px] flex-1 flex flex-col items-center justify-center s5-center min-h-0 py-1">
+      <h1
+        class="text-lg font-black text-gray-900 tracking-[0.2em] mb-1 s5-heading uppercase shrink-0 leading-normal pb-1">
+        Contents</h1>
+      <div class="w-10 h-0.5 mb-3 s5-rule shrink-0" [style.backgroundColor]="primaryColor"></div>
+
+      <div class="w-full flex flex-col justify-evenly gap-1 s5-list min-h-0 flex-1">
         @for (item of tocItems; track item.num) {
-          <div class="flex items-center justify-center gap-3 s5-row group cursor-default">
-            <span class="text-[10px] font-black text-gray-300 group-hover:text-gray-900 transition-colors s5-row-num">{{ item.num }}.</span>
-            <span class="text-[12px] font-bold text-gray-800 uppercase tracking-widest group-hover:tracking-[0.25em] transition-all s5-row-label">{{ item.label }}</span>
+        <div class="flex items-center justify-between py-1 group cursor-default">
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-black s5-row-num leading-normal shrink-0" [style.color]="primaryColor">{{
+              item.num }}.</span>
+            <span
+              class="text-xs font-bold text-gray-800 uppercase tracking-wider leading-normal pb-0.5 whitespace-nowrap shrink-0">{{
+              item.label }}</span>
           </div>
+          <span class="text-[10px] font-black text-gray-400 leading-normal shrink-0">{{ item.page }}</span>
+        </div>
         }
       </div>
     </div>
-    
-    <div class="w-full flex justify-center s5-bottom">
-      <span class="text-[9px] font-black text-gray-300 tracking-[0.3em] uppercase s5-page-label">Page 02</span>
+
+    <div class="w-full flex justify-center pt-2 border-t border-gray-100 s5-bottom shrink-0">
+      <span
+        class="text-[9px] font-black text-gray-300 tracking-[0.3em] uppercase s5-page-label leading-normal whitespace-nowrap shrink-0">Page
+        02</span>
     </div>
   </div>
 </ng-template>

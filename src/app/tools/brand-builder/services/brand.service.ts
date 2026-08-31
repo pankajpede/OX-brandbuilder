@@ -126,7 +126,7 @@ export class BrandService {
       case 0: // Selection
         return true;
       case 1: // Cover
-        return !!(data.cover.name && data.cover.description);
+        return !!data.cover.name;
       case 2: // Summary
         return true;
       case 3: // Logo
@@ -137,7 +137,9 @@ export class BrandService {
         return !!data.typography.primaryFont;
       case 6: // Iconography
         return !!data.iconography.library;
-      case 7: // Review
+      case 7: // Tech Stack
+        return !!(data.techstack && data.techstack.technology && data.techstack.uiFramework);
+      case 8: // Review
         return true;
       default:
         return false;
@@ -172,7 +174,7 @@ export class BrandService {
 
     // Colors (Important: Palette modified from default? We check non-default vibrancy)
     total += weights.important;
-    const hasCustomColors = data.colors.palette.some(c => c.hex !== '#4A6E7A' && c.hex !== '#AE2D24');
+    const hasCustomColors = data.colors.palette.some(c => c.hex !== '#4f46e5' && c.hex !== '#AE2D24');
     if (hasCustomColors) score += weights.important;
 
     // Summary/Sections (Optional)
@@ -260,6 +262,7 @@ export class BrandService {
             ...(parsed.summary || {}),
             enabledSections: Array.from(new Set([
               'selection', 
+              'techstack',
               ...(parsed.summary?.enabledSections || defaults.summary.enabledSections)
             ])).filter(id => STEPS.some((s: StepConfig) => s.id === id))
           },
@@ -267,8 +270,20 @@ export class BrandService {
             ...defaults.logo,
             ...(parsed.logo || {})
           },
+          techstack: {
+            ...defaults.techstack,
+            ...(parsed.techstack || {})
+          },
           colors: parsed.colors && parsed.colors.palette && parsed.colors.palette[0] && parsed.colors.palette[0].category 
-            ? parsed.colors 
+            ? {
+                ...parsed.colors,
+                palette: parsed.colors.palette.map((c: any) => {
+                  if (c.name === 'Primary' && (c.hex === '#4A6E7A' || c.hex === '#4a6e7a')) {
+                    return { ...c, hex: '#4f46e5', rgb: '79, 70, 229' };
+                  }
+                  return c;
+                })
+              }
             : defaults.colors
         };
       }

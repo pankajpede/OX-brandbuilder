@@ -1,8 +1,10 @@
 import { Component, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-file-upload',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './file-upload.component.html',
   styleUrl: './file-upload.component.scss'
 })
@@ -10,6 +12,7 @@ export class FileUploadComponent {
   @Input() label = 'Upload Image';
   @Input() accept = 'image/png,image/jpeg,image/svg+xml';
   @Input() value = '';
+  @Input() bgClass = '';
   @Output() fileChange = new EventEmitter<string>();
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;

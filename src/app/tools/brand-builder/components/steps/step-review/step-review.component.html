@@ -193,17 +193,21 @@
     </div>
   </div>
 
-  <!-- Export Button -->
+  <!-- Export Buttons -->
   <div class="mt-12 pt-8 border-t border-border flex flex-col items-center">
-    <button class="btn btn-primary btn-lg flex items-center gap-3 px-8 transition-transform active:scale-95"
-      (click)="onExport()" id="export-json-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-        stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="16 18 22 12 16 6" />
-        <polyline points="8 6 2 12 8 18" />
-      </svg>
-      Export as JSON
-    </button>
-    <p class="mt-3 text-sm text-gray-400 font-medium italic">Generates a structured JSON file compatible with modern design system workflows</p>
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      <button class="btn btn-primary btn-lg flex items-center gap-3 px-8 transition-transform active:scale-95 shadow-md"
+        (click)="onExport()" id="export-json-btn">
+        <span class="text-base">📄</span>
+        Export as JSON
+      </button>
+
+      <button class="btn btn-primary btn-lg flex items-center gap-3 px-8 transition-transform active:scale-95 shadow-md bg-gray-900 hover:bg-black text-white"
+        (click)="onExportPdf()" id="export-pdf-btn">
+        <span class="text-base">📕</span>
+        Export as PDF
+      </button>
+    </div>
+    <p class="mt-4 text-sm text-gray-400 font-medium italic">Generate developer-ready JSON tokens or a complete brand guidelines PDF document</p>
   </div>
 </div>

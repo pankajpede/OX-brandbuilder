@@ -9,29 +9,33 @@ import { BrandData, ColorEntry } from '../../../models/brand.model';
 })
 export class PreviewColorsComponent {
   @Input() data!: BrandData;
+  @Input() paletteOverride?: ColorEntry[];
+  @Input() pageNumber: string = '04';
+  @Input() isPdfView: boolean = false;
+
   Math = Math;
   copiedHex: string | null = null;
 
   get variantTitle(): string {
-    return this.data.colors.variant
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    return 'Color System';
+  }
+
+  get paletteToRender(): ColorEntry[] {
+    return this.paletteOverride || this.data?.colors?.palette || [];
   }
 
   get categories(): string[] {
     const cats = new Set<string>();
-    this.data.colors.palette.forEach(c => {
+    this.paletteToRender.forEach(c => {
       if (c.category) cats.add(c.category);
     });
-    // Return in order if possible
     const order = ['Brand', 'Semantic', 'Neutral'];
     return order.filter(o => cats.has(o)).concat(Array.from(cats).filter(c => !order.includes(c)));
   }
 
   getColorsByCategory(category: string): ColorEntry[] {
-    const numTones = this.data.colors.numTones || 9;
-    return this.data.colors.palette
+    const numTones = this.data?.colors?.numTones || 9;
+    return this.paletteToRender
       .filter(c => c.category === category)
       .map(c => {
         const hasDuplicates = c.tones && new Set(c.tones).size !== c.tones.length;
@@ -45,11 +49,11 @@ export class PreviewColorsComponent {
   }
 
   generateTonesFallback(hex: string, numTones: number = 9): string[] {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
+    if (!hex || !hex.startsWith('#')) return Array(numTones).fill('#888888');
+    const r = parseInt(hex.slice(1, 3), 16) || 0;
+    const g = parseInt(hex.slice(3, 5), 16) || 0;
+    const b = parseInt(hex.slice(5, 7), 16) || 0;
     
-    // Calculate relative luminance
     const luma = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
     const tones: string[] = [];
     
@@ -91,14 +95,14 @@ export class PreviewColorsComponent {
       tones.push(`#${toHex(mixedR)}${toHex(mixedG)}${toHex(mixedB)}`.toLowerCase());
     }
 
-    // Sort by luminance (lightest first) to ensure White -> Black flow
     return tones.sort((a, b) => this.getLuma(b) - this.getLuma(a));
   }
 
   getLuma(hex: string): number {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
+    if (!hex || !hex.startsWith('#')) return 0.5;
+    const r = parseInt(hex.slice(1, 3), 16) || 0;
+    const g = parseInt(hex.slice(3, 5), 16) || 0;
+    const b = parseInt(hex.slice(5, 7), 16) || 0;
     return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   }
 
@@ -114,14 +118,16 @@ export class PreviewColorsComponent {
   }
 
   copyToClipboard(text: string): void {
-    navigator.clipboard.writeText(text).then(() => {
-      this.copiedHex = text;
-      setTimeout(() => {
-        if (this.copiedHex === text) {
-          this.copiedHex = null;
-        }
-      }, 2000);
-    });
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.copiedHex = text;
+        setTimeout(() => {
+          if (this.copiedHex === text) {
+            this.copiedHex = null;
+          }
+        }, 2000);
+      });
+    }
   }
 
   copyAllTones(color: ColorEntry): void {

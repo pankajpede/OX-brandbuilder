@@ -33,6 +33,7 @@ export class StepSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     { id: 'colors', title: 'Color System', icon: '◐' },
     { id: 'typography', title: 'Typography', icon: 'Aa' },
     { id: 'iconography', title: 'Iconography', icon: '✦' },
+    { id: 'techstack', title: 'Tech Stack', icon: '⚡' },
   ];
 
   templates: SummaryTemplate[] = [

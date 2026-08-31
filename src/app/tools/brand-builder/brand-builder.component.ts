@@ -20,9 +20,11 @@ import { StepLogoComponent } from './components/steps/step-logo/step-logo.compon
 import { StepColorsComponent } from './components/steps/step-colors/step-colors.component';
 import { StepTypographyComponent } from './components/steps/step-typography/step-typography.component';
 import { StepIconographyComponent } from './components/steps/step-iconography/step-iconography.component';
+import { StepTechStackComponent } from './components/steps/step-techstack/step-techstack.component';
 import { StepSelectionComponent } from './components/steps/step-selection/step-selection.component';
 import { StepReviewComponent } from './components/steps/step-review/step-review.component';
 import { PreviewContainerComponent } from './components/preview/preview-container/preview-container.component';
+import { PdfTemplateComponent } from './components/pdf-template/pdf-template.component';
 
 @Component({
   selector: 'app-brand-builder',
@@ -38,15 +40,38 @@ import { PreviewContainerComponent } from './components/preview/preview-containe
     StepColorsComponent,
     StepTypographyComponent,
     StepIconographyComponent,
+    StepTechStackComponent,
     StepSelectionComponent,
-    StepReviewComponent
+    StepReviewComponent,
+    PdfTemplateComponent
   ],
   templateUrl: './brand-builder.component.html',
   styleUrls: ['./brand-builder.component.scss']
 })
 export class BrandBuilderComponent implements OnInit, OnDestroy {
   public brandService = inject(BrandService);
-  private exportService = inject(ExportService);
+  public exportService = inject(ExportService);
+
+  showExportMenu = false;
+
+  toggleExportMenu(event?: Event) {
+    if (event) event.stopPropagation();
+    this.showExportMenu = !this.showExportMenu;
+  }
+
+  closeExportMenu() {
+    this.showExportMenu = false;
+  }
+
+  onExportJson() {
+    this.showExportMenu = false;
+    this.exportService.exportToJson(this.brandData);
+  }
+
+  onExportPdf() {
+    this.showExportMenu = false;
+    this.exportService.exportToPdf(this.brandData);
+  }
 
   @ViewChild('formScrollContainer') formScrollContainer!: ElementRef<HTMLElement>;
   @ViewChild(PreviewContainerComponent) previewContainer!: PreviewContainerComponent;

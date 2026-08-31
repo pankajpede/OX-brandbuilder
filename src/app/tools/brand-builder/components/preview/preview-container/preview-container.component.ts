@@ -6,6 +6,7 @@ import { PreviewLogoComponent } from '../preview-logo/preview-logo.component';
 import { PreviewColorsComponent } from '../preview-colors/preview-colors.component';
 import { PreviewTypographyComponent } from '../preview-typography/preview-typography.component';
 import { PreviewIconographyComponent } from '../preview-iconography/preview-iconography.component';
+import { PreviewTechStackComponent } from '../preview-techstack/preview-techstack.component';
 import { BrandData } from '../../../models/brand.model';
 import { GoogleFontsService } from '../../../services/google-fonts.service';
 import { generateTypographyTokens } from '../../../constants/typography-engine';
@@ -20,8 +21,8 @@ import { generateTypographyTokens } from '../../../constants/typography-engine';
     PreviewLogoComponent, 
     PreviewColorsComponent, 
     PreviewTypographyComponent, 
-    PreviewTypographyComponent, 
-    PreviewIconographyComponent
+    PreviewIconographyComponent,
+    PreviewTechStackComponent
   ],
   templateUrl: './preview-container.component.html',
   styleUrl: './preview-container.component.scss'
@@ -63,7 +64,7 @@ export class PreviewContainerComponent {
       const container = this.previewScrollContainer.nativeElement;
       const pages = container.querySelectorAll('.preview-page');
       
-      if (step === 7) { // Review Step
+      if (step === 8) { // Review Step
         this.scrollToTop();
       } else if (step > 0 && pages && pages[step - 1]) {
         // Step 1 maps to Page 0 (Cover), Step 2 to Page 1 (Summary), etc.

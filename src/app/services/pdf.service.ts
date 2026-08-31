@@ -1,13 +1,17 @@
-import { Injectable, inject } from '@angular/core';
-import { BrandData } from '../models/brand.model';
+import { Injectable } from '@angular/core';
+import { BrandData } from '../tools/brand-builder/models/brand.model';
 
 declare const html2canvas: any;
 declare const jspdf: any;
 
 @Injectable({ providedIn: 'root' })
 export class PdfService {
-  /** Generate and download a multi-page A4 PDF from the preview element */
-  async generatePDF(brandData: BrandData, previewElement: HTMLElement): Promise<void> {
+  /** Generate and download a multi-page A4 PDF from the preview element smoothly */
+  async generatePDF(
+    brandData: BrandData, 
+    previewElement: HTMLElement,
+    onProgress?: (currentStep: number, totalSteps: number, overallPercent: number, pageTitle: string) => void
+  ): Promise<void> {
     // Dynamic imports for tree-shaking
     const html2canvasModule = await import('html2canvas');
     const html2canvasDefault = html2canvasModule.default;
@@ -15,21 +19,40 @@ export class PdfService {
     const { jsPDF } = jsPDFModule;
 
     const pdf = new jsPDF({
-      orientation: 'portrait',
+      orientation: 'landscape',
       unit: 'mm',
       format: 'a4',
       compress: true
     });
 
-    const a4Width = 210;
-    const a4Height = 297;
+    const a4Width = 297;
+    const a4Height = 210;
 
-    const pages = Array.from(previewElement.querySelectorAll('.preview-page')) as HTMLElement[];
+    const pages = Array.from(previewElement.querySelectorAll('.pdf-page, .preview-page')) as HTMLElement[];
     if (pages.length === 0) return;
 
-    // 1. Prepare clones with baked-in styles
+    const getPageTitle = (el: HTMLElement, idx: number): string => {
+      const h2 = el.querySelector('h2');
+      if (h2 && h2.textContent && h2.textContent.trim()) return h2.textContent.trim();
+      const h1 = el.querySelector('h1');
+      if (h1 && h1.textContent && h1.textContent.trim()) return h1.textContent.trim();
+      return `Page ${idx + 1}`;
+    };
+
+    // 1. Prepare clones with baked-in styles asynchronously
     const clones: HTMLElement[] = [];
-    for (const page of pages) {
+    for (let i = 0; i < pages.length; i++) {
+      const page = pages[i];
+      const pageTitle = getPageTitle(page, i);
+      const overallPercent = Math.round(((i + 0.5) / pages.length) * 100);
+
+      if (onProgress) {
+        onProgress(i + 1, pages.length, overallPercent, `Preparing ${pageTitle}...`);
+      }
+
+      // Yield execution to main UI thread for smooth animations
+      await new Promise(resolve => setTimeout(resolve, 30));
+
       const clone = page.cloneNode(true) as HTMLElement;
       
       // Position off-screen for processing
@@ -42,11 +65,11 @@ export class PdfService {
         margin: '0',
         zIndex: '-1'
       });
-      // Apply exporting class for print-specific styles
+      
       clone.classList.add('exporting');
       document.body.appendChild(clone);
       
-      // Bake computed styles into inline styles (skip root layout props to keep A4 size)
+      // Bake computed styles into inline styles
       this.bakeStyles(page, clone, true);
       clones.push(clone);
     }
@@ -54,15 +77,27 @@ export class PdfService {
     try {
       for (let i = 0; i < clones.length; i++) {
         const clone = clones[i];
-        
-        // Wait for layout settlement
-        await new Promise(resolve => setTimeout(resolve, 300));
+        const origPage = pages[i];
+        const pageTitle = getPageTitle(origPage, i);
+        const overallPercent = Math.round(((i + 1) / clones.length) * 100);
+
+        if (onProgress) {
+          onProgress(i + 1, clones.length, overallPercent, pageTitle);
+        }
+
+        // Yield to browser event loop for smooth UI repaint and progress updates
+        await new Promise(resolve => setTimeout(resolve, 50));
         
         if (i > 0) pdf.addPage();
         
         const isCoverPage = (i === 0);
         await this.renderElementToPage(html2canvasDefault, pdf, clone, a4Width, a4Height, false, isCoverPage);
       }
+
+      if (onProgress) {
+        onProgress(clones.length, clones.length, 100, 'Saving PDF file...');
+      }
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const fileName = (brandData.cover.name || 'Brand_Guidelines')
         .replace(/[^a-zA-Z0-9]/g, '_') + '.pdf';
@@ -90,7 +125,6 @@ export class PdfService {
       return value;
     }
 
-    // Matches color(), oklch(), oklab() with up to 1 level of nested parentheses (e.g., calc)
     const colorRegex = /(oklch|oklab|color)\((?:[^)(]+|\([^)(]*\))*\)/g;
     
     return value.replace(colorRegex, (match) => {
@@ -119,30 +153,20 @@ export class PdfService {
   private bakeStyles(source: HTMLElement, target: HTMLElement, isRoot = false): void {
     const computed = window.getComputedStyle(source);
     
-    // Comprehensive property list for visual/layout fidelity
     let props = [
-      // Dimensions & Positioning
       'display', 'position', 'top', 'right', 'bottom', 'left',
       'width', 'height', 'min-width', 'max-width', 'min-height', 'max-height',
       'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
       'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
       'box-sizing', 'overflow', 'z-index', 'vertical-align',
-      
-      // Flexbox
       'flex', 'flex-direction', 'flex-wrap', 'flex-grow', 'flex-shrink', 'flex-basis',
       'justify-content', 'align-items', 'align-content', 'gap', 'column-gap', 'row-gap',
       'order',
-      
-      // Grid
       'grid-template-columns', 'grid-template-rows', 'grid-column', 'grid-row',
       'grid-area', 'grid-auto-flow', 'grid-auto-columns', 'grid-auto-rows',
-      
-      // Typography
       'font-family', 'font-size', 'font-weight', 'line-height', 'letter-spacing',
       'text-align', 'text-transform', 'text-decoration', 'white-space', 'word-break',
       'color', 'font-style', 'font-variant', 'text-indent', 'text-overflow',
-      
-      // Visual Styling
       'background-color', 'background-image', 'background-size', 'background-position',
       'background-repeat', 'background-clip', 'background-origin',
       'border', 'border-color', 'border-width', 'border-style',
@@ -154,12 +178,9 @@ export class PdfService {
       'border-bottom-left-radius', 'border-bottom-right-radius',
       'box-shadow', 'opacity', 'visibility', 'filter', 'backdrop-filter',
       'transform', 'transform-origin', 'clip-path',
-      
-      // SVG Properties
       'fill', 'stroke', 'stroke-width', 'stop-color', 'cx', 'cy', 'r'
     ];
 
-    // For the root page element, we skip properties that would break our fixed A4 container
     if (isRoot) {
       const layoutProps = ['position', 'top', 'right', 'bottom', 'left', 'width', 'height', 'min-width', 'max-width', 'min-height', 'max-height', 'margin'];
       props = props.filter(p => !layoutProps.includes(p));
@@ -168,13 +189,11 @@ export class PdfService {
     props.forEach(prop => {
       let value = computed.getPropertyValue(prop);
       if (value) {
-        // Sanitize oklab/oklch/color to rgba for html2canvas
         value = this.sanitizeCssValue(value);
         target.style.setProperty(prop, value, 'important');
       }
     });
 
-    // Recurse through children
     const sourceChildren = Array.from(source.children);
     const targetChildren = Array.from(target.children);
     
@@ -195,40 +214,29 @@ export class PdfService {
     addPage: boolean,
     isCoverPage: boolean = false
   ): Promise<void> {
-    // Attempt to detect background color from the template content
-    const firstChild = element.firstElementChild as HTMLElement;
-    let bgColor = firstChild ? window.getComputedStyle(firstChild).backgroundColor : '#FFFFFF';
+    const tplChild = (element.querySelector('.tpl') || element.firstElementChild || element) as HTMLElement;
+    let bgColor = tplChild ? window.getComputedStyle(tplChild).backgroundColor : '#FFFFFF';
     
-    // Force specific background for the cover page in the PDF
-    if (isCoverPage) {
-      bgColor = '#5046e5';
-    } else if (!bgColor || bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
-      // jsPDF cannot handle transparent colors or "rgba(0, 0, 0, 0)". Default to white if transparent.
+    if (!bgColor || bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
       bgColor = '#FFFFFF';
     }
 
     const canvas = await html2canvasFn(element, {
-      scale: 3, 
+      scale: 2, // Standard crisp 300DPI PDF output
       useCORS: true,
       logging: false,
-      backgroundColor: null, // Capture as transparent to allow PDF background fill
+      backgroundColor: null,
       windowWidth: element.offsetWidth,
       windowHeight: element.offsetHeight,
       onclone: (clonedDoc: Document) => {
-        // INTERNAL SANITIZATION:
-        // Strip ALL stylesheets from the cloned context.
-        // This stops html2canvas's parser from hitting Tailwind 4 modern color functions.
         const styles = Array.from(clonedDoc.querySelectorAll('style, link[rel="stylesheet"]'));
         styles.forEach(s => s.parentNode?.removeChild(s));
       }
     });
 
-    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
     
-    // Calculate proper dimensions to avoid stretching
     const imgProps = pdf.getImageProperties(imgData);
-    
-    // We fit the image to the page size but preserve aspect ratio
     const ratio = imgProps.width / imgProps.height;
     const pageRatio = pageWidth / pageHeight;
 
@@ -241,14 +249,11 @@ export class PdfService {
       renderWidth = renderHeight * ratio;
     }
     
-    // Center both axes
     const xOffset = (pageWidth - renderWidth) / 2;
     const yOffset = (pageHeight - renderHeight) / 2;
 
     if (addPage) pdf.addPage();
 
-    // Fill the actual PDF page background with the detected brand theme color
-    // This makes sure any gaps (due to aspect ratio diffs) match the design
     pdf.setFillColor(bgColor);
     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
 

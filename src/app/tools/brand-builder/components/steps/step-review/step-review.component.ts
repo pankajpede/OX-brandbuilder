@@ -56,4 +56,8 @@ export class StepReviewComponent {
   onExport(): void {
     this.exportService.exportToJson(this.brandData);
   }
+
+  onExportPdf(): void {
+    this.exportService.exportToPdf(this.brandData);
+  }
 }

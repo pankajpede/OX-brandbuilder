@@ -92,6 +92,20 @@ export interface BrandIconography {
   samples: string[];
 }
 
+export interface SelectedUiFramework {
+  id: string;
+  version: string;
+}
+
+export interface BrandTechStack {
+  variant: string;
+  technology: string;
+  techVersion: string;
+  uiFramework: string;
+  uiVersion: string;
+  selectedUiFrameworks?: SelectedUiFramework[];
+}
+
 export interface BrandVoice {
   tone: string[];
   dos: string;
@@ -122,6 +136,7 @@ export interface BrandData {
   colors: BrandColors;
   typography: BrandTypography;
   iconography: BrandIconography;
+  techstack: BrandTechStack;
   voice: BrandVoice;
   printables: BrandPrintables;
 }
@@ -157,7 +172,8 @@ export const STEPS: StepConfig[] = [
   { index: 4, id: 'colors', title: 'Color System', subtitle: 'Primary & secondary colors', icon: '◐', hasVariants: true },
   { index: 5, id: 'typography', title: 'Typography', subtitle: 'Font families & scale', icon: 'Aa', hasVariants: true },
   { index: 6, id: 'iconography', title: 'Iconography', subtitle: 'Icon set & visual style', icon: '✦', hasVariants: true },
-  { index: 7, id: 'review', title: 'Review', subtitle: 'Export and finalize', icon: '✓', hasVariants: false },
+  { index: 7, id: 'techstack', title: 'Tech Stack', subtitle: 'Frameworks & UI libraries', icon: '⚡', hasVariants: false },
+  { index: 8, id: 'review', title: 'Review', subtitle: 'Export and finalize', icon: '✓', hasVariants: false },
 ];
 
 // ── Default Brand Data Factory ────────────────────────────────
@@ -181,13 +197,14 @@ export function createDefaultBrandData(): BrandData {
     },
     summary: {
       variant: 's1',
-      enabledSections: ['selection', 'cover', 'summary', 'logo', 'colors', 'typography', 'iconography', 'review'],
+      enabledSections: ['selection', 'cover', 'summary', 'logo', 'colors', 'typography', 'iconography', 'techstack', 'review'],
       tocItems: [
         { id: 'cover', num: '01', label: 'Cover Page', sub: 'Title & brand identity', page: '01', icon: '◈' },
         { id: 'logo', num: '02', label: 'Logo System', sub: 'Primary, secondary & icon', page: '03', icon: '◎' },
-        { id: 'colors', num: '03', label: 'Color Palette', sub: 'Primary & secondary colors', page: '04', icon: '◐' },
+        { id: 'colors', num: '03', label: 'Color System', sub: 'Primary & secondary colors', page: '04', icon: '◐' },
         { id: 'typography', num: '04', label: 'Typography', sub: 'Font families & scale', page: '05', icon: 'Aa' },
         { id: 'iconography', num: '05', label: 'Iconography', sub: 'Icon set & visual style', page: '06', icon: '✦' },
+        { id: 'techstack', num: '06', label: 'Tech Stack', sub: 'Frameworks & UI libraries', page: '07', icon: '⚡' },
       ],
     },
     logo: {
@@ -221,8 +238,8 @@ export function createDefaultBrandData(): BrandData {
       numTones: 10,
       palette: [
         {
-          name: 'Primary', category: 'Brand', token: '--color-primary-500', hex: '#4A6E7A', rgb: '74, 110, 122', cmyk: '39, 10, 0, 52', usage: 'Main CTA, key actions, active elements',
-          tones: ["#f2f7f9", "#e3eef2", "#c6dce3", "#9fbfc9", "#7fa9b5", "#4a6e7a", "#3c5b66", "#2e474f", "#203438", "#121f20"]
+          name: 'Primary', category: 'Brand', token: '--color-primary-500', hex: '#4f46e5', rgb: '79, 70, 229', cmyk: '65, 69, 0, 10', usage: 'Main CTA, key actions, active elements',
+          tones: ["#eef2ff", "#e0e7ff", "#c7d2fe", "#a5b4fc", "#818cf8", "#4f46e5", "#4338ca", "#3730a3", "#312e81", "#1e1b4b"]
         },
         {
           name: 'Secondary', category: 'Brand', token: '--color-secondary-500', hex: '#AE2D24', rgb: '174, 45, 36', cmyk: '0, 74, 79, 32', usage: 'Secondary actions, less emphasis elements',
@@ -273,6 +290,16 @@ export function createDefaultBrandData(): BrandData {
       variant: 'regular',
       version: '4.12.0',
       samples: ['FiUser', 'FiBell', 'FiMail', 'FiTrash2', 'FiBookmark', 'FiCalendar', 'FiMessageCircle', 'FiFile', 'FiImage', 'FiCopy', 'FiUser', 'FiCopy', 'FiSave'],
+    },
+    techstack: {
+      variant: 'default',
+      technology: 'react',
+      techVersion: 'v18.2.0 (Latest)',
+      uiFramework: 'tailwind',
+      uiVersion: 'v3.4.0 (Latest)',
+      selectedUiFrameworks: [
+        { id: 'tailwind', version: 'v3.4.0 (Latest)' }
+      ]
     },
     voice: {
       tone: [],

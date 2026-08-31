@@ -1,360 +1,417 @@
-<div class="px-4 bg-white py-4 flex flex-col typography-page text-gray-900 overflow-x-hidden"
-  style="font-family: var(--font-primary)">
+@if (isPdfView) {
+  <div class="px-5 py-4 bg-white flex flex-col justify-start gap-2.5 box-border typography-page text-gray-900 overflow-hidden"
+    style="font-family: var(--font-primary)">
 
-  <!-- Standard Page Header -->
-  <div class="mb-5 page-header shrink-0">
-    <span class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase page-number">04</span>
-    <h2 class="text-[22px] font-extrabold mt-1 mb-0.5 tracking-tight page-title capitalize">{{ variantTitle }}</h2>
-    <p class="text-[10px] text-gray-500 page-subtitle">Typographic styles and hierarchies</p>
+    <!-- Standard Page Header -->
+    <div class="mb-1 page-header shrink-0">
+      <span class="text-[10px] font-bold tracking-widest text-gray-400 uppercase page-number font-mono block leading-none mb-1">{{ pageNumber }}</span>
+      <h2 class="text-[20px] font-black text-gray-900 page-title capitalize my-0.5" style="letter-spacing: 0.01em; word-spacing: normal;">{{ variantTitle }}</h2>
+      <p class="text-[10px] text-gray-500 page-subtitle leading-normal overflow-visible" style="letter-spacing: 0.01em; word-spacing: normal;">Typographic styles, hierarchies & UI components</p>
+    </div>
+
+    <!-- Typography Specification Header Bar -->
+    <div class="grid grid-cols-3 gap-3 mb-1 shrink-0">
+      <!-- Font Family Card -->
+      <div class="bg-gray-50 border border-gray-100 rounded-lg h-[58px] p-2 flex items-center justify-between relative overflow-visible shadow-xs">
+        <div class="flex flex-col justify-between h-full z-10">
+          <span class="text-[7.5px] font-mono font-bold uppercase tracking-widest text-gray-400 leading-normal overflow-visible">Primary Typeface</span>
+          <span class="text-xs font-black text-gray-900 leading-tight overflow-visible" [style.fontFamily]="fontName">{{ fontName }}</span>
+          <span class="text-[6.5px] font-mono text-gray-500 leading-normal pb-0.5 overflow-visible">400 Regular • 600 Medium • 800 Bold</span>
+        </div>
+        <span class="text-3xl font-black text-gray-200/60 absolute right-1.5 bottom-0 pointer-events-none select-none" [style.fontFamily]="fontName">Aa</span>
+      </div>
+
+      <!-- Tone Card -->
+      <div class="bg-gray-50 border border-gray-100 rounded-lg h-[58px] p-2 flex flex-col justify-between overflow-visible shadow-xs">
+        <span class="text-[7.5px] font-mono font-bold uppercase tracking-widest text-gray-400 leading-normal overflow-visible">Typography Tone</span>
+        <span class="text-[11px] font-extrabold text-gray-900 capitalize leading-tight overflow-visible">{{ fontTone }}</span>
+        <span class="text-[6.5px] font-medium text-gray-500 leading-normal pb-0.5 overflow-visible whitespace-nowrap shrink-0 truncate">{{ toneDescriptor }}</span>
+      </div>
+
+      <!-- Density Card -->
+      <div class="bg-gray-50 border border-gray-100 rounded-lg h-[58px] p-2 flex flex-col justify-between overflow-visible shadow-xs">
+        <span class="text-[7.5px] font-mono font-bold uppercase tracking-widest text-gray-400 leading-normal overflow-visible">System Density</span>
+        <span class="text-[11px] font-extrabold text-gray-900 capitalize leading-tight overflow-visible">{{ fontDensity }}</span>
+        <span class="text-[6.5px] font-mono text-gray-500 leading-normal pb-0.5 overflow-visible whitespace-nowrap shrink-0 truncate">{{ densityDescriptor }}</span>
+      </div>
+    </div>
+
+    @switch (data.typography.variant) {
+      <!-- ── PDF CASE 1: CONTENT LAYOUT VARIANT ── -->
+      @case ('content') {
+        <div class="flex flex-col gap-3 justify-start bg-gray-50/50 rounded-xl border border-gray-100 p-4 box-border overflow-hidden">
+          <div class="flex flex-col gap-1">
+            <span class="text-[8px] font-mono font-bold text-primary uppercase tracking-widest leading-none">Identity Guide / 2026</span>
+            <h1 class="text-base font-black tracking-tight text-gray-900 leading-snug">The Evolution of Brand Typography in Digital Spaces</h1>
+          </div>
+          
+          <div class="flex items-center gap-2 py-1.5 border-b border-gray-200/60">
+            <div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center font-bold text-[8px] text-primary">AS</div>
+            <div class="flex flex-col">
+              <span class="text-[9px] font-bold text-gray-900 leading-none">Alexandra Sterling</span>
+              <span class="text-[7.5px] font-medium text-gray-400 leading-none mt-0.5">Design Lead • 12 Min Read</span>
+            </div>
+          </div>
+
+          <p class="text-[10px] font-medium text-gray-800 leading-normal">
+            Typography is not just about choosing a font; it's about defining the voice and rhythm of your brand. In a world where screens are the primary medium, readability and hierarchy are the foundations of trust.
+          </p>
+
+          <div class="flex flex-col gap-1">
+            <h2 class="text-[11.5px] font-black text-gray-900 leading-tight">1. The Psychology of Weight</h2>
+            <p class="text-[9.5px] text-gray-600 leading-normal">
+              When we use heavier weights, we project authority and confidence. Lighter weights evoke elegance, precision, and modernity. By balancing these within a grid, we create a visual melody that guides the eye.
+            </p>
+          </div>
+
+          <div class="bg-white p-3 rounded-lg border-l-4 border-primary italic text-[9.5px] text-gray-700 shadow-xs mt-1">
+            "Good design is obvious. Great design is transparent. Typography is the invisible thread that connects them."
+          </div>
+        </div>
+      }
+
+      <!-- ── PDF CASE 2: CORE TYPOGRAPHY LAYOUT VARIANT (DEFAULT) ── -->
+      @default {
+        <div class="grid grid-cols-2 gap-4 py-0.5 overflow-visible">
+          <!-- Left Column: Headings & Body Text -->
+          <div class="flex flex-col gap-3 justify-start border-r border-gray-100 pr-4 overflow-visible min-w-0">
+            <!-- Headings Section -->
+            <div class="flex flex-col gap-0.5 overflow-visible">
+              <span class="text-[7.5px] font-mono font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-0.5 mb-0.5 block leading-normal overflow-visible">Headings & Hierarchy</span>
+              
+              <div class="flex items-center justify-between py-0.5 border-b border-gray-50 overflow-visible">
+                <span class="text-[7.5px] font-mono text-gray-400 whitespace-nowrap shrink-0 w-36 overflow-visible"><strong class="text-gray-800">&lt;h1&gt;</strong> Page Title</span>
+                <span class="text-[18px] font-black text-gray-900 truncate leading-normal pb-0.5 overflow-visible">The quick brown fox</span>
+              </div>
+
+              <div class="flex items-center justify-between py-0.5 border-b border-gray-50 overflow-visible">
+                <span class="text-[7.5px] font-mono text-gray-400 whitespace-nowrap shrink-0 w-36 overflow-visible"><strong class="text-gray-800">&lt;h2&gt;</strong> Section Heading</span>
+                <span class="text-[15px] font-bold text-gray-900 truncate leading-normal pb-0.5 overflow-visible">The quick brown fox</span>
+              </div>
+
+              <div class="flex items-center justify-between py-0.5 border-b border-gray-50 overflow-visible">
+                <span class="text-[7.5px] font-mono text-gray-400 whitespace-nowrap shrink-0 w-36 overflow-visible"><strong class="text-gray-800">&lt;h3&gt;</strong> Sub-section Heading</span>
+                <span class="text-[13.5px] font-semibold text-gray-900 truncate leading-normal pb-0.5 overflow-visible">The quick brown fox jumps</span>
+              </div>
+
+              <div class="flex items-center justify-between py-0.5 border-b border-gray-50 overflow-visible">
+                <span class="text-[7.5px] font-mono text-gray-400 whitespace-nowrap shrink-0 w-36 overflow-visible"><strong class="text-gray-800">&lt;h4&gt;</strong> Card Group Title</span>
+                <span class="text-[11.5px] font-semibold text-gray-800 truncate leading-normal pb-0.5 overflow-visible">The quick brown fox jumps</span>
+              </div>
+
+              <div class="flex items-center justify-between py-0.5 border-b border-gray-50 overflow-visible">
+                <span class="text-[7.5px] font-mono text-gray-400 whitespace-nowrap shrink-0 w-36 overflow-visible"><strong class="text-gray-800">&lt;h5&gt;</strong> Minor Heading</span>
+                <span class="text-[10px] font-medium text-gray-700 truncate leading-normal pb-0.5 overflow-visible">The quick brown fox jumps</span>
+              </div>
+
+              <div class="flex items-center justify-between py-0.5 overflow-visible">
+                <span class="text-[7.5px] font-mono text-gray-400 whitespace-nowrap shrink-0 w-36 overflow-visible"><strong class="text-gray-800">&lt;h6&gt;</strong> Caption Heading</span>
+                <span class="text-[8.5px] font-bold uppercase tracking-wider text-gray-500 truncate leading-normal pb-0.5 overflow-visible">THE QUICK BROWN FOX</span>
+              </div>
+            </div>
+
+            <!-- Body Text Section -->
+            <div class="flex flex-col gap-0.5 mt-1 overflow-visible min-w-0">
+              <span class="text-[7.5px] font-mono font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-0.5 mb-0.5 block leading-normal overflow-visible">Body & Paragraph Text</span>
+
+              <div class="py-0.5 border-b border-gray-50 overflow-visible">
+                <span class="text-[7px] font-mono text-gray-400 block leading-normal overflow-visible"><strong class="text-gray-800">.body-large</strong> • Intro Text</span>
+                <p class="text-[9.5px] font-medium text-gray-800 leading-tight whitespace-normal break-words mt-0.5 overflow-visible max-w-[340px]">
+                  Typography is the art and technique of arranging type to make language appealing.
+                </p>
+              </div>
+
+              <div class="py-0.5 border-b border-gray-50 overflow-visible">
+                <span class="text-[7px] font-mono text-gray-400 block leading-normal overflow-visible"><strong class="text-gray-800">&lt;p&gt;</strong> • Default Paragraph</span>
+                <p class="text-[8.5px] text-gray-600 leading-tight whitespace-normal break-words mt-0.5 overflow-visible max-w-[340px]">
+                  Selecting typefaces, point sizes, line lengths and letter spacing shapes brand identity.
+                </p>
+              </div>
+
+              <div class="py-0.5 overflow-visible">
+                <span class="text-[7px] font-mono text-gray-400 block leading-normal overflow-visible"><strong class="text-gray-800">.body-small</strong> • Secondary Text</span>
+                <p class="text-[8px] text-gray-500 leading-tight whitespace-normal break-words mt-0.5 overflow-visible max-w-[340px]">
+                  Type design is a craft ensuring optimal legibility across digital screens.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Buttons & Forms -->
+          <div class="flex flex-col gap-4 justify-start pl-0.5 overflow-visible min-w-0">
+            <!-- Buttons & Actions -->
+            <div class="flex flex-col gap-1 overflow-visible">
+              <span class="text-[7.5px] font-mono font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-0.5 mb-1.5 block leading-normal overflow-visible">Buttons & Actions</span>
+              <div class="flex flex-col gap-2 overflow-visible">
+                <button class="bg-[#111] text-white px-4 h-8 flex items-center justify-center rounded-lg text-[9.5px] font-bold leading-none shrink-0 w-full shadow-xs">Primary Action</button>
+                <button class="bg-white text-gray-800 px-4 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-[9.5px] font-bold leading-none shrink-0 w-full shadow-xs">Secondary Action</button>
+                <button class="bg-gray-100 text-gray-400 px-4 h-8 flex items-center justify-center rounded-lg text-[9.5px] font-bold cursor-not-allowed leading-none shrink-0 w-full">Disabled State</button>
+              </div>
+            </div>
+
+            <!-- Form Inputs -->
+            <div class="flex flex-col gap-1 overflow-visible">
+              <span class="text-[7.5px] font-mono font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-0.5 mb-1.5 block leading-normal overflow-visible">Form Controls</span>
+              <div class="flex flex-col gap-2 overflow-visible">
+                <div class="border border-gray-200 rounded-lg px-3 h-8 flex items-center text-[9px] text-gray-400 leading-none bg-white">Placeholder text...</div>
+                <div class="border-2 border-primary/60 rounded-lg px-3 h-8 flex items-center text-[9px] font-medium text-gray-900 bg-white shadow-xs">User Typed Value</div>
+              </div>
+              <div class="flex items-center justify-between text-[7.5px] pt-1 overflow-visible">
+                <span class="text-error font-medium leading-normal overflow-visible">⚠️ Required field error</span>
+                <span class="text-success font-medium leading-normal overflow-visible">✓ Profile saved</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
   </div>
+} @else {
+  <div class="px-4 bg-white py-4 flex flex-col typography-page text-gray-900 overflow-x-hidden"
+    style="font-family: var(--font-primary)">
 
-  @switch (data.typography.variant) {
-  <!-- CASE 1: CORE TYPOGRAPHY LAYOUT -->
-  @case ('core') {
-  <div class="max-w-4xl mx-auto bg-white p-0">
+    <!-- Standard Page Header -->
+    <div class="mb-4 page-header shrink-0">
+      <span class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase page-number">{{ pageNumber }}</span>
+      <h2 class="text-[22px] font-extrabold mt-1 mb-0.5 tracking-tight page-title capitalize">{{ variantTitle }}</h2>
+      <p class="text-[10px] text-gray-500 page-subtitle">Typographic styles and hierarchies</p>
+    </div>
 
-    <!-- <div class="mb-12 border-b border-gray-100 pb-3">
-      <span
-        style="font-size: var(--ui-label-size); font-weight: var(--ui-label-weight); color: var(--color-primary-500); letter-spacing: 0.1em; text-transform: uppercase;">1.
-        Core Typography Styles</span>
-      <h2 class="mt-2 text-gray-900"
-        style="font-size: var(--h2-size); font-weight: var(--h1-weight); line-height: var(--h2-lh);">Foundation Layer
-      </h2>
-      <p class="mt-2 text-gray-500" style="font-size: var(--body-md-size); line-height: var(--body-md-lh);">These are
-        the atomic text styles that define your design system.</p>
-    </div> -->
-
-    <!-- Headings Section -->
-    <div class="mb-5">
-      <div class="mb-0 pb-2 border-b border-gray-50 flex items-baseline justify-between">
-        <h3 class="text-gray-900" style="font-size: var(--h4-size); font-weight: var(--h1-weight);">Headings</h3>
+    <!-- Typography Specification Header Bar -->
+    <div class="grid grid-cols-3 gap-3 mb-5 shrink-0">
+      <!-- Font Family Card -->
+      <div class="bg-gray-50 border border-gray-100 rounded-xl h-[72px] p-2.5 flex items-center justify-between relative overflow-hidden shadow-xs">
+        <div class="flex flex-col justify-between h-full z-10">
+          <span class="text-[7.5px] font-mono font-bold uppercase tracking-widest text-gray-400 leading-normal overflow-visible">Primary Typeface</span>
+          <span class="text-sm font-black text-gray-900 leading-none overflow-visible" [style.fontFamily]="fontName">{{ fontName }}</span>
+          <span class="text-[7px] font-mono text-gray-500 leading-normal pb-0.5 overflow-visible">400 Regular • 600 Medium • 800 Bold</span>
+        </div>
+        <span class="text-4xl font-black text-gray-200/60 absolute right-2 bottom-0 pointer-events-none select-none" [style.fontFamily]="fontName">Aa</span>
       </div>
 
-      <div class="space-y-0">
-        <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-50 pb-6">
-          <div class="w-48 shrink-0 text-gray-400 mb-2 md:mb-0" style="font-size: var(--ui-caption-size);">
-            <span class="font-bold text-gray-800">&lt;h1&gt;</span> • Page Title
-          </div>
-          <div class="text-gray-900"
-            style="font-size: var(--h1-size); font-weight: var(--h1-weight); line-height: var(--h1-lh);">The quick brown
-            fox</div>
-        </div>
+      <!-- Tone Card -->
+      <div class="bg-gray-50 border border-gray-100 rounded-xl h-[72px] p-2.5 flex flex-col justify-between shadow-xs">
+        <span class="text-[7.5px] font-mono font-bold uppercase tracking-widest text-gray-400 leading-normal overflow-visible">Typography Tone</span>
+        <span class="text-xs font-extrabold text-gray-900 capitalize leading-none overflow-visible">{{ fontTone }}</span>
+        <span class="text-[7.5px] font-medium text-gray-500 leading-normal pb-0.5 overflow-visible whitespace-nowrap shrink-0 truncate">{{ toneDescriptor }}</span>
+      </div>
 
-        <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-50 pb-6">
-          <div class="w-48 shrink-0 text-gray-400 mb-2 md:mb-0" style="font-size: var(--ui-caption-size);">
-            <span class="font-bold text-gray-800">&lt;h2&gt;</span> • Section Heading
-          </div>
-          <div class="text-gray-900"
-            style="font-size: var(--h2-size); font-weight: var(--h1-weight); line-height: var(--h2-lh);">The quick brown
-            fox</div>
-        </div>
-
-        <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-50 pb-6">
-          <div class="w-48 shrink-0 text-gray-400 mb-2 md:mb-0" style="font-size: var(--ui-caption-size);">
-            <span class="font-bold text-gray-800">&lt;h3&gt;</span> • Sub-section Heading
-          </div>
-          <div class="text-gray-900"
-            style="font-size: var(--h3-size); font-weight: var(--h1-weight); line-height: var(--h3-lh);">The quick brown
-            fox jumps</div>
-        </div>
-
-        <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-50 pb-6">
-          <div class="w-48 shrink-0 text-gray-400 mb-2 md:mb-0" style="font-size: var(--ui-caption-size);">
-            <span class="font-bold text-gray-800">&lt;h4&gt;</span> • Card / Group Title
-          </div>
-          <div class="text-gray-800"
-            style="font-size: var(--h4-size); font-weight: var(--h1-weight); line-height: var(--h4-lh);">The quick brown
-            fox jumps over the lazy dog</div>
-        </div>
-
-        <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-50 pb-6">
-          <div class="w-48 shrink-0 text-gray-400 mb-2 md:mb-0" style="font-size: var(--ui-caption-size);">
-            <span class="font-bold text-gray-800">&lt;h5&gt;</span> • Minor Heading
-          </div>
-          <div class="text-gray-700"
-            style="font-size: var(--h5-size); font-weight: var(--h1-weight); line-height: var(--h4-lh);">The quick brown
-            fox jumps over the lazy dog</div>
-        </div>
-
-        <div class="flex flex-col md:flex-row md:items-baseline pb-6">
-          <div class="w-48 shrink-0 text-gray-400 mb-2 md:mb-0" style="font-size: var(--ui-caption-size);">
-            <span class="font-bold text-gray-800">&lt;h6&gt;</span> • Caption Heading
-          </div>
-          <div class="uppercase tracking-widest text-gray-500"
-            style="font-size: var(--h6-size); font-weight: var(--h1-weight); line-height: var(--h4-lh);">The quick brown
-            fox jumps</div>
-        </div>
+      <!-- Density Card -->
+      <div class="bg-gray-50 border border-gray-100 rounded-xl h-[72px] p-2.5 flex flex-col justify-between shadow-xs">
+        <span class="text-[7.5px] font-mono font-bold uppercase tracking-widest text-gray-400 leading-normal overflow-visible">System Density</span>
+        <span class="text-xs font-extrabold text-gray-900 capitalize leading-none overflow-visible">{{ fontDensity }}</span>
+        <span class="text-[7.5px] font-mono text-gray-500 leading-normal pb-0.5 overflow-visible whitespace-nowrap shrink-0 truncate">{{ densityDescriptor }}</span>
       </div>
     </div>
 
-    <!-- Body Text Section -->
-    <div class="mb-14">
-      <div class="mb-6 pb-2 border-b border-gray-50">
-        <h3 class="text-gray-900" style="font-size: var(--h4-size); font-weight: var(--h1-weight);">Body Text</h3>
+    @switch (data.typography.variant) {
+    <!-- CASE 1: CORE TYPOGRAPHY LAYOUT -->
+    @case ('core') {
+    <div class="max-w-4xl mx-auto bg-white p-0">
+      <!-- Headings Section -->
+      <div class="mb-5">
+        <div class="mb-0 pb-2 border-b border-gray-50 flex items-baseline justify-between">
+          <h3 class="text-gray-900" style="font-size: var(--h4-size); font-weight: var(--h1-weight);">Headings</h3>
+        </div>
+
+        <div class="space-y-0">
+          <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-50 pb-6">
+            <div class="w-56 shrink-0 text-gray-400 mb-2 md:mb-0 whitespace-nowrap" style="font-size: var(--ui-caption-size);">
+              <span class="font-bold text-gray-800">&lt;h1&gt;</span> • Page Title
+            </div>
+            <div class="text-gray-900"
+              style="font-size: var(--h1-size); font-weight: var(--h1-weight); line-height: var(--h1-lh);">The quick brown
+              fox</div>
+          </div>
+
+          <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-50 pb-6">
+            <div class="w-56 shrink-0 text-gray-400 mb-2 md:mb-0 whitespace-nowrap" style="font-size: var(--ui-caption-size);">
+              <span class="font-bold text-gray-800">&lt;h2&gt;</span> • Section Heading
+            </div>
+            <div class="text-gray-900"
+              style="font-size: var(--h2-size); font-weight: var(--h1-weight); line-height: var(--h2-lh);">The quick brown
+              fox</div>
+          </div>
+
+          <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-50 pb-6">
+            <div class="w-56 shrink-0 text-gray-400 mb-2 md:mb-0 whitespace-nowrap" style="font-size: var(--ui-caption-size);">
+              <span class="font-bold text-gray-800">&lt;h3&gt;</span> • Sub-section Heading
+            </div>
+            <div class="text-gray-900"
+              style="font-size: var(--h3-size); font-weight: var(--h1-weight); line-height: var(--h3-lh);">The quick brown
+              fox jumps</div>
+          </div>
+
+          <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-50 pb-6">
+            <div class="w-56 shrink-0 text-gray-400 mb-2 md:mb-0 whitespace-nowrap" style="font-size: var(--ui-caption-size);">
+              <span class="font-bold text-gray-800">&lt;h4&gt;</span> • Card / Group Title
+            </div>
+            <div class="text-gray-800"
+              style="font-size: var(--h4-size); font-weight: var(--h1-weight); line-height: var(--h4-lh);">The quick brown
+              fox jumps over the lazy dog</div>
+          </div>
+
+          <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-50 pb-6">
+            <div class="w-56 shrink-0 text-gray-400 mb-2 md:mb-0 whitespace-nowrap" style="font-size: var(--ui-caption-size);">
+              <span class="font-bold text-gray-800">&lt;h5&gt;</span> • Minor Heading
+            </div>
+            <div class="text-gray-700"
+              style="font-size: var(--h5-size); font-weight: var(--h1-weight); line-height: var(--h4-lh);">The quick brown
+              fox jumps over the lazy dog</div>
+          </div>
+
+          <div class="flex flex-col md:flex-row md:items-baseline pb-6">
+            <div class="w-56 shrink-0 text-gray-400 mb-2 md:mb-0 whitespace-nowrap" style="font-size: var(--ui-caption-size);">
+              <span class="font-bold text-gray-800">&lt;h6&gt;</span> • Caption Heading
+            </div>
+            <div class="uppercase tracking-widest text-gray-500"
+              style="font-size: var(--h6-size); font-weight: var(--h1-weight); line-height: var(--h4-lh);">The quick brown
+              fox jumps</div>
+          </div>
+        </div>
       </div>
 
-      <div class="space-y-8">
-        <div class="flex flex-col md:flex-row md:items-start border-b border-gray-50 pb-6">
-          <div class="w-48 shrink-0 text-gray-400 mb-2 md:mb-0 mt-1" style="font-size: var(--ui-caption-size);">
-            <span class="font-bold text-gray-800">.body-large</span> • Intro text
-          </div>
-          <div class="text-gray-800 max-w-2xl"
-            style="font-size: var(--body-lg-size); font-weight: var(--body-lg-weight); line-height: var(--body-lg-lh);">
-            Typography is the art and technique of arranging type to make written language legible, readable, and
-            appealing when displayed.
-          </div>
+      <!-- Body Text Section -->
+      <div class="mb-14">
+        <div class="mb-6 pb-2 border-b border-gray-50">
+          <h3 class="text-gray-900" style="font-size: var(--h4-size); font-weight: var(--h1-weight);">Body Text</h3>
         </div>
 
-        <div class="flex flex-col md:flex-row md:items-start border-b border-gray-50 pb-6">
-          <div class="w-48 shrink-0 text-gray-400 mb-2 md:mb-0 mt-1" style="font-size: var(--ui-caption-size);">
-            <span class="font-bold text-gray-800">&lt;p&gt;</span> • Default paragraph
+        <div class="space-y-8">
+          <div class="flex flex-col md:flex-row md:items-start border-b border-gray-50 pb-6">
+            <div class="w-56 shrink-0 text-gray-400 mb-2 md:mb-0 mt-1 whitespace-nowrap" style="font-size: var(--ui-caption-size);">
+              <span class="font-bold text-gray-800">.body-large</span> • Intro text
+            </div>
+            <div class="text-gray-800 max-w-2xl"
+              style="font-size: var(--body-lg-size); font-weight: var(--body-lg-weight); line-height: var(--body-lg-lh);">
+              Typography is the art and technique of arranging type to make written language legible, readable, and
+              appealing when displayed.
+            </div>
           </div>
-          <div class="text-gray-600 max-w-2xl"
-            style="font-size: var(--body-md-size); font-weight: var(--body-md-weight); line-height: var(--body-md-lh);">
-            The arrangement of type involves selecting typefaces, point sizes, line lengths, line-spacing, and
-            letter-spacing, and adjusting the space between pairs of letters. The term typography is also applied to the
-            form and appearance.
-          </div>
-        </div>
 
-        <div class="flex flex-col md:flex-row md:items-start border-b border-gray-50 pb-6">
-          <div class="w-48 shrink-0 text-gray-400 mb-2 md:mb-0 mt-1" style="font-size: var(--ui-caption-size);">
-            <span class="font-bold text-gray-800">.body-small</span> • Secondary text
+          <div class="flex flex-col md:flex-row md:items-start border-b border-gray-50 pb-6">
+            <div class="w-56 shrink-0 text-gray-400 mb-2 md:mb-0 mt-1 whitespace-nowrap" style="font-size: var(--ui-caption-size);">
+              <span class="font-bold text-gray-800">&lt;p&gt;</span> • Default paragraph
+            </div>
+            <div class="text-gray-600 max-w-2xl"
+              style="font-size: var(--body-md-size); font-weight: var(--body-md-weight); line-height: var(--body-md-lh);">
+              The arrangement of type involves selecting typefaces, point sizes, line lengths, line-spacing, and
+              letter-spacing, and adjusting the space between pairs of letters. The term typography is also applied to the
+              form and appearance.
+            </div>
           </div>
-          <div class="text-gray-500 max-w-2xl"
-            style="font-size: var(--body-sm-size); font-weight: var(--body-md-weight); line-height: var(--body-md-lh);">
-            Type design is a closely related craft, sometimes considered part of typography; most typographers do not
-            design typefaces, and some type designers do not consider themselves typographers.
-          </div>
-        </div>
 
-        <div class="flex flex-col md:flex-row md:items-start pb-4">
-          <div class="w-48 shrink-0 text-gray-400 mb-2 md:mb-0 mt-1" style="font-size: var(--ui-caption-size);">
-            <span class="font-bold text-gray-800">.caption</span> • Metadata
+          <div class="flex flex-col md:flex-row md:items-start border-b border-gray-50 pb-6">
+            <div class="w-56 shrink-0 text-gray-400 mb-2 md:mb-0 mt-1 whitespace-nowrap" style="font-size: var(--ui-caption-size);">
+              <span class="font-bold text-gray-800">.body-small</span> • Secondary text
+            </div>
+            <div class="text-gray-500 max-w-2xl"
+              style="font-size: var(--body-sm-size); font-weight: var(--body-md-weight); line-height: var(--body-md-lh);">
+              Type design is a closely related craft, sometimes considered part of typography; most typographers do not
+              design typefaces, and some type designers do not consider executives typographers.
+            </div>
           </div>
-          <div class="text-gray-400 max-w-2xl uppercase tracking-wider"
-            style="font-size: var(--ui-caption-size); font-weight: var(--body-md-weight);">
-            Last updated: 24 October 2026 • Reading time: 5 mins
+
+          <div class="flex flex-col md:flex-row md:items-start pb-4">
+            <div class="w-56 shrink-0 text-gray-400 mb-2 md:mb-0 mt-1 whitespace-nowrap" style="font-size: var(--ui-caption-size);">
+              <span class="font-bold text-gray-800">.caption</span> • Metadata
+            </div>
+            <div class="text-gray-400 max-w-2xl uppercase tracking-wider"
+              style="font-size: var(--ui-caption-size); font-weight: var(--body-md-weight);">
+              Last updated: 24 October 2026 • Reading time: 5 mins
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Inline Text Elements -->
-    <div class="mb-14">
-      <div class="mb-6 pb-2 border-b border-gray-50">
-        <h3 class="text-gray-900" style="font-size: var(--h4-size); font-weight: var(--h1-weight);">Inline Text Elements
-        </h3>
-      </div>
-
-      <div class="flex flex-wrap gap-10 text-gray-800"
-        style="font-size: var(--body-md-size); font-weight: var(--body-md-weight); line-height: var(--body-md-lh);">
-        <div class="flex flex-col gap-1.5">
-          <span class="text-gray-400" style="font-size: var(--ui-caption-size);">&lt;strong&gt;</span>
-          <strong>Bold emphasis</strong>
-        </div>
-        <div class="flex flex-col gap-1.5">
-          <span class="text-gray-400" style="font-size: var(--ui-caption-size);">&lt;em&gt;</span>
-          <em>Italic emphasis</em>
-        </div>
-        <div class="flex flex-col gap-1.5">
-          <span class="text-gray-400" style="font-size: var(--ui-caption-size);">&lt;u&gt;</span>
-          <u>Underline text</u>
-        </div>
-        <div class="flex flex-col gap-1.5">
-          <span class="text-gray-400" style="font-size: var(--ui-caption-size);">&lt;a&gt;</span>
-          <a href="#" class="text-primary-600 underline hover:text-primary-700 transition-colors">Hoverable Link</a>
-        </div>
-        <div class="flex flex-col gap-1.5">
-          <span class="text-gray-400" style="font-size: var(--ui-caption-size);">&lt;mark&gt;</span>
-          <mark class="bg-yellow-100 text-yellow-800 px-1 rounded">Highlighted text</mark>
-        </div>
-      </div>
-    </div>
-
-    <!-- Labels & UI Text -->
-    <div class="mb-14">
-      <div class="mb-6 pb-2 border-b border-gray-50">
-        <h3 class="text-gray-900" style="font-size: var(--h4-size); font-weight: var(--h1-weight);">Labels & UI Text
-        </h3>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <!-- Functional Typography Section (Buttons & Forms) -->
+      <div class="grid md:grid-cols-2 gap-12">
+        <!-- Buttons -->
         <div>
-          <span class="text-gray-400 block mb-2" style="font-size: var(--ui-caption-size);">.label</span>
-          <label
-            style="font-size: var(--ui-label-size); font-weight: var(--ui-label-weight); color: var(--color-gray-700);">Email
-            Address</label>
+          <h4 class="mb-4 text-gray-400 uppercase tracking-widest"
+            style="font-size: var(--ui-caption-size); font-weight: var(--ui-label-weight);">Buttons</h4>
+          <div class="flex flex-col gap-4 items-start">
+            <button
+              class="bg-[#111] text-white px-6 py-2.5 rounded-lg border border-[#111] hover:bg-black transition-colors"
+              style="font-size: var(--action-btn-size); font-weight: var(--action-btn-weight);">Primary Button
+              Action</button>
+            <button
+              class="bg-white text-gray-800 px-6 py-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+              style="font-size: var(--action-btn-size); font-weight: var(--action-btn-weight);">Secondary Button</button>
+            <button class="bg-gray-50 text-gray-400 px-6 py-2.5 rounded-lg border border-gray-100 cursor-not-allowed"
+              style="font-size: var(--action-btn-size); font-weight: var(--action-btn-weight);">Disabled State</button>
+          </div>
         </div>
+
+        <!-- Forms -->
         <div>
-          <span class="text-gray-400 block mb-2" style="font-size: var(--ui-caption-size);">.helper-text</span>
-          <span class="text-gray-400" style="font-size: var(--ui-helper-size);">We'll never share your email.</span>
-        </div>
-        <div>
-          <span class="text-gray-400 block mb-2" style="font-size: var(--ui-caption-size);">.error-text</span>
-          <span class="text-error" style="font-size: var(--ui-helper-size);">Invalid email format.</span>
-        </div>
-        <div>
-          <span class="text-gray-400 block mb-2" style="font-size: var(--ui-caption-size);">.badge-text</span>
-          <div>
-            <span class="bg-success/10 text-success px-2 py-0.5 rounded font-bold uppercase tracking-wider"
-              style="font-size: var(--ui-caption-size);">Active</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Functional Typography Section -->
-    <!-- <div class="mb-12 border-b border-gray-100 pb-6 mt-16">
-      <span
-        style="font-size: var(--ui-label-size); font-weight: var(--ui-label-weight); color: var(--color-primary-500); letter-spacing: 0.1em; text-transform: uppercase;">2.
-        Functional Typography</span>
-      <h2 class="mt-2 text-gray-900"
-        style="font-size: var(--h2-size); font-weight: var(--h1-weight); line-height: var(--h2-lh);">UI Context</h2>
-      <p class="mt-2 text-gray-500" style="font-size: var(--body-md-size); line-height: var(--body-md-lh);">How
-        typography becomes meaningful in real product scenarios.</p>
-    </div> -->
-
-    <div class="grid md:grid-cols-2 gap-12">
-      <!-- Buttons -->
-      <div>
-        <h4 class="mb-4 text-gray-400 uppercase tracking-widest"
-          style="font-size: var(--ui-caption-size); font-weight: var(--ui-label-weight);">Buttons</h4>
-        <div class="flex flex-col gap-4 items-start">
-          <button
-            class="bg-[#111] text-white px-6 py-2.5 rounded-lg border border-[#111] hover:bg-black transition-colors"
-            style="font-size: var(--action-btn-size); font-weight: var(--action-btn-weight);">Primary Button
-            Action</button>
-          <button
-            class="bg-white text-gray-800 px-6 py-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
-            style="font-size: var(--action-btn-size); font-weight: var(--action-btn-weight);">Secondary Button</button>
-          <button class="bg-gray-50 text-gray-400 px-6 py-2.5 rounded-lg border border-gray-100 cursor-not-allowed"
-            style="font-size: var(--action-btn-size); font-weight: var(--action-btn-weight);">Disabled State</button>
-        </div>
-      </div>
-
-      <!-- Forms -->
-      <div>
-        <h4 class="mb-4 text-gray-400 uppercase tracking-widest"
-          style="font-size: var(--ui-caption-size); font-weight: var(--ui-label-weight);">Forms</h4>
-        <div class="flex flex-col gap-3">
-          <div class="w-full border border-gray-200 rounded-lg p-3 text-gray-400"
-            style="font-size: var(--ui-input-size);">Placeholder text...</div>
-          <div class="w-full border-2 border-primary-500 rounded-lg p-3 text-gray-900 bg-white"
-            style="font-size: var(--ui-input-size);">User Typed Value</div>
-          <div class="flex items-center gap-1.5 mt-1">
-            <span class="text-error" style="font-size: var(--ui-helper-size);">⚠️ This field is required.</span>
-          </div>
-          <div class="flex items-center gap-1.5 mt-1 border-t border-gray-50 pt-3">
-            <span class="text-success font-medium" style="font-size: var(--ui-helper-size);">✓ Profile successfully
-              saved.</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Navigation -->
-      <div>
-        <h4 class="mb-4 text-gray-400 uppercase tracking-widest"
-          style="font-size: var(--ui-caption-size); font-weight: var(--ui-label-weight);">Navigation</h4>
-        <div class="flex flex-col gap-6 bg-gray-50/50 p-6 rounded-xl border border-gray-100">
-          <div class="flex gap-6">
-            <span class="text-primary-600 border-b-2 border-primary-600 pb-1.5"
-              style="font-size: var(--body-sm-size); font-weight: var(--h1-weight);">Active Item</span>
-            <span class="text-gray-900 cursor-pointer pb-1.5"
-              style="font-size: var(--body-sm-size); font-weight: var(--h1-weight);">Hover Item</span>
-            <span class="text-gray-500 cursor-pointer pb-1.5"
-              style="font-size: var(--body-sm-size); font-weight: var(--body-md-weight);">Default Item</span>
-          </div>
-          <div class="flex items-center gap-2 text-gray-400 pt-2 border-t border-gray-100"
-            style="font-size: var(--ui-caption-size);">
-            <a href="#" class="hover:text-primary-600 transition-colors">Home</a>
-            <span>/</span>
-            <a href="#" class="hover:text-primary-600 transition-colors">Settings</a>
-            <span>/</span>
-            <span class="text-gray-800 font-bold">Profile</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Data Display -->
-      <div>
-        <h4 class="mb-4 text-gray-400 uppercase tracking-widest"
-          style="font-size: var(--ui-caption-size); font-weight: var(--ui-label-weight);">Data Display</h4>
-        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
-          <div
-            class="grid grid-cols-2 bg-gray-50/80 p-3.5 border-b border-gray-100 text-gray-500 uppercase tracking-wider"
-            style="font-size: var(--ui-caption-size); font-weight: var(--ui-label-weight);">
-            <span>Table Header</span>
-            <span class="text-right">Value</span>
-          </div>
-          <div class="grid grid-cols-2 p-3.5 border-b border-gray-50 items-center">
-            <span class="text-gray-700 font-medium" style="font-size: var(--body-sm-size);">Active Users</span>
-            <span class="text-right text-gray-900"
-              style="font-size: var(--h3-size); font-weight: var(--h1-weight); letter-spacing: -0.02em;">14,509</span>
-          </div>
-          <div class="grid grid-cols-2 p-3.5 items-center bg-white">
-            <span class="text-gray-700 font-medium" style="font-size: var(--body-sm-size);">Conversion</span>
-            <div class="text-right flex flex-col justify-end">
-              <span class="text-success"
-                style="font-size: var(--h4-size); font-weight: var(--h1-weight); letter-spacing: -0.02em;">+8.4%</span>
-              <span class="text-gray-400 mt-0.5" style="font-size: var(--ui-caption-size);">Vs Last Quarter</span>
+          <h4 class="mb-4 text-gray-400 uppercase tracking-widest"
+            style="font-size: var(--ui-caption-size); font-weight: var(--ui-label-weight);">Forms</h4>
+          <div class="flex flex-col gap-3">
+            <div class="w-full border border-gray-200 rounded-lg p-3 text-gray-400"
+              style="font-size: var(--ui-input-size);">Placeholder text...</div>
+            <div class="w-full border-2 border-primary-500 rounded-lg p-3 text-gray-900 bg-white"
+              style="font-size: var(--ui-input-size);">User Typed Value</div>
+            <div class="flex items-center gap-1.5 mt-1">
+              <span class="text-error" style="font-size: var(--ui-helper-size);">⚠️ This field is required.</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-1 border-t border-gray-50 pt-3">
+              <span class="text-success font-medium" style="font-size: var(--ui-helper-size);">✓ Profile successfully saved.</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  }
+    }
 
-  <!-- CASE 2: CONTENT LAYOUT -->
-  @case ('content') {
-  <div class="max-w-2xl mx-auto bg-white p-12 shadow-sm rounded-2xl animate-fade-in">
-    <span
-      style="font-size: var(--ui-label-size); font-weight: var(--ui-label-weight); color: var(--color-primary-500); letter-spacing: 0.1em; text-transform: uppercase;">Identity
-      Guide / 2026</span>
-    <h1 class="mt-4 mb-6"
-      style="font-size: var(--h1-size); font-weight: var(--h1-weight); line-height: var(--h1-lh); letter-spacing: -0.02em;">
-      The Evolution of Brand Typography in Digital Spaces
-    </h1>
-    <div class="flex items-center gap-3 mb-10 pb-10 border-b border-gray-100">
-      <div class="w-10 h-10 rounded-full bg-gray-200"></div>
-      <div>
-        <span class="block font-bold" style="font-size: var(--body-sm-size);">Alexandra Sterling</span>
-        <span class="text-gray-400" style="font-size: var(--ui-caption-size);">Design Lead • 12 Min Read</span>
+    <!-- CASE 2: CONTENT LAYOUT -->
+    @case ('content') {
+    <div class="max-w-2xl mx-auto bg-white p-12 shadow-sm rounded-2xl animate-fade-in">
+      <span
+        style="font-size: var(--ui-label-size); font-weight: var(--ui-label-weight); color: var(--color-primary-500); letter-spacing: 0.1em; text-transform: uppercase;">Identity
+        Guide / 2026</span>
+      <h1 class="mt-4 mb-6"
+        style="font-size: var(--h1-size); font-weight: var(--h1-weight); line-height: var(--h1-lh); letter-spacing: -0.02em;">
+        The Evolution of Brand Typography in Digital Spaces
+      </h1>
+      <div class="flex items-center gap-3 mb-10 pb-10 border-b border-gray-100">
+        <div class="w-10 h-10 rounded-full bg-gray-200"></div>
+        <div>
+          <span class="block font-bold" style="font-size: var(--body-sm-size);">Alexandra Sterling</span>
+          <span class="text-gray-400" style="font-size: var(--ui-caption-size);">Design Lead • 12 Min Read</span>
+        </div>
+      </div>
+
+      <div class="typography-content space-y-8 text-gray-700">
+        <p style="font-size: var(--body-lg-size); line-height: var(--body-lg-lh); font-weight: var(--body-lg-weight);">
+          Typography is not just about choosing a font; it's about defining the voice and rhythm of your brand. In a world
+          where screens are the primary medium, readability and hierarchy are the foundations of trust.
+        </p>
+
+        <h2 class="pt-4" style="font-size: var(--h2-size); font-weight: var(--h1-weight); line-height: var(--h2-lh);">
+          1. The Psychology of Weight
+        </h2>
+        <p style="font-size: var(--body-md-size); line-height: var(--body-md-lh); font-weight: var(--body-md-weight);">
+          When we use heavier weights, we project authority and confidence. Lighter weights, on the other hand, evoke
+          elegance, precision, and modernity. By balancing these within a grid, we create a visual melody that guides the
+          eye.
+        </p>
+
+        <h3 class="pt-2" style="font-size: var(--h3-size); font-weight: var(--h1-weight); line-height: var(--h3-lh);">
+          Optical Sizing & Scaling
+        </h3>
+        <p style="font-size: var(--body-md-size); line-height: var(--body-md-lh); font-weight: var(--body-md-weight);">
+          This brand system uses a semantic scaling engine. This means your choices of tone and density are mathematically
+          applied to ensure that an H1 always feels distinct from an H2, while maintaining a cohesive family relationship.
+        </p>
+
+        <div class="bg-gray-50 p-8 rounded-xl border-l-4 border-primary italic"
+          style="font-size: var(--body-lg-size); font-weight: var(--body-md-weight);">
+          "Good design is obvious. Great design is transparent. Typography is the invisible thread that connects them."
+        </div>
       </div>
     </div>
-
-    <div class="typography-content space-y-8 text-gray-700">
-      <p style="font-size: var(--body-lg-size); line-height: var(--body-lg-lh); font-weight: var(--body-lg-weight);">
-        Typography is not just about choosing a font; it's about defining the voice and rhythm of your brand. In a world
-        where screens are the primary medium, readability and hierarchy are the foundations of trust.
-      </p>
-
-      <h2 class="pt-4" style="font-size: var(--h2-size); font-weight: var(--h1-weight); line-height: var(--h2-lh);">
-        1. The Psychology of Weight
-      </h2>
-      <p style="font-size: var(--body-md-size); line-height: var(--body-md-lh); font-weight: var(--body-md-weight);">
-        When we use heavier weights, we project authority and confidence. Lighter weights, on the other hand, evoke
-        elegance, precision, and modernity. By balancing these within a grid, we create a visual melody that guides the
-        eye.
-      </p>
-
-      <h3 class="pt-2" style="font-size: var(--h3-size); font-weight: var(--h1-weight); line-height: var(--h3-lh);">
-        Optical Sizing & Scaling
-      </h3>
-      <p style="font-size: var(--body-md-size); line-height: var(--body-md-lh); font-weight: var(--body-md-weight);">
-        This brand system uses a semantic scaling engine. This means your choices of tone and density are mathematically
-        applied to ensure that an H1 always feels distinct from an H2, while maintaining a cohesive family relationship.
-      </p>
-
-      <div class="bg-gray-50 p-8 rounded-xl border-l-4 border-primary italic"
-        style="font-size: var(--body-lg-size); font-weight: var(--body-md-weight);">
-        "Good design is obvious. Great design is transparent. Typography is the invisible thread that connects them."
-      </div>
-    </div>
+    }
+    }
   </div>
-  }
-
-
-  }
-</div>
+}

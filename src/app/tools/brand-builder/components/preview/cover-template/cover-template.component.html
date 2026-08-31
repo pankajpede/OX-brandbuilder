@@ -8,21 +8,21 @@
 
 <!-- ── T1: Bold Color Fill ─────────────────────────────── -->
 <ng-template #t1>
-  <div class="w-full h-full bg-primary text-white p-[8%] flex flex-col justify-between relative overflow-hidden tpl tpl-1">
+  <div class="w-full h-full text-white p-[8%] flex flex-col justify-between relative overflow-hidden tpl tpl-1" [style.backgroundColor]="primaryColor">
     <div class="flex justify-between items-start t1-top">
-      <div class="flex items-center gap-2 t1-logo-mark">
-        <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
+      <div class="flex items-center gap-2 t1-logo-mark whitespace-nowrap shrink-0">
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="none" class="shrink-0">
           <circle cx="3" cy="3" r="2.5" fill="white" opacity="0.9"/>
           <circle cx="10" cy="3" r="2.5" fill="white" opacity="0.9"/>
           <circle cx="17" cy="3" r="2.5" fill="white" opacity="0.9"/>
           <circle cx="3" cy="11" r="2.5" fill="white" opacity="0.5"/>
           <circle cx="10" cy="11" r="2.5" fill="white" opacity="0.5"/>
         </svg>
-        <span class="text-[10px] font-bold tracking-widest uppercase t1-brand-sm">{{ brandName }}</span>
+        <span class="text-[10px] font-bold tracking-widest uppercase t1-brand-sm whitespace-nowrap shrink-0">{{ brandName }}</span>
       </div>
-      <div class="flex flex-col items-end gap-1 t1-brand-label">
-        <span class="text-[8px] font-bold uppercase tracking-[0.2em] opacity-60 lbl-xs">Brand</span>
-        <span class="text-[11px] font-black uppercase tracking-tight lbl-bold">{{ brandName }}</span>
+      <div class="flex flex-col items-end gap-1 t1-brand-label whitespace-nowrap shrink-0">
+        <span class="text-[8px] font-bold uppercase tracking-[0.2em] opacity-60 lbl-xs whitespace-nowrap">Brand</span>
+        <span class="text-[11px] font-black uppercase tracking-tight lbl-bold whitespace-nowrap shrink-0">{{ brandName }}</span>
       </div>
     </div>
     <div class="my-auto t1-center">
@@ -30,9 +30,9 @@
     </div>
     <div class="flex justify-between items-end t1-bottom">
       <span class="text-[48px] font-black leading-none opacity-20 t1-num">01</span>
-      <div class="flex flex-col items-end gap-1 t1-year-block">
-        <span class="text-[8px] font-bold uppercase tracking-[0.2em] opacity-60 lbl-xs">Year</span>
-        <span class="text-[11px] font-black uppercase tracking-tight lbl-bold">{{ year }}</span>
+      <div class="flex flex-col items-end gap-1 t1-year-block whitespace-nowrap shrink-0">
+        <span class="text-[8px] font-bold uppercase tracking-[0.2em] opacity-60 lbl-xs whitespace-nowrap">Year</span>
+        <span class="text-[11px] font-black uppercase tracking-tight lbl-bold whitespace-nowrap shrink-0">{{ year }}</span>
       </div>
     </div>
   </div>
@@ -43,33 +43,33 @@
   <div class="w-full h-full bg-white text-black p-[8%] flex flex-col justify-between relative overflow-hidden tpl tpl-2">
     <div class="t2-dot">
       <svg width="24" height="18" viewBox="0 0 24 18" fill="none">
-        <circle cx="4" cy="4" r="3.5" fill="#6d5cff" opacity="0.9"/>
-        <circle cx="13" cy="4" r="3.5" fill="#6d5cff" opacity="0.9"/>
-        <circle cx="22" cy="4" r="3.5" fill="#6d5cff" opacity="0.9"/>
-        <circle cx="4" cy="14" r="3.5" fill="#6d5cff" opacity="0.5"/>
-        <circle cx="13" cy="14" r="3.5" fill="#6d5cff" opacity="0.5"/>
+        <circle cx="4" cy="4" r="3.5" [attr.fill]="primaryColor" opacity="0.9"/>
+        <circle cx="13" cy="4" r="3.5" [attr.fill]="primaryColor" opacity="0.9"/>
+        <circle cx="22" cy="4" r="3.5" [attr.fill]="primaryColor" opacity="0.9"/>
+        <circle cx="4" cy="14" r="3.5" [attr.fill]="primaryColor" opacity="0.5"/>
+        <circle cx="13" cy="14" r="3.5" [attr.fill]="primaryColor" opacity="0.5"/>
       </svg>
     </div>
     <div class="my-auto t2-body">
       <h1 class="flex flex-col t2-title">
-        <span class="text-[64px] font-black leading-[0.85] tracking-tighter uppercase t2-l1">Brand</span>
+        <span class="text-[64px] font-black leading-[0.85] tracking-tighter uppercase t2-l1" [style.color]="primaryColor">Brand</span>
         <span class="text-[64px] font-black leading-[0.85] tracking-tighter uppercase text-primary t2-l2">Guidelines</span>
       </h1>
     </div>
     <div class="t2-footer">
       <div class="w-full h-px bg-gray-100 mb-6 t2-rule"></div>
       <div class="flex gap-10 t2-meta">
-        <div class="flex flex-col gap-1 meta-col">
+        <div class="flex flex-col gap-1 meta-col whitespace-nowrap shrink-0">
           <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 meta-lbl">Brand</span>
-          <span class="text-[11px] font-black text-gray-900 meta-val">{{ brandName }}</span>
+          <span class="text-[11px] font-black text-gray-900 meta-val whitespace-nowrap shrink-0">{{ brandName }}</span>
         </div>
-        <div class="flex flex-col gap-1 meta-col">
+        <div class="flex flex-col gap-1 meta-col whitespace-nowrap shrink-0">
           <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 meta-lbl">Content</span>
-          <span class="text-[11px] font-black text-gray-900 meta-val">Visual Identity</span>
+          <span class="text-[11px] font-black text-gray-900 meta-val whitespace-nowrap shrink-0">Visual Identity</span>
         </div>
-        <div class="flex flex-col gap-1 meta-col">
+        <div class="flex flex-col gap-1 meta-col whitespace-nowrap shrink-0">
           <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 meta-lbl">Document</span>
-          <span class="text-[11px] font-black text-gray-900 meta-val">Version 1</span>
+          <span class="text-[11px] font-black text-gray-900 meta-val whitespace-nowrap shrink-0">Version 1</span>
         </div>
       </div>
     </div>
@@ -78,21 +78,21 @@
 
 <!-- ── T3: Bold Color + Geometric ───────────────────────── -->
 <ng-template #t3>
-  <div class="w-full h-full bg-black text-white p-0 flex relative overflow-hidden tpl tpl-3">
-    <div class="flex-[1.2] p-[8%] flex flex-col justify-between z-10 t3-left">
-      <div class="flex items-center gap-2 t3-logo">
-        <svg width="16" height="12" viewBox="0 0 20 14" fill="none">
+  <div class="w-full h-full text-white p-0 flex relative overflow-hidden tpl tpl-3">
+    <div class="flex-[1.2] p-[8%] flex flex-col justify-between z-10 t3-left" [style.backgroundColor]="darkPrimaryColor">
+      <div class="flex items-center gap-2 t3-logo whitespace-nowrap shrink-0">
+        <svg width="16" height="12" viewBox="0 0 20 14" fill="none" class="shrink-0">
           <circle cx="3" cy="3" r="2.5" fill="white" opacity="0.9"/>
           <circle cx="10" cy="3" r="2.5" fill="white" opacity="0.9"/>
           <circle cx="17" cy="3" r="2.5" fill="white" opacity="0.9"/>
           <circle cx="3" cy="11" r="2.5" fill="white" opacity="0.5"/>
           <circle cx="10" cy="11" r="2.5" fill="white" opacity="0.5"/>
         </svg>
-        <span class="text-[10px] font-bold tracking-widest uppercase t3-brand">{{ brandName }}</span>
+        <span class="text-[10px] font-bold tracking-widest uppercase t3-brand whitespace-nowrap shrink-0">{{ brandName }}</span>
       </div>
       <h1 class="text-[52px] font-black leading-[0.95] tracking-tighter uppercase italic t3-title">Brand<br>Guidelines.</h1>
     </div>
-    <div class="flex-1 relative bg-primary overflow-hidden t3-right">
+    <div class="flex-1 relative overflow-hidden t3-right" [style.backgroundColor]="primaryColor">
       <div class="absolute inset-0 flex flex-col t3-grid">
         @for (r of gridRows; track $index) {
           <div class="flex-1 border-b border-white/10 t3-row"></div>
@@ -118,40 +118,40 @@
 <!-- ── T4: White Arcs + Centered Logo ───────────────────── -->
 <ng-template #t4>
   <div class="w-full h-full bg-white text-black p-[8%] flex flex-col justify-between relative overflow-hidden tpl tpl-4">
-    <div class="absolute -top-[15%] -left-[10%] w-[50%] aspect-square border-[40px] border-primary/5 rounded-full t4-arc-l"></div>
-    <div class="absolute -bottom-[20%] -right-[15%] w-[60%] aspect-square border-[50px] border-primary/5 rounded-full t4-arc-r"></div>
+    <div class="absolute -top-[15%] -left-[10%] w-[50%] aspect-square border-[40px] rounded-full t4-arc-l" [style.borderColor]="primaryColor" style="opacity: 0.1"></div>
+    <div class="absolute -bottom-[20%] -right-[15%] w-[60%] aspect-square border-[50px] rounded-full t4-arc-r" [style.borderColor]="primaryColor" style="opacity: 0.1"></div>
     
     <div class="flex items-center gap-3 z-10 t4-top">
       <svg width="28" height="22" viewBox="0 0 28 22" fill="none">
-        <circle cx="4" cy="4" r="3.5" fill="#6d5cff"/>
-        <circle cx="13" cy="4" r="3.5" fill="#6d5cff"/>
-        <circle cx="4" cy="13" r="3.5" fill="#6d5cff" opacity="0.5"/>
-        <circle cx="13" cy="13" r="3.5" fill="#6d5cff" opacity="0.5"/>
-        <circle cx="22" cy="13" r="3.5" fill="#6d5cff"/>
+        <circle cx="4" cy="4" r="3.5" [attr.fill]="primaryColor"/>
+        <circle cx="13" cy="4" r="3.5" [attr.fill]="primaryColor"/>
+        <circle cx="4" cy="13" r="3.5" [attr.fill]="primaryColor" opacity="0.5"/>
+        <circle cx="13" cy="13" r="3.5" [attr.fill]="primaryColor" opacity="0.5"/>
+        <circle cx="22" cy="13" r="3.5" [attr.fill]="primaryColor"/>
       </svg>
-      <span class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 t4-heading">Brand Guidelines</span>
+      <span class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 t4-heading whitespace-nowrap">Brand Guidelines</span>
     </div>
     
     <div class="flex-1 flex items-center justify-center z-10 t4-center">
       <div class="flex flex-col items-center gap-4 text-center t4-lockup">
         <svg class="mb-2" width="48" height="38" viewBox="0 0 28 22" fill="none">
-          <circle cx="4" cy="4" r="3.5" fill="#6d5cff"/>
-          <circle cx="13" cy="4" r="3.5" fill="#6d5cff"/>
-          <circle cx="4" cy="13" r="3.5" fill="#6d5cff" opacity="0.5"/>
-          <circle cx="13" cy="13" r="3.5" fill="#6d5cff" opacity="0.5"/>
-          <circle cx="22" cy="13" r="3.5" fill="#6d5cff"/>
+          <circle cx="4" cy="4" r="3.5" [attr.fill]="primaryColor"/>
+          <circle cx="13" cy="4" r="3.5" [attr.fill]="primaryColor"/>
+          <circle cx="4" cy="13" r="3.5" [attr.fill]="primaryColor" opacity="0.5"/>
+          <circle cx="13" cy="13" r="3.5" [attr.fill]="primaryColor" opacity="0.5"/>
+          <circle cx="22" cy="13" r="3.5" [attr.fill]="primaryColor"/>
         </svg>
-        <span class="text-[40px] font-black uppercase tracking-tighter text-gray-900 leading-none t4-brand-name">{{ brandName }}</span>
+        <span class="text-[40px] font-black uppercase tracking-tighter text-gray-900 leading-none t4-brand-name whitespace-nowrap shrink-0">{{ brandName }}</span>
       </div>
     </div>
     
     <div class="flex justify-between items-end z-10 t4-bottom">
-      <div class="flex flex-col gap-1 t4-mc">
-        <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 t4-lbl">Document</span>
+      <div class="flex flex-col gap-1 t4-mc whitespace-nowrap shrink-0">
+        <span class="text-[8px] font-bold uppercase tracking-widest t4-lbl" [style.color]="primaryColor">Document</span>
         <span class="text-[11px] font-black tracking-tight t4-mval">Version 1</span>
       </div>
-      <div class="flex flex-col items-end gap-1 t4-mc t4-mc-right">
-        <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 t4-lbl">Year</span>
+      <div class="flex flex-col items-end gap-1 t4-mc t4-mc-right whitespace-nowrap shrink-0">
+        <span class="text-[8px] font-bold uppercase tracking-widest t4-lbl" [style.color]="primaryColor">Year</span>
         <span class="text-[11px] font-black tracking-tight t4-mval">{{ year }}</span>
       </div>
     </div>
@@ -162,40 +162,40 @@
 <ng-template #t5>
   <div class="w-full h-full bg-gray-50 text-black p-[8%] flex flex-col justify-between relative overflow-hidden tpl tpl-5">
     <div class="flex gap-8 t5-top">
-      <div class="flex flex-col gap-1 t5-mg">
+      <div class="flex flex-col gap-1 t5-mg whitespace-nowrap shrink-0">
         <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 meta-lbl">Brand</span>
-        <span class="text-[10px] font-black text-gray-900 meta-val">{{ brandName }}</span>
+        <span class="text-[10px] font-black text-gray-900 meta-val whitespace-nowrap shrink-0">{{ brandName }}</span>
       </div>
-      <div class="flex flex-col gap-1 t5-mg">
+      <div class="flex flex-col gap-1 t5-mg whitespace-nowrap shrink-0">
         <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 meta-lbl">Content</span>
-        <span class="text-[10px] font-black text-gray-900 meta-val">Visual Identity</span>
+        <span class="text-[10px] font-black text-gray-900 meta-val whitespace-nowrap shrink-0">Visual Identity</span>
       </div>
-      <div class="flex flex-col gap-1 t5-mg">
+      <div class="flex flex-col gap-1 t5-mg whitespace-nowrap shrink-0">
         <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 meta-lbl">Document</span>
-        <span class="text-[10px] font-black text-gray-900 meta-val">Version 1</span>
+        <span class="text-[10px] font-black text-gray-900 meta-val whitespace-nowrap shrink-0">Version 1</span>
       </div>
-      <div class="flex flex-col gap-1 t5-mg">
+      <div class="flex flex-col gap-1 t5-mg whitespace-nowrap shrink-0">
         <span class="text-[8px] font-bold uppercase tracking-widest text-gray-400 meta-lbl">Year</span>
-        <span class="text-[10px] font-black text-gray-900 meta-val">{{ year }}</span>
+        <span class="text-[10px] font-black text-gray-900 meta-val whitespace-nowrap shrink-0">{{ year }}</span>
       </div>
     </div>
     
     <div class="my-auto t5-center">
       <h1 class="text-[84px] font-black uppercase tracking-[-0.06em] leading-none flex flex-col t5-big">
         <span class="text-gray-900 t5-dark">Brand</span>
-        <span class="text-primary t5-purple">Book</span>
+        <span class="t5-purple" [style.color]="primaryColor">Book</span>
       </h1>
     </div>
     
-    <div class="flex items-center gap-3 t5-bottom">
+    <div class="flex items-center gap-3 t5-bottom whitespace-nowrap shrink-0">
       <svg width="20" height="16" viewBox="0 0 20 14" fill="none" class="shrink-0">
-        <circle cx="3" cy="3" r="2.5" fill="#6d5cff" opacity="0.9"/>
-        <circle cx="10" cy="3" r="2.5" fill="#6d5cff" opacity="0.9"/>
-        <circle cx="17" cy="3" r="2.5" fill="#6d5cff" opacity="0.9"/>
-        <circle cx="3" cy="11" r="2.5" fill="#6d5cff" opacity="0.5"/>
-        <circle cx="10" cy="11" r="2.5" fill="#6d5cff" opacity="0.5"/>
+        <circle cx="3" cy="3" r="2.5" [attr.fill]="primaryColor" opacity="0.9"/>
+        <circle cx="10" cy="3" r="2.5" [attr.fill]="primaryColor" opacity="0.9"/>
+        <circle cx="17" cy="3" r="2.5" [attr.fill]="primaryColor" opacity="0.9"/>
+        <circle cx="3" cy="11" r="2.5" [attr.fill]="primaryColor" opacity="0.5"/>
+        <circle cx="10" cy="11" r="2.5" [attr.fill]="primaryColor" opacity="0.5"/>
       </svg>
-      <span class="text-[11px] font-black uppercase tracking-tight text-gray-900 t5-bname">{{ brandName }}</span>
+      <span class="text-[11px] font-black uppercase tracking-tight text-gray-900 t5-bname whitespace-nowrap shrink-0">{{ brandName }}</span>
     </div>
   </div>
 </ng-template>

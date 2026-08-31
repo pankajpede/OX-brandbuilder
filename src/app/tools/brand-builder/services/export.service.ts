@@ -1,9 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BrandData } from '../models/brand.model';
+import { PdfService } from '../../../services/pdf.service';
 
 @Injectable({ providedIn: 'root' })
 export class ExportService {
-  
+  private pdfService = inject(PdfService);
+  public isExportingPdf = false;
+  public pdfCurrentStep = 0;
+  public pdfTotalSteps = 0;
+  public pdfOverallPercent = 0;
+  public pdfProgressText = '';
+
   exportToJson(data: BrandData): void {
     // Helper to find colors by name or category
     const findColor = (name: string) => data.colors.palette.find((c: any) => c.name === name);
@@ -114,6 +121,40 @@ export class ExportService {
     a.download = `${fileName}-foundations.json`;
     a.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  async exportToPdf(data: BrandData): Promise<void> {
+    const pdfContainer = (document.querySelector('#pdf-export-container') || document.querySelector('.preview-scroll') || document.querySelector('.preview-container')) as HTMLElement;
+    const pages = pdfContainer ? pdfContainer.querySelectorAll('.pdf-page, .preview-page') : document.querySelectorAll('.preview-page');
+
+    if (!pages || pages.length === 0) {
+      alert('PDF export template not ready. Please try again.');
+      return;
+    }
+
+    this.isExportingPdf = true;
+    this.pdfCurrentStep = 1;
+    this.pdfTotalSteps = pages.length;
+    this.pdfOverallPercent = 0;
+    this.pdfProgressText = 'Initializing PDF exporter...';
+
+    try {
+      await this.pdfService.generatePDF(data, pdfContainer, (currentStep, totalSteps, overallPercent, pageTitle) => {
+        this.pdfCurrentStep = currentStep;
+        this.pdfTotalSteps = totalSteps;
+        this.pdfOverallPercent = overallPercent;
+        this.pdfProgressText = pageTitle;
+      });
+    } catch (err) {
+      console.error('Error generating PDF:', err);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      this.isExportingPdf = false;
+      this.pdfCurrentStep = 0;
+      this.pdfTotalSteps = 0;
+      this.pdfOverallPercent = 0;
+      this.pdfProgressText = '';
+    }
   }
 
   private getInstallCommand(libId: string, version?: string): string {

@@ -101,35 +101,18 @@ export class VariantService {
         description: 'Professional tonal scale with key colors and adjustable palettes',
         thumbnail: this.createSvg(`
           <rect width="120" height="80" fill="#fff" rx="4" stroke="#e5e5e5"/>
-          <rect x="8" y="8" width="30" height="30" fill="#6366f1" rx="4"/>
-          <rect x="42" y="10" width="10" height="10" fill="#312e81" rx="1"/>
-          <rect x="54" y="10" width="10" height="10" fill="#4338ca" rx="1"/>
-          <rect x="66" y="10" width="10" height="10" fill="#6366f1" rx="1"/>
-          <rect x="78" y="10" width="10" height="10" fill="#818cf8" rx="1"/>
-          <rect x="90" y="10" width="10" height="10" fill="#c7d2fe" rx="1"/>
-          <rect x="8" y="44" width="30" height="30" fill="#10b981" rx="4"/>
-          <rect x="42" y="46" width="10" height="10" fill="#064e3b" rx="1"/>
-          <rect x="54" y="46" width="10" height="10" fill="#047857" rx="1"/>
-          <rect x="66" y="46" width="10" height="10" fill="#10b981" rx="1"/>
-          <rect x="78" y="46" width="10" height="10" fill="#34d399" rx="1"/>
-          <rect x="90" y="46" width="10" height="10" fill="#a7f3d0" rx="1"/>
-        `),
-      },
-      {
-        id: 'cards',
-        name: 'Color Cards',
-        description: 'Individual color cards with detailed info',
-        thumbnail: this.createSvg(`
-          <rect width="120" height="80" fill="#fff" rx="4" stroke="#e5e5e5"/>
-          <rect x="8" y="8" width="28" height="40" fill="#000" rx="3"/>
-          <rect x="8" y="52" width="28" height="3" fill="#d4d4d4" rx="1"/>
-          <rect x="8" y="58" width="20" height="2" fill="#e5e5e5" rx="1"/>
-          <rect x="44" y="8" width="28" height="40" fill="#525252" rx="3"/>
-          <rect x="44" y="52" width="28" height="3" fill="#d4d4d4" rx="1"/>
-          <rect x="44" y="58" width="20" height="2" fill="#e5e5e5" rx="1"/>
-          <rect x="80" y="8" width="28" height="40" fill="#d4d4d4" rx="3"/>
-          <rect x="80" y="52" width="28" height="3" fill="#d4d4d4" rx="1"/>
-          <rect x="80" y="58" width="20" height="2" fill="#e5e5e5" rx="1"/>
+          <rect x="8" y="8" width="30" height="30" fill="#000000" rx="4"/>
+          <rect x="42" y="10" width="10" height="10" fill="#171717" rx="1"/>
+          <rect x="54" y="10" width="10" height="10" fill="#404040" rx="1"/>
+          <rect x="66" y="10" width="10" height="10" fill="#737373" rx="1"/>
+          <rect x="78" y="10" width="10" height="10" fill="#a3a3a3" rx="1"/>
+          <rect x="90" y="10" width="10" height="10" fill="#e5e5e5" rx="1"/>
+          <rect x="8" y="44" width="30" height="30" fill="#404040" rx="4"/>
+          <rect x="42" y="46" width="10" height="10" fill="#171717" rx="1"/>
+          <rect x="54" y="46" width="10" height="10" fill="#404040" rx="1"/>
+          <rect x="66" y="46" width="10" height="10" fill="#737373" rx="1"/>
+          <rect x="78" y="46" width="10" height="10" fill="#a3a3a3" rx="1"/>
+          <rect x="90" y="46" width="10" height="10" fill="#e5e5e5" rx="1"/>
         `),
       },
       {
