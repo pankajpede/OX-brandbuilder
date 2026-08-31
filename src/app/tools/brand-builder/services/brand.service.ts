@@ -101,6 +101,11 @@ export class BrandService {
     }
   }
 
+  /** Alias for goToStep for backwards compatibility */
+  setCurrentStep(stepIndex: number): void {
+    this.goToStep(stepIndex);
+  }
+
   /** Go to next enabled step */
   nextStep(): void {
     const active = this.activeSteps;
@@ -158,45 +163,41 @@ export class BrandService {
       optional: 5
     };
 
-    // Cover (Required: Name, Important: Industry)
-    total += weights.required + weights.important;
-    if (data.cover.name) score += weights.required;
-    if (data.cover.industry && data.cover.industry.length > 0) score += weights.important;
-    
-    // Logo (Important: Icon, Optional: Primary)
-    total += weights.important + weights.optional;
-    if (data.logo.primary) score += weights.optional;
-    if (data.logo.icon) score += weights.important;
+    // Cover page
+    total += weights.required; if (data.cover.name) score += weights.required;
+    total += weights.optional; if (data.cover.tagline) score += weights.optional;
+    total += weights.optional; if (data.cover.industry && data.cover.industry.length > 0) score += weights.optional;
 
-    // Typography (Required: Primary Font)
-    total += weights.required;
-    if (data.typography.primaryFont) score += weights.required;
+    // Logo
+    total += weights.required; if (data.logo.primary) score += weights.required;
+    total += weights.important; if (data.logo.secondary || data.logo.icon) score += weights.important;
 
-    // Colors (Important: Palette modified from default? We check non-default vibrancy)
-    total += weights.important;
-    const hasCustomColors = data.colors.palette.some(c => c.hex !== '#4f46e5' && c.hex !== '#AE2D24');
-    if (hasCustomColors) score += weights.important;
+    // Colors
+    total += weights.required; if (data.colors.palette.length > 0) score += weights.required;
+    total += weights.important; if (data.colors.palette.length >= 3) score += weights.important;
 
-    // Summary/Sections (Optional)
-    total += weights.optional;
-    if (data.summary.enabledSections.length > 5) score += weights.optional;
+    // Typography
+    total += weights.required; if (data.typography.primaryFont) score += weights.required;
+
+    // Iconography
+    total += weights.important; if (data.iconography.library) score += weights.important;
+
+    // Tech stack
+    total += weights.important; if (data.techstack && data.techstack.technology) score += weights.important;
 
     return Math.round((score / total) * 100);
   }
 
-  get pendingFields(): { label: string, stepIndex: number, id: string, required: boolean }[] {
+  get pendingFields(): { label: string; stepIndex: number; id: string; required: boolean }[] {
     const data = this.brandData;
-    const pending: { label: string, stepIndex: number, id: string, required: boolean }[] = [];
+    const pending: { label: string; stepIndex: number; id: string; required: boolean }[] = [];
 
     if (!data.cover.name) pending.push({ label: 'Brand Name', stepIndex: 1, id: 'brand-name', required: true });
     if (!data.cover.industry || data.cover.industry.length === 0) pending.push({ label: 'Industry', stepIndex: 1, id: 'industry-select', required: false });
     
-    // Consolidated Logo Assets
-    const logoFields = ['primary', 'secondary', 'horizontal', 'vertical', 'icon', 'monoBlack', 'monoWhite'];
-    const uploadedCount = logoFields.filter(f => !!(data.logo as any)[f]).length;
-    if (uploadedCount < 7) {
+    if (!data.logo.primary) {
       pending.push({ 
-        label: `Logo Assets (${uploadedCount}/7 Uploaded)`, 
+        label: 'Primary Logo', 
         stepIndex: 3, 
         id: 'logo-assets', 
         required: false 
@@ -236,6 +237,11 @@ export class BrandService {
     this.currentStepSubject.next(0);
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(STEP_KEY);
+  }
+
+  /** Alias for resetAll for backwards compatibility */
+  resetData(): void {
+    this.resetAll();
   }
 
   /** Auto-save with debounce managed externally */

@@ -166,14 +166,14 @@ export interface StepConfig {
 // ── All Steps ─────────────────────────────────────────────────
 export const STEPS: StepConfig[] = [
   { index: 0, id: 'selection', title: 'Builder Type', subtitle: 'AI vs Custom', icon: '⎈', hasVariants: false },
-  { index: 1, id: 'cover', title: 'Brand Cover', subtitle: 'Title & brand identity', icon: '◈', hasVariants: true },
+  { index: 1, id: 'cover', title: 'Brand Details', subtitle: 'Name, tagline & identity', icon: '◈', hasVariants: true },
   { index: 2, id: 'summary', title: 'Guide Summary', subtitle: 'Table of contents', icon: '▤', hasVariants: true },
   { index: 3, id: 'logo', title: 'Logo System', subtitle: 'Primary, secondary & icon', icon: '◎', hasVariants: true },
   { index: 4, id: 'colors', title: 'Color System', subtitle: 'Primary & secondary colors', icon: '◐', hasVariants: true },
   { index: 5, id: 'typography', title: 'Typography', subtitle: 'Font families & scale', icon: 'Aa', hasVariants: true },
   { index: 6, id: 'iconography', title: 'Iconography', subtitle: 'Icon set & visual style', icon: '✦', hasVariants: true },
   { index: 7, id: 'techstack', title: 'Tech Stack', subtitle: 'Frameworks & UI libraries', icon: '⚡', hasVariants: false },
-  { index: 8, id: 'review', title: 'Review', subtitle: 'Export and finalize', icon: '✓', hasVariants: false },
+  { index: 8, id: 'review', title: 'Export', subtitle: 'Package & download assets', icon: '⚡', hasVariants: false },
 ];
 
 // ── Default Brand Data Factory ────────────────────────────────

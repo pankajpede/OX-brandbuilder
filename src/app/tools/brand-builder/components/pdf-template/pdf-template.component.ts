@@ -80,7 +80,7 @@ export class PdfTemplateComponent {
       return {
         id:    step.id,
         num:   itemNum,
-        label: step.title === 'Brand Cover' ? 'Cover Page' : (step.id === 'colors' ? 'Color System' : step.title),
+        label: step.id === 'cover' ? 'Brand Details' : (step.id === 'colors' ? 'Color System' : step.title),
         sub:   step.subtitle,
         page:  pageStr,
         icon:  step.icon

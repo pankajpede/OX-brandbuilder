@@ -1,10 +1,10 @@
 <div class="px-4 py-0 animate-fade-in-up">
   <!-- Standardized Section Header -->
-  <div class="mb-6">
+  <div class="mb-4">
     <div class="flex items-center gap-2 mb-1">
-      <h2 class="text-xl font-bold text-gray-900">Review & Export</h2>
+      <h2 class="text-xl font-bold text-gray-900">Export Assets</h2>
       <div class="info-trigger"
-        data-tooltip="Review all sections for accuracy. Once satisfied, export your brand foundations as a structured JSON file for developers.">
+        data-tooltip="Select asset formats to include in your package. UFX Studio will compile your selections into a single organized ZIP archive.">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10" />
@@ -13,201 +13,142 @@
         </svg>
       </div>
     </div>
-    <p class="text-sm text-gray-500">Finalize your brand foundations and generate a JSON token file.</p>
+    <p class="text-xs text-gray-500">Select asset formats below and download a single ZIP package containing your brand design system.</p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <!-- Brand Basics -->
-    <div class="p-5 border border-border rounded-xl bg-white transition-all duration-200 review-card">
-      <div class="flex items-center gap-2 mb-4">
-        <span class="w-6 h-6 flex items-center justify-center text-primary font-bold">◉</span>
-        <h4 class="text-sm font-bold text-gray-900">Brand Basics</h4>
-      </div>
-      <div class="flex flex-col gap-3">
-        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0 text-sm">
-          <span class="text-gray-400 font-medium whitespace-nowrap">Name</span>
-          <span class="text-gray-900 font-semibold text-right">{{ brandData.cover.name || '—' }}</span>
+  <!-- ── EXPORT OPTIONS SELECTION (Compact Stacked List) ── -->
+  <div class="flex flex-col gap-2.5 mb-4">
+    
+    <!-- Option 1: Export JSON Tokens -->
+    <div class="p-3.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 group"
+      [ngClass]="exportJson ? 'bg-white border-black shadow-xs' : 'bg-gray-50/70 border-gray-200'"
+      (click)="toggleOption('json')">
+      
+      <div class="flex items-center gap-3 flex-1 min-w-0">
+        <!-- Feather Code / File-Text Icon -->
+        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/80">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
         </div>
-        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0 text-sm">
-          <span class="text-gray-400 font-medium whitespace-nowrap">Tagline</span>
-          <span class="text-gray-900 font-semibold text-right">{{ brandData.cover.tagline || '—' }}</span>
-        </div>
-        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0 text-sm">
-          <span class="text-gray-400 font-medium whitespace-nowrap">Industry</span>
-          <span class="text-gray-900 font-semibold text-right">{{ brandData.cover.industry || '—' }}</span>
-        </div>
-        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0 text-sm">
-          <span class="text-gray-400 font-medium whitespace-nowrap">Year</span>
-          <span class="text-gray-900 font-semibold text-right">{{ brandData.cover.year }}</span>
-        </div>
-        @if (brandData.cover.personality.length > 0) {
-        <div class="flex flex-col gap-2 py-2 last:border-0 text-sm">
-          <span class="text-gray-400 font-medium">Personality</span>
-          <div class="flex flex-wrap gap-1.5">
-            @for (trait of brandData.cover.personality; track $index) {
-            <span
-              class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-bold uppercase tracking-wider">{{
-              trait }}</span>
-            }
+
+        <div class="flex flex-col min-w-0">
+          <div class="flex items-center gap-2 mb-0.5">
+            <h4 class="text-xs font-bold text-gray-900 truncate">Export JSON Tokens</h4>
+            <span class="text-[9px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 border border-blue-100 px-1.5 py-0.2 rounded shrink-0">
+              /json
+            </span>
           </div>
+          <p class="text-[11px] text-gray-500 truncate leading-tight">
+            Generates <code class="bg-gray-100 px-1 py-0.2 rounded font-mono text-[10px] text-gray-800">foundations.json</code> with design tokens, color scales, and builder state.
+          </p>
         </div>
-        }
+      </div>
+
+      <div class="flex items-center shrink-0">
+        <input type="checkbox" [(ngModel)]="exportJson" (click)="$event.stopPropagation()" class="w-4 h-4 accent-black rounded cursor-pointer" />
       </div>
     </div>
 
-    <!-- Variants Summary -->
-    <div class="p-5 border border-border rounded-xl bg-white transition-all duration-200 review-card">
-      <div class="flex items-center gap-2 mb-4">
-        <span class="w-6 h-6 flex items-center justify-center text-primary font-bold">◈</span>
-        <h4 class="text-sm font-bold text-gray-900">Selected Variants</h4>
-      </div>
-      <div class="flex flex-col gap-3 text-sm">
-        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
-          <span class="text-gray-400 font-medium">Cover</span>
-          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
-            brandData.cover.variant }}</span>
+    <!-- Option 2: Export Brand Guide PDF -->
+    <div class="p-3.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 group"
+      [ngClass]="exportPdf ? 'bg-white border-black shadow-xs' : 'bg-gray-50/70 border-gray-200'"
+      (click)="toggleOption('pdf')">
+      
+      <div class="flex items-center gap-3 flex-1 min-w-0">
+        <!-- Feather Book / File-Text Icon -->
+        <div class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-100/80">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
         </div>
-        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
-          <span class="text-gray-400 font-medium">Summary</span>
-          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
-            brandData.summary.variant }}</span>
-        </div>
-        @if (isSectionEnabled('logo')) {
-        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
-          <span class="text-gray-400 font-medium">Logo</span>
-          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
-            brandData.logo.variant }}</span>
-        </div>
-        }
-        @if (isSectionEnabled('colors')) {
-        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
-          <span class="text-gray-400 font-medium">Colors</span>
-          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
-            brandData.colors.variant }}</span>
-        </div>
-        }
-        @if (isSectionEnabled('typography')) {
-        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
-          <span class="text-gray-400 font-medium">Typography</span>
-          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
-            brandData.typography.variant }}</span>
-        </div>
-        }
-        @if (isSectionEnabled('iconography')) {
-        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
-          <span class="text-gray-400 font-medium">Iconography</span>
-          <span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">{{
-            brandData.iconography.library }} ({{ brandData.iconography.variant }})</span>
-        </div>
-        }
-      </div>
-    </div>
 
-    <!-- Colors Summary -->
-    @if (isSectionEnabled('colors')) {
-    <div class="p-5 border border-border rounded-xl bg-white transition-all duration-200 review-card">
-      <div class="flex items-center gap-2 mb-4">
-        <span class="w-6 h-6 flex items-center justify-center text-primary font-bold">◐</span>
-        <h4 class="text-sm font-bold text-gray-900">Color Palette</h4>
-      </div>
-      <div class="grid grid-cols-2 gap-3">
-        @for (color of brandData.colors.palette; track $index) {
-        <div class="flex flex-col gap-1">
-          <div class="h-8 rounded shadow-sm border border-black/5" [style.background]="color.hex"></div>
-          <div class="flex flex-col min-w-0">
-            <span class="text-[10px] font-bold text-gray-900 truncate">{{ color.name }}</span>
-            <span class="text-[9px] font-mono text-gray-400">{{ color.hex }}</span>
+        <div class="flex flex-col min-w-0">
+          <div class="flex items-center gap-2 mb-0.5">
+            <h4 class="text-xs font-bold text-gray-900 truncate">Export Brand Guide (PDF)</h4>
+            <span class="text-[9px] font-bold uppercase tracking-wider text-red-600 bg-red-50 border border-red-100 px-1.5 py-0.2 rounded shrink-0">
+              /brand-guide
+            </span>
           </div>
+          <p class="text-[11px] text-gray-500 truncate leading-tight">
+            Compiles <code class="bg-gray-100 px-1 py-0.2 rounded font-mono text-[10px] text-gray-800">brand-guide.pdf</code> with multi-page A4 landscape vector guidelines.
+          </p>
         </div>
-        }
+      </div>
+
+      <div class="flex items-center shrink-0">
+        <input type="checkbox" [(ngModel)]="exportPdf" (click)="$event.stopPropagation()" class="w-4 h-4 accent-black rounded cursor-pointer" />
       </div>
     </div>
-    }
 
-    <!-- Typography Summary -->
-    @if (isSectionEnabled('typography')) {
-    <div class="p-5 border border-border rounded-xl bg-white transition-all duration-200 review-card">
-      <div class="flex items-center gap-2 mb-4">
-        <span
-          class="w-6 h-6 flex items-center justify-center text-primary font-bold text-xs uppercase tracking-tight">Aa</span>
-        <h4 class="text-sm font-bold text-gray-900">Typography</h4>
+    <!-- Option 3: Export Fonts (.ttf) -->
+    <div class="p-3.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 group"
+      [ngClass]="exportFonts ? 'bg-white border-black shadow-xs' : 'bg-gray-50/70 border-gray-200'"
+      (click)="toggleOption('fonts')">
+      
+      <div class="flex items-center gap-3 flex-1 min-w-0">
+        <!-- Feather Type / Font Icon -->
+        <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100/80">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 7 4 4 20 4 20 7"></polyline>
+            <line x1="9" y1="20" x2="15" y2="20"></line>
+            <line x1="12" y1="4" x2="12" y2="20"></line>
+          </svg>
+        </div>
+
+        <div class="flex flex-col min-w-0">
+          <div class="flex items-center gap-2 mb-0.5">
+            <h4 class="text-xs font-bold text-gray-900 truncate">Export Font Package (.ttf)</h4>
+            <span class="text-[9px] font-bold uppercase tracking-wider text-amber-600 bg-amber-50 border border-amber-100 px-1.5 py-0.2 rounded shrink-0">
+              /fonts
+            </span>
+          </div>
+          <p class="text-[11px] text-gray-500 truncate leading-tight">
+            Downloads <code class="bg-gray-100 px-1 py-0.2 rounded font-mono text-[10px] text-gray-800">.ttf</code> files for <strong>{{ brandData.typography.primaryFont }}</strong> + Google Fonts README.
+          </p>
+        </div>
       </div>
-      <div class="flex flex-col gap-3 text-sm">
-        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0">
-          <span class="text-gray-400 font-medium">Font Family</span>
-          <span class="text-gray-900 font-semibold text-right">{{ brandData.typography.primaryFont }}</span>
-        </div>
-        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0">
-          <span class="text-gray-400 font-medium">Visual Tone</span>
-          <span class="text-gray-900 font-semibold text-right capitalize">{{ brandData.typography.tone }}</span>
-        </div>
-        <div class="flex justify-between items-baseline gap-4 py-2 border-b border-gray-50 last:border-0 text-sm">
-          <span class="text-gray-400 font-medium whitespace-nowrap">Density</span>
-          <span class="text-gray-900 font-semibold text-right capitalize">{{ brandData.typography.density }}</span>
-        </div>
+
+      <div class="flex items-center shrink-0">
+        <input type="checkbox" [(ngModel)]="exportFonts" (click)="$event.stopPropagation()" class="w-4 h-4 accent-black rounded cursor-pointer" />
       </div>
     </div>
-    }
 
-
-    <!-- Iconography Summary -->
-    @if (isSectionEnabled('iconography')) {
-    <div class="p-5 border border-border rounded-xl bg-white transition-all duration-200 review-card">
-      <div class="flex items-center gap-2 mb-4">
-        <span class="w-6 h-6 flex items-center justify-center text-primary font-bold">✦</span>
-        <h4 class="text-sm font-bold text-gray-900">Iconography</h4>
-      </div>
-      <div class="flex flex-col gap-3 text-sm">
-        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
-          <span class="text-gray-400 font-medium whitespace-nowrap">Library</span>
-          <span class="text-gray-900 font-semibold text-right">{{ brandData.iconography.library || '—' }}</span>
-        </div>
-        <div class="flex justify-between items-center gap-4 py-2 border-b border-gray-50 last:border-0">
-          <span class="text-gray-400 font-medium whitespace-nowrap">Style</span>
-          <span class="text-gray-900 font-semibold text-right capitalize">{{ brandData.iconography.variant }}</span>
-        </div>
-      </div>
-    </div>
-    }
-
-    <!-- Completion Stats -->
-    <div class="p-5 border-2 border-primary/20 rounded-xl bg-primary/5 review-card">
-      <div class="flex items-center gap-2 mb-4">
-        <span class="w-6 h-6 flex items-center justify-center text-primary font-bold">✓</span>
-        <h4 class="text-sm font-bold text-primary">Completion</h4>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="flex flex-col">
-          <span class="text-2xl font-black text-primary leading-tight">{{ completedSteps }}</span>
-          <span class="text-[10px] font-bold text-primary/60 uppercase tracking-wider">Sections filled</span>
-        </div>
-        <div class="flex flex-col">
-          <span class="text-2xl font-black text-primary leading-tight">{{ brandData.colors.palette.length }}</span>
-          <span class="text-[10px] font-bold text-primary/60 uppercase tracking-wider">Colors defined</span>
-        </div>
-        <div class="flex flex-col">
-          <span class="text-2xl font-black text-primary leading-tight">{{ uploadCount }}</span>
-          <span class="text-[10px] font-bold text-primary/60 uppercase tracking-wider">Assets uploaded</span>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <!-- Export Buttons -->
-  <div class="mt-12 pt-8 border-t border-border flex flex-col items-center">
-    <div class="flex flex-wrap items-center justify-center gap-4">
-      <button class="btn btn-primary btn-lg flex items-center gap-3 px-8 transition-transform active:scale-95 shadow-md"
-        (click)="onExport()" id="export-json-btn">
-        <span class="text-base">📄</span>
-        Export as JSON
-      </button>
-
-      <button class="btn btn-primary btn-lg flex items-center gap-3 px-8 transition-transform active:scale-95 shadow-md bg-gray-900 hover:bg-black text-white"
-        (click)="onExportPdf()" id="export-pdf-btn">
-        <span class="text-base">📕</span>
-        Export as PDF
-      </button>
+  <!-- Export Action Bar -->
+  <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+    <div class="text-[11px] text-gray-400">
+      @if (canExport) {
+        <span>Package: <strong class="text-gray-900 font-bold">{{ (brandData.cover.name || 'brand').toLowerCase() }}-brand-package.zip</strong></span>
+      } @else {
+        <span class="text-amber-600 font-bold">Select at least one asset option above.</span>
+      }
     </div>
-    <p class="mt-4 text-sm text-gray-400 font-medium italic">Generate developer-ready JSON tokens or a complete brand guidelines PDF document</p>
+
+    <button 
+      class="inline-flex items-center gap-2 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white bg-black hover:bg-gray-800 rounded-full transition-all shadow-sm active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+      [disabled]="!canExport || exportService.isExportingBundle"
+      (click)="onExportBundle()">
+      @if (exportService.isExportingBundle) {
+        <svg class="animate-spin h-3.5 w-3.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>{{ exportService.bundleProgressText || 'Compiling ZIP...' }}</span>
+      } @else {
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Download Package (.zip)</span>
+      }
+    </button>
   </div>
 </div>

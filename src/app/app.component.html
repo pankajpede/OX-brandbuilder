@@ -1,14 +1,14 @@
 <div class="flex flex-col h-screen overflow-hidden bg-white text-gray-900 font-sans">
   <!-- ── Global Header ──────────────────────────────── -->
   <header class="flex items-center justify-between px-6 py-2 border-b border-gray-100 bg-white shrink-0 z-50 relative">
-    <div class="flex items-center gap-3 sm:gap-4" id="ox-logo">
+    <div class="flex items-center gap-3 sm:gap-4" id="ufx-logo">
       <div (click)="goHome()" class="cursor-pointer flex items-center gap-2">
         <div
-          class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center font-bold text-[12px] tracking-widest">
-          OX</div>
+          class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center font-bold text-[10px] tracking-widest uppercase">
+          UFX</div>
         <div class="flex flex-col leading-none">
-          <h1 class="text-[16px] font-black tracking-tight">{{ activeTool || 'OS Builder Hub' }}</h1>
-          <span class="text-[10px] text-gray-400 font-medium">v1.0</span>
+          <h1 class="text-[16px] font-black tracking-tight">{{ activeTool || 'UFX Studio Hub' }}</h1>
+          <span class="text-[9.5px] text-gray-400 font-medium tracking-tight">Universal Framework & Xecution</span>
         </div>
       </div>
 
@@ -22,6 +22,14 @@
               </svg>
               <span class="hidden sm:inline">Back to Builder Type</span>
               <span class="sm:hidden">Builder Type</span>
+            </button>
+          } @else {
+            <button (click)="goHome()" class="flex items-center gap-1.5 px-3 py-1 bg-gray-50 hover:bg-gray-100 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-500 transition-all">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              <span class="hidden sm:inline">Back to Hub</span>
+              <span class="sm:hidden">Hub</span>
             </button>
           }
         } @else {

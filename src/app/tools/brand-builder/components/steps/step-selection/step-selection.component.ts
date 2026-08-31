@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { BrandService } from '../../../services/brand.service';
 import { BrandData } from '../../../models/brand.model';
 
@@ -12,6 +13,7 @@ import { BrandData } from '../../../models/brand.model';
 })
 export class StepSelectionComponent {
   public brandService = inject(BrandService);
+  public router = inject(Router);
 
   isAnalyzing = false;
   analysisStep = '';

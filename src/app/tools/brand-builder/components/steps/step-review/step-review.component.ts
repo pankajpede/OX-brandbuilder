@@ -1,4 +1,6 @@
 import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { BrandService } from '../../../services/brand.service';
 import { ExportService } from '../../../services/export.service';
 import { BrandData } from '../../../models/brand.model';
@@ -6,14 +8,18 @@ import { BrandData } from '../../../models/brand.model';
 @Component({
   selector: 'app-step-review',
   standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './step-review.component.html',
   styleUrl: './step-review.component.scss'
 })
 export class StepReviewComponent {
   private brandService = inject(BrandService);
-  private exportService = inject(ExportService);
+  public exportService = inject(ExportService);
   
-  isExporting = false;
+  // Checkbox selections (default all true)
+  exportJson = true;
+  exportPdf = true;
+  exportFonts = true;
 
   get brandData(): BrandData {
     return this.brandService.brandData;
@@ -53,11 +59,34 @@ export class StepReviewComponent {
     return count;
   }
 
+  get canExport(): boolean {
+    return this.exportJson || this.exportPdf || this.exportFonts;
+  }
+
+  toggleOption(option: 'json' | 'pdf' | 'fonts'): void {
+    if (option === 'json') this.exportJson = !this.exportJson;
+    if (option === 'pdf') this.exportPdf = !this.exportPdf;
+    if (option === 'fonts') this.exportFonts = !this.exportFonts;
+  }
+
+  onExportBundle(): void {
+    this.exportService.exportBundleZip(this.brandData, {
+      json: this.exportJson,
+      pdf: this.exportPdf,
+      fonts: this.exportFonts
+    });
+  }
+
+  // Legacy helper methods
   onExport(): void {
     this.exportService.exportToJson(this.brandData);
   }
 
   onExportPdf(): void {
     this.exportService.exportToPdf(this.brandData);
+  }
+
+  onExportFonts(): void {
+    this.exportService.exportFonts(this.brandData);
   }
 }

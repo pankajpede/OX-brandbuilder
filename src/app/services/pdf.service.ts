@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BrandData } from '../tools/brand-builder/models/brand.model';
+import { saveAs } from 'file-saver';
 
 declare const html2canvas: any;
 declare const jspdf: any;
@@ -12,7 +13,18 @@ export class PdfService {
     previewElement: HTMLElement,
     onProgress?: (currentStep: number, totalSteps: number, overallPercent: number, pageTitle: string) => void
   ): Promise<void> {
-    // Dynamic imports for tree-shaking
+    const blob = await this.generatePdfBlob(brandData, previewElement, onProgress);
+    const fileName = (brandData.cover.name || 'Brand_Guidelines')
+      .replace(/[^a-zA-Z0-9]/g, '_') + '.pdf';
+    saveAs(blob, fileName);
+  }
+
+  /** Generate and return a Blob of the multi-page A4 PDF */
+  async generatePdfBlob(
+    brandData: BrandData, 
+    previewElement: HTMLElement,
+    onProgress?: (currentStep: number, totalSteps: number, overallPercent: number, pageTitle: string) => void
+  ): Promise<Blob> {
     const html2canvasModule = await import('html2canvas');
     const html2canvasDefault = html2canvasModule.default;
     const jsPDFModule = await import('jspdf');
@@ -29,7 +41,7 @@ export class PdfService {
     const a4Height = 210;
 
     const pages = Array.from(previewElement.querySelectorAll('.pdf-page, .preview-page')) as HTMLElement[];
-    if (pages.length === 0) return;
+    if (pages.length === 0) throw new Error('PDF pages element not found');
 
     const getPageTitle = (el: HTMLElement, idx: number): string => {
       const h2 = el.querySelector('h2');
@@ -39,7 +51,6 @@ export class PdfService {
       return `Page ${idx + 1}`;
     };
 
-    // 1. Prepare clones with baked-in styles asynchronously
     const clones: HTMLElement[] = [];
     for (let i = 0; i < pages.length; i++) {
       const page = pages[i];
@@ -50,12 +61,9 @@ export class PdfService {
         onProgress(i + 1, pages.length, overallPercent, `Preparing ${pageTitle}...`);
       }
 
-      // Yield execution to main UI thread for smooth animations
       await new Promise(resolve => setTimeout(resolve, 30));
 
       const clone = page.cloneNode(true) as HTMLElement;
-      
-      // Position off-screen for processing
       Object.assign(clone.style, {
         position: 'fixed',
         left: '-9999px',
@@ -69,7 +77,6 @@ export class PdfService {
       clone.classList.add('exporting');
       document.body.appendChild(clone);
       
-      // Bake computed styles into inline styles
       this.bakeStyles(page, clone, true);
       clones.push(clone);
     }
@@ -85,7 +92,6 @@ export class PdfService {
           onProgress(i + 1, clones.length, overallPercent, pageTitle);
         }
 
-        // Yield to browser event loop for smooth UI repaint and progress updates
         await new Promise(resolve => setTimeout(resolve, 50));
         
         if (i > 0) pdf.addPage();
@@ -95,19 +101,15 @@ export class PdfService {
       }
 
       if (onProgress) {
-        onProgress(clones.length, clones.length, 100, 'Saving PDF file...');
+        onProgress(clones.length, clones.length, 100, 'Compiling PDF document...');
       }
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 50));
 
-      const fileName = (brandData.cover.name || 'Brand_Guidelines')
-        .replace(/[^a-zA-Z0-9]/g, '_') + '.pdf';
-
-      pdf.save(fileName);
+      return pdf.output('blob');
     } catch (error) {
       console.error('PDF generation failed:', error);
       throw error;
     } finally {
-      // Cleanup clones
       clones.forEach(clone => {
         if (clone.parentNode) document.body.removeChild(clone);
       });
@@ -116,17 +118,15 @@ export class PdfService {
 
   private colorCanvasCtx: CanvasRenderingContext2D | null = null;
 
-  /**
-   * Converts modern color functions (oklab, oklch, color) to rgba 
-   * so html2canvas doesn't crash during parsing.
-   */
+  /** Converts modern color functions (oklab, oklch, color) to rgba */
   private sanitizeCssValue(value: string): string {
-    if (!value || (!value.includes('okl') && !value.includes('color('))) {
+    if (!value || typeof value !== 'string') return value;
+    if (!value.includes('oklch') && !value.includes('oklab') && !value.includes('color(')) {
       return value;
     }
 
-    const colorRegex = /(oklch|oklab|color)\((?:[^)(]+|\([^)(]*\))*\)/g;
-    
+    const colorRegex = /(?:oklch|oklab|color)\([^)]+\)/g;
+
     return value.replace(colorRegex, (match) => {
       if (!this.colorCanvasCtx) {
         const canvas = document.createElement('canvas');
@@ -146,10 +146,6 @@ export class PdfService {
     });
   }
 
-  /**
-   * Bakes comprehensive computed styles from a source element into a target element.
-   * This allows the element to maintain its appearance without external stylesheets.
-   */
   private bakeStyles(source: HTMLElement, target: HTMLElement, isRoot = false): void {
     const computed = window.getComputedStyle(source);
     
@@ -204,7 +200,6 @@ export class PdfService {
     });
   }
 
-  /** Render a single element to a PDF page */
   private async renderElementToPage(
     html2canvasFn: any,
     pdf: any,
@@ -222,7 +217,7 @@ export class PdfService {
     }
 
     const canvas = await html2canvasFn(element, {
-      scale: 2, // Standard crisp 300DPI PDF output
+      scale: 2,
       useCORS: true,
       logging: false,
       backgroundColor: null,

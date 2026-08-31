@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 // Services
@@ -9,11 +10,11 @@ import { ExportService } from './services/export.service';
 // Models
 import { BrandData, STEPS, StepConfig } from './models/brand.model';
 
-// Shared Components (Now internal to tool shared)
+// Shared Components
 import { StepperComponent } from './components/shared/stepper/stepper.component';
 import { OnboardingTourComponent, TourStep } from './components/shared/onboarding-tour/onboarding-tour.component';
 
-// Tool Components (Now under tools/brand-builder/components)
+// Tool Components
 import { StepCoverComponent } from './components/steps/step-cover/step-cover.component';
 import { StepSummaryComponent } from './components/steps/step-summary/step-summary.component';
 import { StepLogoComponent } from './components/steps/step-logo/step-logo.component';
@@ -31,6 +32,7 @@ import { PdfTemplateComponent } from './components/pdf-template/pdf-template.com
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     StepperComponent,
     PreviewContainerComponent,
     OnboardingTourComponent,
@@ -54,6 +56,15 @@ export class BrandBuilderComponent implements OnInit, OnDestroy {
 
   showExportMenu = false;
 
+  // Footer Checkbox Selections (Default all true)
+  exportJson = true;
+  exportPdf = true;
+  exportFonts = true;
+
+  get canExport(): boolean {
+    return this.exportJson || this.exportPdf || this.exportFonts;
+  }
+
   toggleExportMenu(event?: Event) {
     if (event) event.stopPropagation();
     this.showExportMenu = !this.showExportMenu;
@@ -61,6 +72,23 @@ export class BrandBuilderComponent implements OnInit, OnDestroy {
 
   closeExportMenu() {
     this.showExportMenu = false;
+  }
+
+  toggleMobileView() {
+    this.showPreviewMobile = !this.showPreviewMobile;
+  }
+
+  closeResetModal() {
+    this.showResetModal = false;
+  }
+
+  onExportBundle() {
+    this.closeExportMenu();
+    this.exportService.exportBundleZip(this.brandData, {
+      json: this.exportJson,
+      pdf: this.exportPdf,
+      fonts: this.exportFonts
+    });
   }
 
   onExportJson() {
@@ -71,6 +99,11 @@ export class BrandBuilderComponent implements OnInit, OnDestroy {
   onExportPdf() {
     this.showExportMenu = false;
     this.exportService.exportToPdf(this.brandData);
+  }
+
+  onExportFonts() {
+    this.showExportMenu = false;
+    this.exportService.exportFonts(this.brandData);
   }
 
   @ViewChild('formScrollContainer') formScrollContainer!: ElementRef<HTMLElement>;
@@ -93,34 +126,30 @@ export class BrandBuilderComponent implements OnInit, OnDestroy {
     { targetId: 'next-step-btn', title: 'Navigation', content: 'Move through the workflow as you complete sections.', position: 'top' }
   ];
 
-  private sub = new Subscription();
+  private subs: Subscription[] = [];
 
   ngOnInit() {
-    this.sub.add(
-      this.brandService.brandData$.subscribe(data => {
-        this.brandData = data;
-      })
-    );
-    this.sub.add(
+    this.brandData = this.brandService.brandData;
+    this.steps = this.brandService.activeSteps;
+
+    this.subs.push(
       this.brandService.currentStep$.subscribe(step => {
         this.currentStep = step;
         this.scrollToTop();
+      }),
+      this.brandService.brandData$.subscribe(data => {
+        this.brandData = data;
+        this.steps = this.brandService.activeSteps;
       })
     );
-    this.sub.add(
-      this.brandService.activeSteps$.subscribe(steps => {
-        this.steps = steps;
-      })
-    );
-
-    // Initial view mode check
-    if (window.innerWidth < 1024) {
-      this.viewMode = 'form-full';
-    }
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.subs.forEach(s => s.unsubscribe());
+  }
+
+  setViewMode(mode: 'split' | 'form-full' | 'preview-full') {
+    this.viewMode = mode;
   }
 
   onStepChange(index: number) {
@@ -128,11 +157,15 @@ export class BrandBuilderComponent implements OnInit, OnDestroy {
   }
 
   onNext() {
-    this.brandService.nextStep();
+    if (this.currentStep < this.steps.length - 1) {
+      this.brandService.goToStep(this.currentStep + 1);
+    }
   }
 
   onBack() {
-    this.brandService.previousStep();
+    if (this.currentStep > 0) {
+      this.brandService.goToStep(this.currentStep - 1);
+    }
   }
 
   onReset() {
@@ -144,20 +177,36 @@ export class BrandBuilderComponent implements OnInit, OnDestroy {
     this.showResetModal = false;
   }
 
-  closeResetModal() {
+  cancelReset() {
     this.showResetModal = false;
   }
 
-  onExport() {
-    this.exportService.exportToJson(this.brandData);
+  get isCurrentStepValid(): boolean {
+    return this.brandService.isStepValid(this.currentStep);
   }
 
-  toggleMobileView() {
-    this.showPreviewMobile = !this.showPreviewMobile;
+  get currentStepConfig(): StepConfig | undefined {
+    return this.steps[this.currentStep];
   }
 
-  setViewMode(mode: 'split' | 'form-full' | 'preview-full') {
-    this.viewMode = mode;
+  jumpToField(field: { stepIndex: number; id: string }) {
+    this.brandService.goToStep(field.stepIndex);
+    this.showProgressPopover = false;
+
+    setTimeout(() => {
+      const el = document.getElementById(field.id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
+        setTimeout(() => el.classList.remove('ring-2', 'ring-primary', 'ring-offset-2'), 2000);
+      }
+    }, 150);
+  }
+
+  private scrollToTop() {
+    if (this.formScrollContainer?.nativeElement) {
+      this.formScrollContainer.nativeElement.scrollTop = 0;
+    }
   }
 
   startTour() {
@@ -168,38 +217,7 @@ export class BrandBuilderComponent implements OnInit, OnDestroy {
     this.isTourActive = false;
   }
 
-  private scrollToTop() {
-    if (this.formScrollContainer) {
-      this.formScrollContainer.nativeElement.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    if (this.previewContainer) {
-      this.previewContainer.scrollToTop();
-    }
-  }
-
-  get isCurrentStepValid(): boolean {
-    return this.brandService.isStepValid(this.currentStep);
-  }
-
-  get progressTooltip(): string {
-    const pending = this.brandService.pendingFields;
-    if (pending.length === 0) return 'Design System Complete! 100%';
-    return `Pending: ${pending.map(p => p.label).join(', ')}`;
-  }
-
-  jumpToField(item: { label: string, stepIndex: number, id: string }) {
-    this.brandService.goToStep(item.stepIndex);
-    this.showProgressPopover = false;
-
-    // Use a small timeout to allow the step component to render before scrolling
-    setTimeout(() => {
-      const element = document.getElementById(item.id);
-      if (element && this.formScrollContainer) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // Add a temporary highlight effect
-        element.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
-        setTimeout(() => element.classList.remove('ring-2', 'ring-primary', 'ring-offset-2'), 2000);
-      }
-    }, 100);
+  onTourSkip() {
+    this.isTourActive = false;
   }
 }

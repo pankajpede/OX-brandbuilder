@@ -1,70 +1,735 @@
-<div class="min-h-screen bg-white p-8 md:p-16 animate-[fadeIn_0.5s_ease-out]">
-  <div class="max-w-6xl mx-auto">
-    <header class="mb-16">
-      <div class="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-4">Onella Soft</div>
-      <h1 class="text-6xl font-black tracking-tighter text-gray-900 mb-6">OS Builder <span class="text-primary">.</span></h1>
-      <p class="text-xl text-gray-500 max-w-2xl leading-relaxed">
-        The ultimate design-to-code ecosystem. Select a specialized tool to accelerate your workflow.
+<div
+  class="h-full flex flex-col justify-between p-5 md:p-6 pb-2 md:pb-2 box-border overflow-y-auto animate-[fadeIn_0.3s_ease-out]">
+  <div class="max-w-5xl mx-auto w-full flex-1 flex flex-col justify-center">
+    <!-- Compact Header -->
+    <header class="mb-5 pt-1">
+      <div class="text-[9px] font-black uppercase tracking-[0.25em] text-black/40 mb-1">Universal Framework & Xecution
+        Suite</div>
+      <h1 class="text-3xl md:text-4xl font-black tracking-tight text-gray-900 mb-1.5">UFX Studio <span
+          class="text-black">.</span></h1>
+      <p class="text-xs md:text-sm text-gray-500 max-w-xl leading-relaxed">
+        Free-hand design-to-code platform. Select a specialized tool below to build brand guidelines, configure semantic
+        UI tokens, or generate AI prompt assets.
       </p>
     </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Compact Tool Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 my-1">
       @for (tool of tools; track tool.id) {
-        <div 
-          [routerLink]="tool.status !== 'upcoming' ? tool.route : null"
-          class="group relative flex flex-col p-8 rounded-[2rem] border-2 border-gray-100 transition-all duration-500 cursor-pointer overflow-hidden hover:border-black hover:shadow-2xl hover:-translate-y-2"
-          [class.pointer-events-none]="tool.status === 'upcoming'"
-          [class.opacity-50]="tool.status === 'upcoming'">
-          
-          <!-- Icon -->
-          <div 
-            [style.background-color]="tool.color"
-            class="mb-8 w-16 h-16 rounded-2xl text-white flex items-center justify-center text-3xl shadow-lg transition-transform group-hover:scale-110 group-hover:rotate-6">
-            {{ tool.icon }}
-          </div>
+      <div [routerLink]="tool.status !== 'upcoming' ? tool.route : null"
+        class="group relative flex flex-col p-5 rounded-2xl border border-gray-200/70 bg-gray-50/40 transition-all duration-300 cursor-pointer overflow-hidden hover:border-black hover:bg-white hover:shadow-lg hover:-translate-y-0.5"
+        [class.pointer-events-none]="tool.status === 'upcoming'" [class.opacity-50]="tool.status === 'upcoming'">
 
-          <!-- Content -->
-          <h3 class="text-2xl font-black mb-3">{{ tool.title }}</h3>
-          <p class="text-sm text-gray-500 leading-relaxed mb-8">
-            {{ tool.description }}
-          </p>
+        <!-- Icon -->
+        <div [style.background-color]="tool.color"
+          class="mb-3.5 w-10 h-10 rounded-xl text-white flex items-center justify-center text-xl shadow-xs transition-transform group-hover:scale-105">
+          {{ tool.icon }}
+        </div>
 
-          <!-- Footer -->
-          <div class="mt-auto flex items-center justify-between">
-            <span 
-              class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest"
-              [ngClass]="{
+        <!-- Content -->
+        <h3 class="text-base font-black text-gray-900 mb-1 leading-tight">{{ tool.title }}</h3>
+        <p class="text-xs text-gray-500 leading-relaxed mb-4">
+          {{ tool.description }}
+        </p>
+
+        <!-- Footer -->
+        <div class="mt-auto flex items-center justify-between pt-2.5 border-t border-gray-100">
+          <span class="px-2.5 py-0.5 rounded-full text-[8.5px] font-black uppercase tracking-wider" [ngClass]="{
                 'bg-black text-white': tool.status === 'ready',
-                'bg-primary/10 text-primary': tool.status === 'beta',
+                'bg-gray-200 text-gray-800': tool.status === 'beta',
                 'bg-gray-100 text-gray-400': tool.status === 'upcoming'
               }">
-              {{ tool.status }}
-            </span>
-            
-            <div class="w-10 h-10 rounded-full border-2 border-gray-100 flex items-center justify-center transition-all group-hover:border-black group-hover:bg-black group-hover:text-white">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </div>
-          </div>
+            {{ tool.status }}
+          </span>
 
-          <!-- Subtle Background Glow -->
-          <div 
-            [style.background-color]="tool.color"
-            class="absolute -right-10 -bottom-10 w-32 h-32 rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity">
+          <div
+            class="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center transition-all group-hover:border-black group-hover:bg-black group-hover:text-white">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
           </div>
         </div>
+      </div>
       }
     </div>
+  </div>
 
-    <footer class="mt-24 pt-8 border-t border-gray-100 flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-      <div>© 2024 Onella Soft Design Systems</div>
-      <div class="flex gap-8">
-        <a href="#" class="hover:text-black">Documentation</a>
-        <a href="#" class="hover:text-black">GitHub</a>
-        <a href="#" class="hover:text-black">Community</a>
+  <!-- Hub Landing Footer (Always Visible On Screen) -->
+  <footer
+    class="max-w-5xl mx-auto w-full mt-4 pt-3 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-3 text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400 shrink-0">
+    <div>© {{ currentYear }} UFX Studio • Free-Hand Design Systems</div>
+    <div class="flex items-center gap-6">
+      <button (click)="openModal('credits')"
+        class="hover:text-black transition-colors uppercase tracking-[0.2em] cursor-pointer">Credits</button>
+      <button (click)="openModal('privacy')"
+        class="hover:text-black transition-colors uppercase tracking-[0.2em] cursor-pointer">Privacy Policy</button>
+      <button (click)="openModal('faq')"
+        class="hover:text-black transition-colors uppercase tracking-[0.2em] cursor-pointer">FAQ</button>
+    </div>
+  </footer>
+</div>
+
+<!-- ── MODAL OVERLAYS ────────────────────────────────── -->
+@if (activeModal) {
+<div class="fixed inset-0 z-[300] flex items-center justify-center p-4 sm:p-6 animate-[fadeIn_0.2s_ease-out]">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-xs" (click)="closeModal()"></div>
+
+  <!-- Modal Card -->
+  <div
+    class="bg-white rounded-3xl w-full max-w-3xl max-h-[88vh] flex flex-col overflow-hidden relative z-10 shadow-2xl border border-gray-100 animate-[scaleUp_0.25s_cubic-bezier(0.34,1.56,0.64,1)]">
+
+    <!-- Modal Header -->
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0 bg-gray-50/50">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-bold text-xs">
+          @switch (activeModal) {
+          @case ('credits') { 👏 }
+          @case ('privacy') { 🛡️ }
+          @case ('faq') { ❓ }
+          }
+        </div>
+        <div class="flex flex-col">
+          <h3 class="text-base font-black text-gray-900 uppercase tracking-tight">
+            @switch (activeModal) {
+            @case ('credits') { Open Source Credits & Complete Ecosystem Backlinks }
+            @case ('privacy') { Client-Side Privacy Policy & Data Sovereignty }
+            @case ('faq') { Frequently Asked Questions }
+            }
+          </h3>
+          <span class="text-[10px] text-gray-400 font-medium">UFX Studio Architecture</span>
+        </div>
       </div>
-    </footer>
+
+      <button (click)="closeModal()"
+        class="w-8 h-8 rounded-full bg-gray-100 hover:bg-black hover:text-white flex items-center justify-center text-gray-500 transition-all cursor-pointer">
+        ✕
+      </button>
+    </div>
+
+    <!-- Modal Body (Scrollable) -->
+    <div class="p-6 overflow-y-auto flex-1 text-sm text-gray-600 leading-relaxed font-sans space-y-6">
+
+      <!-- ── CREDITS CONTENT ───────────────────────────── -->
+      @if (activeModal === 'credits') {
+      <p class="text-xs text-gray-500">
+        UFX Studio is engineered on top of leading open-source frameworks, UI design systems, vector iconography suites,
+        PDF rendering engines, and open typography standards. We extend our full acknowledgment and direct backlinks to
+        each ecosystem:
+      </p>
+
+      <!-- Section 1: Core Core Architecture & Build Tools -->
+      <div class="space-y-2">
+        <h4 class="text-xs font-black uppercase tracking-wider text-gray-900 border-b border-gray-100 pb-1">1. Core
+          Application Engine & Build Tools</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          <a href="https://angular.dev" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/teck-stack/Angular.png" alt="Angular 19" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Angular
+                19</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">angular.dev ↗</span>
+            </div>
+          </a>
+
+          <a href="https://vitejs.dev" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 text-xs font-bold text-amber-500 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              ⚡
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Vite
+                Engine</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">vitejs.dev ↗</span>
+            </div>
+          </a>
+
+          <a href="https://www.typescriptlang.org" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 text-xs font-black text-blue-600 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              TS
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">TypeScript
+                5</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">typescriptlang.org
+                ↗</span>
+            </div>
+          </a>
+
+          <a href="https://rxjs.dev" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 text-xs font-bold text-pink-600 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              Rx
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">RxJS</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">rxjs.dev ↗</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section 2: Iconography Systems -->
+      <div class="space-y-2">
+        <h4 class="text-xs font-black uppercase tracking-wider text-gray-900 border-b border-gray-100 pb-1">2.
+          Iconography Systems</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          <a href="https://lucide.dev" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="icons/Lucid-icons/logo.svg" alt="Lucide Icons" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Lucide
+                Icons</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">lucide.dev ↗</span>
+            </div>
+          </a>
+
+          <a href="https://tabler.io/icons" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="icons/Tabler-icons/logo.svg" alt="Tabler Icons" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Tabler
+                Icons</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">tabler.io ↗</span>
+            </div>
+          </a>
+
+          <a href="https://feathericons.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="icons/feather/logo.svg" alt="Feather Icons" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Feather
+                Icons</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">feathericons.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://fontawesome.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="icons/font-awesome/logo.svg" alt="FontAwesome" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">FontAwesome</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">fontawesome.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://react-icons.github.io/react-icons" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="icons/feather/react-icon-logo.svg" alt="React Icons" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">React
+                Icons</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">react-icons.github.io
+                ↗</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section 3: UI Frameworks & CSS Libraries -->
+      <div class="space-y-2">
+        <h4 class="text-xs font-black uppercase tracking-wider text-gray-900 border-b border-gray-100 pb-1">3. UI
+          Frameworks & Design System Backlinks</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          <a href="https://tailwindcss.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/Tailwind-ui.svg" alt="Tailwind CSS"
+                class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Tailwind
+                CSS</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">tailwindcss.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://ui.shadcn.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/shadcn-ui.svg" alt="Shadcn UI"
+                class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Shadcn
+                UI</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">ui.shadcn.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://mantine.dev" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/mantine-ui.svg" alt="Mantine UI"
+                class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Mantine
+                UI</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">mantine.dev ↗</span>
+            </div>
+          </a>
+
+          <a href="https://getbootstrap.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/Bootstrap-ui.svg" alt="Bootstrap"
+                class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Bootstrap</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">getbootstrap.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://mui.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/Angular.png" alt="Material UI"
+                class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Material
+                UI</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">mui.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://material.angular.io" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/Angular.png" alt="Angular Material"
+                class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Angular
+                Material</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">material.angular.io
+                ↗</span>
+            </div>
+          </a>
+
+          <a href="https://chakra-ui.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/chakra-ui.svg" alt="Chakra UI"
+                class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Chakra
+                UI</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">chakra-ui.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://ant.design" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/Antd-ui.svg" alt="Ant Design"
+                class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Ant
+                Design</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">ant.design ↗</span>
+            </div>
+          </a>
+
+          <a href="https://primeng.org" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/primeng-ui.svg" alt="PrimeNG"
+                class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">PrimeNG</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">primeng.org ↗</span>
+            </div>
+          </a>
+
+          <a href="https://bulma.io" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/Bulma-ui.svg" alt="Bulma" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Bulma</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">bulma.io ↗</span>
+            </div>
+          </a>
+
+          <a href="https://picocss.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/ui-frameworks/pico-ui.svg" alt="Pico CSS" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Pico
+                CSS</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">picocss.com ↗</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section 4: Target Technology Engines -->
+      <div class="space-y-2">
+        <h4 class="text-xs font-black uppercase tracking-wider text-gray-900 border-b border-gray-100 pb-1">4.
+          Technology Stack Code Generators</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          <a href="https://react.dev" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/teck-stack/React.svg" alt="React" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">React</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">react.dev ↗</span>
+            </div>
+          </a>
+
+          <a href="https://angular.dev" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/teck-stack/Angular.png" alt="Angular" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Angular</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">angular.dev ↗</span>
+            </div>
+          </a>
+
+          <a href="https://nextjs.org" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/teck-stack/nextjs.svg" alt="Next.js" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Next.js</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">nextjs.org ↗</span>
+            </div>
+          </a>
+
+          <a href="https://nuxt.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/teck-stack/Nuxt.svg" alt="Nuxt" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Nuxt</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">nuxt.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://svelte.dev" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/teck-stack/Svelte.svg" alt="SvelteKit" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">SvelteKit</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">svelte.dev ↗</span>
+            </div>
+          </a>
+
+          <a href="https://astro.build" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/teck-stack/astro.svg" alt="Astro" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Astro</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">astro.build ↗</span>
+            </div>
+          </a>
+
+          <a href="https://solidjs.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/teck-stack/solidjs.svg" alt="SolidJS" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">SolidJS</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">solidjs.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://qwik.dev" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/teck-stack/Qwik.png" alt="Qwik" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Qwik</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">qwik.dev ↗</span>
+            </div>
+          </a>
+
+          <a href="https://vuejs.org" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-110">
+              <img src="assets/images/teck-stack/vuejs.svg" alt="Vue.js" class="w-full h-full object-contain" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Vue.js</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">vuejs.org ↗</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section 5: Typography & Document Export Engines -->
+      <div class="space-y-2">
+        <h4 class="text-xs font-black uppercase tracking-wider text-gray-900 border-b border-gray-100 pb-1">5.
+          Typography Platform & Export Libraries</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          <a href="https://fonts.google.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 text-xs font-black text-black shadow-xs transition-transform duration-200 group-hover:scale-110">
+              Aa
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">Google
+                Fonts</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">fonts.google.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://github.com/parallax/jsPDF" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 text-xs shadow-xs transition-transform duration-200 group-hover:scale-110">
+              📕
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">jsPDF</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">github.com ↗</span>
+            </div>
+          </a>
+
+          <a href="https://html2canvas.hertzen.com" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 text-xs shadow-xs transition-transform duration-200 group-hover:scale-110">
+              🖼️
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">html2canvas</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">html2canvas.hertzen.com
+                ↗</span>
+            </div>
+          </a>
+
+          <a href="https://stuk.github.io/jszip" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 text-xs shadow-xs transition-transform duration-200 group-hover:scale-110">
+              📦
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">JSZip</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">stuk.github.io ↗</span>
+            </div>
+          </a>
+
+          <a href="https://github.com/eligrey/FileSaver.js" target="_blank"
+            class="p-2.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
+            <div
+              class="w-7 h-7 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0 text-xs shadow-xs transition-transform duration-200 group-hover:scale-110">
+              💾
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="text-xs font-bold text-gray-900 group-hover:text-black truncate transition-colors">FileSaver.js</span>
+              <span class="text-[10px] text-gray-400 group-hover:text-black transition-colors">github.com ↗</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      }
+
+      <!-- ── PRIVACY POLICY CONTENT ────────────────────── -->
+      @if (activeModal === 'privacy') {
+      <div class="space-y-5 text-xs text-gray-600">
+        <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-950 flex items-start gap-3">
+          <span class="text-xl">🔒</span>
+          <div class="flex flex-col">
+            <strong class="text-xs font-black text-emerald-900">100% Client-Side Privacy & Data Sovereignty
+              Guarantee</strong>
+            <span class="text-[11px] leading-relaxed mt-0.5">
+              UFX Studio operates as a self-contained browser application. All image mockup processing, color
+              extraction, typography styling, PDF guideline compilation, and TTF font ZIP generation take place strictly
+              inside your local browser runtime environment. No user mockups, brand assets, or design tokens are ever
+              transmitted to an external server or stored in a remote database.
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-3.5 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
+            <h4 class="text-xs font-black uppercase tracking-wider text-gray-900">1. Zero Telemetry & Tracking</h4>
+            <p class="text-[11px] leading-relaxed text-gray-500">
+              We do not execute tracking scripts, user session recorders, or analytics trackers. Your design workflow
+              remains private and unmonitored.
+            </p>
+          </div>
+
+          <div class="p-3.5 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
+            <h4 class="text-xs font-black uppercase tracking-wider text-gray-900">2. Local Storage Ownership</h4>
+            <p class="text-[11px] leading-relaxed text-gray-500">
+              Your active design system configuration is stored locally in your browser's <code
+                class="bg-gray-200 px-1 rounded">localStorage</code>. You maintain 100% ownership over your brand files.
+            </p>
+          </div>
+
+          <div class="p-3.5 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
+            <h4 class="text-xs font-black uppercase tracking-wider text-gray-900">3. Direct Open Asset Exports</h4>
+            <p class="text-[11px] leading-relaxed text-gray-500">
+              Exported JSON design tokens, PDF guideline documents, and `.zip` font packages are generated locally and
+              downloaded directly to your device.
+            </p>
+          </div>
+
+          <div class="p-3.5 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
+            <h4 class="text-xs font-black uppercase tracking-wider text-gray-900">4. Open Source CDN Requests</h4>
+            <p class="text-[11px] leading-relaxed text-gray-500">
+              Web font stylesheets and raw font binaries are fetched directly via standard CORS requests to official
+              Google Fonts servers (<code class="bg-gray-200 px-1 rounded">fonts.googleapis.com</code>).
+            </p>
+          </div>
+
+          <div class="p-3.5 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
+            <h4 class="text-xs font-black uppercase tracking-wider text-gray-900">5. No Account Authentication</h4>
+            <p class="text-[11px] leading-relaxed text-gray-500">
+              UFX Studio requires no registration, password creation, email collection, or subscription signup. You can
+              use the entire platform anonymously.
+            </p>
+          </div>
+
+          <div class="p-3.5 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
+            <h4 class="text-xs font-black uppercase tracking-wider text-gray-900">6. Commercial & Personal Rights</h4>
+            <p class="text-[11px] leading-relaxed text-gray-500">
+              All brand guidelines, color palettes, and component tokens created with UFX Studio belong exclusively to
+              you for unlimited commercial and personal use.
+            </p>
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- ── FAQ CONTENT ────────────────────────────────── -->
+      @if (activeModal === 'faq') {
+      <div class="space-y-3">
+        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 flex flex-col gap-1">
+          <span class="text-xs font-black text-gray-900">Q: What is UFX Studio?</span>
+          <span class="text-xs text-gray-600">
+            UFX Studio (Universal Framework & Xecution) is a free-hand design-to-code platform. It allows designers and
+            developers to build brand guidelines, configure semantic UI tokens, analyze mockups, and export production
+            assets.
+          </span>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 flex flex-col gap-1">
+          <span class="text-xs font-black text-gray-900">Q: Are exported fonts free for commercial use?</span>
+          <span class="text-xs text-gray-600">
+            Yes! All font families in UFX Studio are open-source fonts hosted by Google Fonts under open licenses (SIL
+            Open Font License or Apache 2.0). You are free to use them in commercial, personal, web, and print projects.
+          </span>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 flex flex-col gap-1">
+          <span class="text-xs font-black text-gray-900">Q: Can I import my saved JSON foundations back later?</span>
+          <span class="text-xs text-gray-600">
+            Yes! On Step 01 (Choose Your Builder), select <strong>Import Configuration</strong> and upload your exported
+            <code class="bg-gray-100 px-1 py-0.5 rounded">-foundations.json</code> file to instantly restore your entire
+            brand configuration.
+          </span>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 flex flex-col gap-1">
+          <span class="text-xs font-black text-gray-900">Q: How does the AI Mockup Analysis work?</span>
+          <span class="text-xs text-gray-600">
+            You can upload up to 5 image mockups. The built-in client-side image analyzer scans pixel data, samples
+            dominant colors, classifies primary/secondary/neutral/functional tones, and automatically generates 9-step
+            color scales.
+          </span>
+        </div>
+      </div>
+      }
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-end bg-gray-50/50 shrink-0">
+      <button (click)="closeModal()"
+        class="px-5 py-1.5 bg-black text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-gray-800 transition-all cursor-pointer">
+        Close
+      </button>
+    </div>
+
   </div>
 </div>
+}

@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 export interface ToolCard {
   id: string;
@@ -18,10 +18,13 @@ export interface ToolCard {
   imports: [CommonModule, RouterLink],
   templateUrl: './home.component.html',
   styles: [`
-    :host { display: block; }
+    :host { display: block; height: 100%; overflow: hidden; }
   `]
 })
 export class HomeComponent {
+  currentYear = new Date().getFullYear();
+  activeModal: 'credits' | 'privacy' | 'faq' | null = null;
+
   tools: ToolCard[] = [
     {
       id: 'brand-builder',
@@ -51,4 +54,12 @@ export class HomeComponent {
       color: '#AE2D24'
     }
   ];
+
+  openModal(type: 'credits' | 'privacy' | 'faq'): void {
+    this.activeModal = type;
+  }
+
+  closeModal(): void {
+    this.activeModal = null;
+  }
 }
