@@ -1,0 +1,38 @@
+name: Deploy Brand Builder to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular app for GitHub Pages
+        run: npm run build:gh-pages
+
+      - name: Copy index.html to 404.html for Angular SPA routing
+        run: cp dist/ox-brand-builder/browser/index.html dist/ox-brand-builder/browser/404.html
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist/ox-brand-builder/browser
+          branch: gh-pages
