@@ -6,9 +6,9 @@
     <span class="font-medium truncate mr-4 msd-placeholder" [class.text-gray-900]="selected.length > 0"
       [class.text-gray-400]="selected.length === 0">
       @if (selected.length === 0) {
-      {{ placeholder }}
+      {{ placeholder || ('Select up to ' + maxSelections) }}
       } @else {
-      {{ selected.length }} selected
+      {{ selected.length }} of {{ maxSelections }} selected
       }
     </span>
     <span class="shrink-0 text-gray-400 transition-transform duration-300 msd-arrow">
@@ -80,7 +80,7 @@
       {{ item }}
       <button type="button"
         class="flex items-center justify-center w-4 h-4 rounded-md transition-colors msd-chip-remove"
-        (click)="removeItem(item); $event.stopPropagation()" aria-label="Remove">
+        (click)="removeItem(item); $event.stopPropagation()" [attr.aria-label]="'Remove ' + item">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
           stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18" />

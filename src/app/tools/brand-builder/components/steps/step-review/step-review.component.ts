@@ -15,11 +15,34 @@ import { BrandData } from '../../../models/brand.model';
 export class StepReviewComponent {
   private brandService = inject(BrandService);
   public exportService = inject(ExportService);
-  
-  // Checkbox selections (default all true)
-  exportJson = true;
-  exportPdf = true;
-  exportFonts = true;
+
+  get exportJson(): boolean {
+    return this.exportService.bundleOptions.json;
+  }
+  set exportJson(val: boolean) {
+    this.exportService.bundleOptions.json = val;
+  }
+
+  get exportPdf(): boolean {
+    return this.exportService.bundleOptions.pdf;
+  }
+  set exportPdf(val: boolean) {
+    this.exportService.bundleOptions.pdf = val;
+  }
+
+  get exportLogos(): boolean {
+    return this.exportService.bundleOptions.logos !== false;
+  }
+  set exportLogos(val: boolean) {
+    this.exportService.bundleOptions.logos = val;
+  }
+
+  get exportFonts(): boolean {
+    return this.exportService.bundleOptions.fonts;
+  }
+  set exportFonts(val: boolean) {
+    this.exportService.bundleOptions.fonts = val;
+  }
 
   get brandData(): BrandData {
     return this.brandService.brandData;
@@ -60,21 +83,15 @@ export class StepReviewComponent {
   }
 
   get canExport(): boolean {
-    return this.exportJson || this.exportPdf || this.exportFonts;
+    return this.exportService.canExport;
   }
 
-  toggleOption(option: 'json' | 'pdf' | 'fonts'): void {
-    if (option === 'json') this.exportJson = !this.exportJson;
-    if (option === 'pdf') this.exportPdf = !this.exportPdf;
-    if (option === 'fonts') this.exportFonts = !this.exportFonts;
+  toggleOption(option: 'json' | 'pdf' | 'logos' | 'fonts'): void {
+    this.exportService.toggleBundleOption(option);
   }
 
   onExportBundle(): void {
-    this.exportService.exportBundleZip(this.brandData, {
-      json: this.exportJson,
-      pdf: this.exportPdf,
-      fonts: this.exportFonts
-    });
+    this.exportService.exportBundleZip(this.brandData, this.exportService.bundleOptions);
   }
 
   // Legacy helper methods

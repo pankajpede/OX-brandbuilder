@@ -1,10 +1,9 @@
 <div class="px-4 py-0 animate-fade-in-up">
-  <!-- Standardized Section Header -->
-  <div class="mb-6">
+  <!-- Page Header -->
+  <div class="mb-3">
     <div class="flex items-center gap-2 mb-1">
       <h2 class="text-xl font-bold text-gray-900">Logo System</h2>
-      <div class="info-trigger"
-        data-tooltip="Upload all logo variants including primary, mono, and icon versions. Define clear space rules to ensure visibility.">
+      <div class="info-trigger" data-tooltip="Manage your brand's approved logo variants and usage rules.">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10" />
@@ -13,145 +12,176 @@
         </svg>
       </div>
     </div>
-    <p class="text-sm text-gray-500">Manage your brand's visual identity assets.</p>
+    <p class="text-sm text-gray-500">Manage your brand's approved logo variants and usage rules.</p>
   </div>
 
-  <div class="section-header">
-    <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-0">Logo Assets</span>
-    <div class="info-trigger"
-      data-tooltip="Upload all variants of your logo for different backgrounds and orientations (Primary, Mono, Horizontal, Vertical, etc.).">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-        stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="12" y1="16" x2="12" y2="12" />
-        <line x1="12" y1="8" x2="12.01" y2="8" />
-      </svg>
-    </div>
-  </div>
-  <form [formGroup]="form" class="flex flex-col gap-6 mt-6">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-      <!-- Primary -->
-      <div class="flex flex-col gap-3" id="logo-primary">
-        <label class="form-label">Primary Logo</label>
-        <app-file-upload label="Main logo" [value]="form.get('primary')?.value"
-          (fileChange)="onFileChange('primary', $event)"></app-file-upload>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
-            <input class="form-input" formControlName="primaryClearSpace" type="number" />
+  <form [formGroup]="form" class="flex flex-col gap-8">
+    <!-- SECTION 1: APPROVED LOGO VARIANTS -->
+    <div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        @for (item of logoVariantsConfig; track item.field) {
+        <div
+          class="flex flex-col gap-1 p-2 pb-1 rounded-md border border-gray-200/80 bg-gray-50/30 hover:border-gray-300 transition-colors">
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-gray-900">{{ item.label }}</span>
+            <span class="text-[10px] text-gray-400 font-medium">{{ item.subtitle }}</span>
           </div>
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
-            <input class="form-input" formControlName="primaryMinSize" type="number" />
-          </div>
-        </div>
-      </div>
+          <app-file-upload [label]="item.label" [bgClass]="item.bgClass" [value]="form.get(item.field)?.value"
+            (fileChange)="onFileChange(item.field, $event)">
+          </app-file-upload>
 
-      <!-- Secondary -->
-      <div class="flex flex-col gap-3">
-        <label class="form-label">Secondary Logo</label>
-        <app-file-upload label="Alternate version" [value]="form.get('secondary')?.value"
-          (fileChange)="onFileChange('secondary', $event)"></app-file-upload>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
-            <input class="form-input" formControlName="secondaryClearSpace" type="number" />
+          <!-- Per-variant overrides when expanded -->
+          @if (showOverrides) {
+          <div class="grid grid-cols-2 gap-3 pt-2 border-t border-gray-100 animate-[fadeIn_0.2s_ease-out]">
+            <div class="form-group">
+              <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
+              <input class="form-input" [formControlName]="item.field + 'ClearSpace'" type="number" placeholder="24" />
+            </div>
+            <div class="form-group">
+              <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
+              <input class="form-input" [formControlName]="item.field + 'MinSize'" type="number" placeholder="32" />
+            </div>
           </div>
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
-            <input class="form-input" formControlName="secondaryMinSize" type="number" />
-          </div>
+          }
         </div>
-      </div>
-
-      <!-- Horizontal -->
-      <div class="flex flex-col gap-3">
-        <label class="form-label">Horizontal Layout</label>
-        <app-file-upload label="Horizontal version" [value]="form.get('horizontal')?.value"
-          (fileChange)="onFileChange('horizontal', $event)"></app-file-upload>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
-            <input class="form-input" formControlName="horizontalClearSpace" type="number" />
-          </div>
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
-            <input class="form-input" formControlName="horizontalMinSize" type="number" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Vertical -->
-      <div class="flex flex-col gap-3">
-        <label class="form-label">Vertical Layout</label>
-        <app-file-upload label="Vertical version" [value]="form.get('vertical')?.value"
-          (fileChange)="onFileChange('vertical', $event)"></app-file-upload>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
-            <input class="form-input" formControlName="verticalClearSpace" type="number" />
-          </div>
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
-            <input class="form-input" formControlName="verticalMinSize" type="number" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Icon -->
-      <div class="flex flex-col gap-3" id="logo-icon">
-        <label class="form-label">Icon / Favicon</label>
-        <app-file-upload label="Logo mark" [value]="form.get('icon')?.value"
-          (fileChange)="onFileChange('icon', $event)"></app-file-upload>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
-            <input class="form-input" formControlName="iconClearSpace" type="number" />
-          </div>
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
-            <input class="form-input" formControlName="iconMinSize" type="number" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Mono Black -->
-      <div class="flex flex-col gap-3">
-        <label class="form-label">Mono Black</label>
-        <app-file-upload label="Black version" [value]="form.get('monoBlack')?.value"
-          (fileChange)="onFileChange('monoBlack', $event)"></app-file-upload>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
-            <input class="form-input" formControlName="monoBlackClearSpace" type="number" />
-          </div>
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
-            <input class="form-input" formControlName="monoBlackMinSize" type="number" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Mono White -->
-      <div class="flex flex-col gap-3">
-        <label class="form-label text-gray-900 font-bold">Mono White</label>
-        <app-file-upload label="White version" bgClass="bg-[#4f46e5]" [value]="form.get('monoWhite')?.value"
-          (fileChange)="onFileChange('monoWhite', $event)"></app-file-upload>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Clear Space (px)</span>
-            <input class="form-input" formControlName="monoWhiteClearSpace" type="number" />
-          </div>
-          <div class="form-group">
-            <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Min. Size (px)</span>
-            <input class="form-input" formControlName="monoWhiteMinSize" type="number" />
-          </div>
-        </div>
+        }
       </div>
     </div>
 
-    <!-- Layout Selection Moved to Bottom -->
-    <div class="mt-8 pt-8 border-t border-gray-100">
+    <!-- SECTION 2: LOGO USAGE RULES -->
+    <div class="pt-6 border-t border-gray-100">
+      <div class="section-header mb-1">
+        <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-0">Logo Usage Rules</span>
+        <div class="info-trigger"
+          data-tooltip="Default rules for clear space and minimum sizing across all logo variants.">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 mb-5">Define universal clearance boundaries and minimum sizes to maintain logo
+        legibility.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <!-- Rules Controls Column -->
+        <div class="flex flex-col gap-4">
+          <!-- Clear Space Rule -->
+          <div class="form-group">
+            <div class="flex items-center justify-between mb-1">
+              <label class="form-label mb-0">Clear Space Rule</label>
+              <span class="text-[10px] text-gray-400 font-medium">Scalable boundary rule</span>
+            </div>
+            <select formControlName="clearSpaceRule"
+              class="form-select font-medium text-xs py-2 rounded-md border-gray-200">
+              @for (rule of clearSpaceRules; track rule.id) {
+              <option [value]="rule.id">{{ rule.label }} — {{ rule.desc }}</option>
+              }
+            </select>
+            <span class="text-[11px] text-gray-400 mt-1">Minimum space to maintain around the logo.</span>
+
+            @if (form.get('clearSpaceRule')?.value === 'custom') {
+            <div class="flex items-center gap-2 mt-2 animate-[fadeIn_0.2s_ease-out]">
+              <span class="text-xs font-bold text-gray-600">Custom Boundary:</span>
+              <input type="number" formControlName="customClearSpace"
+                class="w-24 form-input py-1.5 text-xs text-center font-bold rounded-md" min="4" max="200" />
+              <span class="text-xs text-gray-400 font-semibold">px</span>
+            </div>
+            }
+          </div>
+
+          <!-- Minimum Size Rules (Digital & Print) -->
+          <div class="form-group">
+            <div class="flex items-center justify-between mb-1">
+              <label class="form-label mb-0">Minimum Size</label>
+              <span class="text-[10px] text-gray-400 font-medium">Smallest legible dimension</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="flex flex-col gap-1 p-2.5 bg-gray-50/60 rounded-md border border-gray-200/80">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Digital</span>
+                <div class="flex items-center gap-2">
+                  <input type="number" formControlName="minSizeDigital"
+                    class="w-full form-input py-1 text-xs font-bold text-gray-900 bg-white rounded-md" min="8" max="500" />
+                  <span class="text-xs font-bold text-gray-400">px</span>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-1 p-2.5 bg-gray-50/60 rounded-md border border-gray-200/80">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Print</span>
+                <div class="flex items-center gap-2">
+                  <input type="number" formControlName="minSizePrint"
+                    class="w-full form-input py-1 text-xs font-bold text-gray-900 bg-white rounded-md" min="2" max="100" />
+                  <span class="text-xs font-bold text-gray-400">mm</span>
+                </div>
+              </div>
+            </div>
+            <span class="text-[11px] text-gray-400 mt-1">Smallest recommended size for clear, legible use.</span>
+          </div>
+
+          <!-- Advanced Overrides Trigger Button -->
+          <div class="pt-0.5">
+            <button type="button" (click)="toggleOverrides()"
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-600 hover:text-black transition-colors cursor-pointer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round" [class.rotate-45]="showOverrides"
+                class="transition-transform">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              <span>{{ showOverrides ? 'Hide Variant Overrides' : 'Customize by logo variant' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Clear Space Visual Demonstration Box -->
+        <div class="flex flex-col gap-2 p-4 bg-gray-50/80 rounded-md border border-gray-200/80 justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Clear Space Preview</span>
+              <span
+                class="text-xs font-bold text-gray-900 bg-white px-2.5 py-0.5 rounded-md border border-gray-200">{{
+                getClearSpaceText() }}</span>
+            </div>
+            <p class="text-[11px] text-gray-500">Visual demonstration of the clearance boundary around your primary logo.</p>
+          </div>
+
+          <!-- Boundary Demo Canvas -->
+          <div
+            class="my-2 p-6 bg-white border border-dashed border-gray-300 rounded-md relative flex items-center justify-center min-h-[120px] overflow-hidden group">
+            <div
+              class="absolute inset-2 border border-dotted border-blue-400 rounded-md pointer-events-none flex items-center justify-center">
+              <span
+                class="absolute top-1 left-2 text-[9px] font-mono text-blue-500 font-bold uppercase tracking-wider">Clearance Zone</span>
+            </div>
+
+            @if (form.get('primary')?.value) {
+            <img [src]="form.get('primary')?.value"
+              class="max-h-14 max-w-[160px] object-contain relative z-10 drop-shadow-xs" alt="Primary Logo Preview" />
+            } @else {
+            <div class="flex flex-col items-center gap-1.5 text-gray-400 relative z-10">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+              <span class="text-xs font-bold">Primary Logo Placeholder</span>
+            </div>
+            }
+          </div>
+
+          <div class="flex items-center justify-between text-[10px] font-semibold text-gray-400">
+            <span>Digital Min: <strong class="text-gray-700">{{ form.get('minSizeDigital')?.value || 32 }}px</strong></span>
+            <span>Print Min: <strong class="text-gray-700">{{ form.get('minSizePrint')?.value || 10 }}mm</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout / Variant Selection at Bottom -->
+    <div class="mt-6 pt-6 border-t border-gray-100">
       <app-variant-selector [variants]="variants" [selectedVariant]="selectedVariant"
         (variantSelected)="onVariantChange($event)"></app-variant-selector>
     </div>

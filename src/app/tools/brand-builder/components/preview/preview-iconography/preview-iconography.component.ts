@@ -15,10 +15,19 @@ export class PreviewIconographyComponent {
   @Input() pageNumber: string = '06';
   @Input() isPdfView: boolean = false;
 
+  copiedCommand = false;
+
   constructor(private variantService: VariantService) {}
 
   copyToClipboard(text: string): void {
-    navigator.clipboard.writeText(text);
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.copiedCommand = true;
+        setTimeout(() => {
+          this.copiedCommand = false;
+        }, 2000);
+      });
+    }
   }
 
   get libraryName(): string {

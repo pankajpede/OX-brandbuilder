@@ -8,9 +8,10 @@ export interface ExportBundleOptions {
   json: boolean;
   pdf: boolean;
   fonts: boolean;
+  logos?: boolean;
 }
 
-export type ExportStage = 'init' | 'json' | 'pdf' | 'fonts' | 'zip';
+export type ExportStage = 'init' | 'json' | 'pdf' | 'fonts' | 'logos' | 'zip';
 
 @Injectable({ providedIn: 'root' })
 export class ExportService {
@@ -23,12 +24,23 @@ export class ExportService {
   public bundleProgressText = '';
   public bundlePercent = 0;
   public currentStage: ExportStage = 'init';
-  public bundleOptions: ExportBundleOptions = { json: true, pdf: true, fonts: true };
+  public bundleOptions: ExportBundleOptions = { json: true, pdf: true, fonts: true, logos: true };
 
   public pdfCurrentStep = 0;
   public pdfTotalSteps = 0;
   public pdfOverallPercent = 0;
   public pdfProgressText = '';
+
+  public toggleBundleOption(option: 'json' | 'pdf' | 'logos' | 'fonts'): void {
+    if (option === 'json') this.bundleOptions.json = !this.bundleOptions.json;
+    if (option === 'pdf') this.bundleOptions.pdf = !this.bundleOptions.pdf;
+    if (option === 'logos') this.bundleOptions.logos = !this.bundleOptions.logos;
+    if (option === 'fonts') this.bundleOptions.fonts = !this.bundleOptions.fonts;
+  }
+
+  public get canExport(): boolean {
+    return !!(this.bundleOptions.json || this.bundleOptions.pdf || this.bundleOptions.logos !== false || this.bundleOptions.fonts);
+  }
 
   /** Build JSON foundations payload */
   buildJsonContent(data: BrandData): any {
@@ -269,9 +281,33 @@ Generated with UFX Studio — Free-Hand Design-to-Code Platform
     }
   }
 
+  /** Convert base64 Data URL or fetch URL to Blob */
+  private dataUrlToBlob(dataUrl: string): { blob: Blob; ext: string } | null {
+    if (!dataUrl || typeof dataUrl !== 'string') return null;
+    if (dataUrl.startsWith('data:')) {
+      const parts = dataUrl.split(',');
+      const mimeMatch = parts[0].match(/:(.*?);/);
+      const mime = mimeMatch ? mimeMatch[1] : 'image/png';
+      let ext = 'png';
+      if (mime.includes('svg')) ext = 'svg';
+      else if (mime.includes('jpg') || mime.includes('jpeg')) ext = 'jpg';
+      else if (mime.includes('webp')) ext = 'webp';
+
+      const bstr = atob(parts[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return { blob: new Blob([u8arr], { type: mime }), ext };
+    }
+    return null;
+  }
+
   /** Export customized single ZIP package holding selected subfolders with stage progress */
-  async exportBundleZip(data: BrandData, options: ExportBundleOptions): Promise<void> {
-    if (!options.json && !options.pdf && !options.fonts) {
+  async exportBundleZip(data: BrandData, options?: ExportBundleOptions): Promise<void> {
+    const opts = options || this.bundleOptions;
+    if (!opts.json && !opts.pdf && !opts.fonts && !opts.logos) {
       alert('Please select at least one export option.');
       return;
     }
@@ -283,7 +319,7 @@ Generated with UFX Studio — Free-Hand Design-to-Code Platform
     const tone = (data.typography?.tone || 'professional').toLowerCase();
 
     this.isExportingBundle = true;
-    this.bundleOptions = { ...options };
+    this.bundleOptions = { ...opts };
     this.bundlePercent = 5;
     this.currentStage = 'init';
     this.bundleProgressText = 'Creating export package container...';
@@ -293,11 +329,11 @@ Generated with UFX Studio — Free-Hand Design-to-Code Platform
 
     try {
       // 1. JSON Foundations Export (if selected)
-      if (options.json) {
+      if (opts.json) {
         this.currentStage = 'json';
         this.bundlePercent = 15;
         this.bundleProgressText = 'Generating JSON design tokens & schema...';
-        await new Promise(r => setTimeout(r, 120));
+        await new Promise(r => setTimeout(r, 100));
 
         const jsonContent = this.buildJsonContent(data);
         const jsonFolder = masterZip.folder('json');
@@ -308,16 +344,16 @@ Generated with UFX Studio — Free-Hand Design-to-Code Platform
       }
 
       // 2. Brand Guide PDF Export (if selected)
-      if (options.pdf) {
+      if (opts.pdf) {
         this.currentStage = 'pdf';
-        this.bundlePercent = options.json ? 30 : 15;
+        this.bundlePercent = opts.json ? 30 : 15;
         this.bundleProgressText = 'Compiling Brand Guide PDF pages...';
         const pdfContainer = (document.querySelector('#pdf-export-container') || document.querySelector('.preview-scroll') || document.querySelector('.preview-container')) as HTMLElement;
         
         if (pdfContainer) {
           const pdfBlob = await this.pdfService.generatePdfBlob(data, pdfContainer, (currentStep, totalSteps, overallPercent, pageTitle) => {
-            const startPct = options.json ? 30 : 15;
-            const endPct = options.fonts ? 75 : 85;
+            const startPct = opts.json ? 30 : 15;
+            const endPct = opts.fonts || opts.logos ? 65 : 85;
             this.bundlePercent = startPct + Math.round((overallPercent / 100) * (endPct - startPct));
             this.bundleProgressText = `Rendering PDF Page ${currentStep}/${totalSteps}: ${pageTitle}`;
           });
@@ -329,10 +365,62 @@ Generated with UFX Studio — Free-Hand Design-to-Code Platform
         }
       }
 
-      // 3. TTF Fonts Package (if selected)
-      if (options.fonts) {
+      // 3. Logo Assets Folder (if selected)
+      if (opts.logos !== false) {
+        this.currentStage = 'logos';
+        this.bundlePercent = 70;
+        this.bundleProgressText = 'Packaging uploaded logo asset files...';
+        const logosFolder = masterZip.folder('logos');
+
+        const logoKeys: { key: keyof typeof data.logo; name: string }[] = [
+          { key: 'primary', name: 'primary-logo' },
+          { key: 'secondary', name: 'secondary-logo' },
+          { key: 'horizontal', name: 'horizontal-logo' },
+          { key: 'vertical', name: 'vertical-logo' },
+          { key: 'icon', name: 'icon-favicon' },
+          { key: 'monoBlack', name: 'mono-black-logo' },
+          { key: 'monoWhite', name: 'mono-white-logo' }
+        ];
+
+        let logoCount = 0;
+        const logoFilesInfo: string[] = [];
+
+        for (const item of logoKeys) {
+          const val = data.logo?.[item.key];
+          if (val && typeof val === 'string') {
+            const converted = this.dataUrlToBlob(val);
+            if (converted && logosFolder) {
+              const filename = `${item.name}.${converted.ext}`;
+              logosFolder.file(filename, converted.blob);
+              logoCount++;
+              logoFilesInfo.push(`    - ${filename}`);
+            } else if (val.startsWith('http') && logosFolder) {
+              try {
+                const res = await fetch(val);
+                if (res.ok) {
+                  const blob = await res.blob();
+                  const ext = val.includes('.svg') ? 'svg' : 'png';
+                  const filename = `${item.name}.${ext}`;
+                  logosFolder.file(filename, blob);
+                  logoCount++;
+                  logoFilesInfo.push(`    - ${filename}`);
+                }
+              } catch (e) {
+                console.warn('Failed to fetch logo URL:', val, e);
+              }
+            }
+          }
+        }
+
+        if (logoCount > 0) {
+          manifestItems.push(`  - /logos/ ${logoCount} logo asset files (${cleanBrandName} approved logo variants)\n${logoFilesInfo.join('\n')}`);
+        }
+      }
+
+      // 4. TTF Fonts Package (if selected)
+      if (opts.fonts) {
         this.currentStage = 'fonts';
-        this.bundlePercent = options.pdf ? 80 : (options.json ? 50 : 20);
+        this.bundlePercent = 82;
         this.bundleProgressText = `Fetching Google Fonts for ${fontName}...`;
         
         let weights = [400, 600, 700];
@@ -421,7 +509,7 @@ Generated with UFX Studio — Free-Hand Design-to-Code Platform
         }
       }
 
-      // 4. Root MANIFEST.txt & ZIP Compression
+      // 5. Root MANIFEST.txt & ZIP Compression
       this.currentStage = 'zip';
       this.bundlePercent = 95;
       this.bundleProgressText = 'Creating MANIFEST.txt & compressing ZIP archive...';
@@ -443,6 +531,7 @@ DIRECTORY STRUCTURE OVERVIEW:
 ------------------------------------------------------------------------
 • /json/        - Holds raw JSON tokens for developer import & theme engines.
 • /brand-guide/ - Holds multi-page PDF guideline document for stakeholders.
+• /logos/       - Holds approved brand logo variant files (primary, secondary, etc).
 • /fonts/       - Holds raw .ttf font files & Google Fonts licensing README.
 
 Thank you for building your design system with UFX Studio!
@@ -450,7 +539,7 @@ Thank you for building your design system with UFX Studio!
 `;
       masterZip.file('MANIFEST.txt', manifestContent);
 
-      // 5. Download zip
+      // 6. Download zip
       this.bundlePercent = 99;
       this.bundleProgressText = 'Finalizing package download...';
       await new Promise(r => setTimeout(r, 100));

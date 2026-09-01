@@ -1,13 +1,15 @@
 <div class="h-full bg-gray-100 flex flex-col relative overflow-hidden preview-wrapper" [ngStyle]="getPreviewStyles()">
-  <!-- Live Preview Tag -->
-  <!-- <div
-    class="absolute top-2 right-4 z-10 flex items-center gap-2 px-3 py-2 bg-success/10 text-success border border-success/20 rounded-full text-[10px] font-medium tracking-widest shadow-sm preview-label">
-    <span class="w-1.5 h-1.5 text-[12px] rounded-full bg-success animate-[pulse_2s_infinite] preview-dot"></span>
-    Live Preview
-  </div> -->
+  <!-- Live Preview Header Bar -->
+  <div class="sticky top-0 z-20 flex items-center justify-between px-4 py-2.5 bg-white/90 backdrop-blur-md border-b border-gray-200/80 shadow-xs shrink-0">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span class="text-xs font-black uppercase tracking-wider text-gray-900">Live Preview</span>
+    </div>
+    <span class="text-[11px] text-gray-500 font-medium">Preview of your generated brand guide</span>
+  </div>
 
   <!-- Content Area -->
-  <div class="flex-1 overflow-y-auto overflow-x-hidden px-3 pt-10 pb-3 flex flex-col items-center gap-8 preview-scroll"
+  <div class="flex-1 overflow-y-auto overflow-x-hidden px-3 pt-6 pb-6 flex flex-col items-center gap-8 preview-scroll"
     #previewScrollContainer>
     <app-preview-cover [data]="data"
       class="bg-white shadow-2xl rounded-sm overflow-hidden preview-page"></app-preview-cover>
@@ -16,7 +18,7 @@
     <app-preview-logo [data]="data"
       class="bg-white shadow-2xl rounded-sm overflow-hidden preview-page"></app-preview-logo>
     <app-preview-colors [data]="data"
-      class="bg-white shadow-2xl rounded-sm overflow-hidden preview-page"></app-preview-colors>
+      class="bg-white shadow-2xl rounded-sm overflow-visible preview-page"></app-preview-colors>
     <app-preview-typography [data]="data"
       class="bg-white shadow-2xl rounded-sm overflow-hidden preview-page"></app-preview-typography>
     <app-preview-iconography [data]="data"

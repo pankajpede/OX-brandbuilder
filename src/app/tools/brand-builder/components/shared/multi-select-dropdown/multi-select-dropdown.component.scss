@@ -21,15 +21,18 @@
 /* ── Trigger ─────────────────────────────────── */
 .msd-trigger {
   width: 100%;
+  height: 40px;
+  min-height: 40px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-3) var(--space-4);
-  background: var(--color-bg);
+  padding: 7px 10px;
+  background: var(--color-bg, #fff);
   border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: var(--text-base);
-  color: var(--color-text);
+  border-radius: 5px;
+  font-size: 14px;
+  color: var(--color-text, #171717);
   transition:
     border-color var(--transition-base),
     box-shadow var(--transition-base);
@@ -46,17 +49,17 @@
 }
 
 .msd-placeholder {
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #a3a3a3);
 
   &.has-value {
-    color: var(--color-text);
+    color: var(--color-text, #171717);
     font-weight: 500;
   }
 }
 
 .msd-arrow {
   display: flex;
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #a3a3a3);
   transition: transform var(--transition-base);
 }
 
@@ -66,11 +69,11 @@
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: var(--color-bg);
+  background: var(--color-bg, #fff);
   border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: 5px;
   box-shadow: var(--shadow-lg);
-  z-index: var(--z-dropdown);
+  z-index: var(--z-dropdown, 100);
   animation: fadeInUp 0.15s ease-out;
   overflow: hidden;
 }
@@ -78,30 +81,30 @@
 /* ── Search ──────────────────────────────────── */
 .msd-search {
   position: relative;
-  padding: var(--space-2);
+  padding: var(--space-2, 0.5rem);
   border-bottom: 1px solid var(--color-gray-100);
 }
 
 .msd-search-icon {
   position: absolute;
-  left: var(--space-4);
+  left: var(--space-4, 1rem);
   top: 50%;
   transform: translateY(-50%);
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #a3a3a3);
 }
 
 .msd-search-input {
   width: 100%;
   border: none;
   background: var(--color-gray-50);
-  border-radius: var(--radius-sm);
-  padding: var(--space-2) var(--space-3) var(--space-2) 36px;
-  font-size: var(--text-sm);
-  color: var(--color-text);
+  border-radius: var(--radius-sm, 4px);
+  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem) var(--space-2, 0.5rem) 36px;
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--color-text, #171717);
   outline: none;
 
   &::placeholder {
-    color: var(--color-text-muted);
+    color: var(--color-text-muted, #a3a3a3);
   }
 }
 
@@ -109,17 +112,17 @@
 .msd-options {
   max-height: 200px;
   overflow-y: auto;
-  padding: var(--space-1) 0;
+  padding: var(--space-1, 0.25rem) 0;
 }
 
 .msd-option {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--color-text);
+  gap: var(--space-3, 0.75rem);
+  padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--color-text, #171717);
   transition: background var(--transition-fast);
   text-align: left;
   cursor: pointer;
@@ -132,9 +135,9 @@
     font-weight: 600;
 
     .msd-checkbox {
-      background: var(--color-primary);
-      border-color: var(--color-primary);
-      color: var(--color-white);
+      background: var(--color-primary, #000);
+      border-color: var(--color-primary, #000);
+      color: #fff;
     }
   }
 
@@ -148,7 +151,7 @@
   width: 18px;
   height: 18px;
   border: 1.5px solid var(--color-gray-300);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-sm, 4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,44 +165,44 @@
 }
 
 .msd-empty {
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-6, 1.5rem) var(--space-4, 1rem);
   text-align: center;
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--color-text-muted, #a3a3a3);
 }
 
 /* ── Footer ──────────────────────────────────── */
 .msd-footer {
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
   border-top: 1px solid var(--color-gray-100);
   background: var(--color-gray-50);
 }
 
 .msd-count {
-  font-size: var(--text-xs);
+  font-size: var(--text-xs, 0.75rem);
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #a3a3a3);
 }
 
 /* ── Chips ───────────────────────────────────── */
 .msd-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
+  gap: var(--space-2, 0.5rem);
+  margin-top: var(--space-3, 0.75rem);
 }
 
 .msd-chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
-  background: var(--color-primary);
-  color: var(--color-white);
+  gap: var(--space-1, 0.25rem);
+  padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem) var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+  background: var(--color-primary, #000);
+  color: #fff;
   border-radius: 20px;
-  font-size: var(--text-xs);
+  font-size: var(--text-xs, 0.75rem);
   font-weight: 600;
-  letter-spacing: var(--tracking-wide);
+  letter-spacing: var(--tracking-wide, 0.025em);
   animation: scaleIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -207,7 +210,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-white);
+  color: #fff;
   opacity: 0.6;
   transition: opacity var(--transition-fast);
   padding: 2px;

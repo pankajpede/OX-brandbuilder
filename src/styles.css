@@ -307,6 +307,9 @@
   .form-textarea,
   .form-select {
     width: 100%;
+    height: 40px;
+    min-height: 40px;
+    box-sizing: border-box;
     padding: 7px 10px;
     background: #fff;
     border: 1.5px solid var(--color-border);
@@ -563,8 +566,8 @@
   /* Reusable Tooltip Pattern */
   [data-tooltip] {
     position: relative;
-    --tooltip-offset-y: 72px;
-    --tooltip-arrow-y: 60px;
+    --tooltip-offset-y: 28px;
+    --tooltip-arrow-y: 16px;
   }
 
   [data-tooltip].tooltip-card {
@@ -589,24 +592,25 @@
     left: 50%;
     transform: translateX(-50%) translateY(-10px);
     width: max-content;
-    max-width: 240px;
-    padding: 0.6rem 1rem;
+    max-width: 260px;
+    padding: 0.6rem 0.85rem;
     background: #000;
     color: #fff;
-    font-size: 0.7rem;
-    line-height: 1.4;
-    font-weight: 700;
+    font-size: 0.725rem;
+    line-height: 1.45;
+    font-weight: 600;
     text-transform: none;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     border-radius: var(--radius-md);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
     opacity: 0;
     visibility: hidden;
     transition: all var(--transition-base);
     z-index: 10000;
     pointer-events: none;
     text-align: center;
-    white-space: nowrap;
+    white-space: pre-line;
+    word-break: break-word;
   }
 
   [data-tooltip]::after {

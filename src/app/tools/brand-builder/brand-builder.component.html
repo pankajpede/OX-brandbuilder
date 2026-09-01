@@ -275,7 +275,20 @@
                 <input type="checkbox" [(ngModel)]="exportPdf" (click)="$event.stopPropagation()" class="w-4 h-4 accent-black rounded cursor-pointer" />
               </label>
 
-              <!-- Checkbox 3: Font Package TTF -->
+              <!-- Checkbox 3: Logo Assets Folder -->
+              <label class="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50 cursor-pointer text-xs font-bold text-gray-900 transition-colors">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-6 h-6 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100/80">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </div>
+                  <span>Logo Assets (/logos)</span>
+                </div>
+                <input type="checkbox" [(ngModel)]="exportLogos" (click)="$event.stopPropagation()" class="w-4 h-4 accent-black rounded cursor-pointer" />
+              </label>
+
+              <!-- Checkbox 4: Font Package TTF -->
               <label class="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50 cursor-pointer text-xs font-bold text-gray-900 transition-colors">
                 <div class="flex items-center gap-2.5">
                   <div class="w-6 h-6 rounded-md bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100/80">

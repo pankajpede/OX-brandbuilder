@@ -36,9 +36,17 @@ export class StepSelectionComponent {
       ...this.brandData,
       brandMode: mode
     });
-    // Auto-advance if custom, or stay to upload if AI/Import
-    if (mode === 'custom') {
-      this.brandService.nextStep();
+  }
+
+  onContinue(): void {
+    if (this.brandData.brandMode === 'ai') {
+      if (this.brandData.aiMockups.length > 0 && !this.isAnalyzing) {
+        this.analyzeImages();
+      } else {
+        this.brandService.goToStep(1);
+      }
+    } else {
+      this.brandService.goToStep(1);
     }
   }
 
@@ -54,14 +62,14 @@ export class StepSelectionComponent {
           // 1. Full Builder State (Best for editing)
           if (json._builder_state) {
             this.brandService.updateBrandData(json._builder_state);
-            this.brandService.nextStep();
+            this.brandService.goToStep(1);
             return;
           }
 
           // 2. Legacy Raw Data or direct BrandData
           if (json.brandMode && json.cover && json.colors) {
             this.brandService.updateBrandData(json);
-            this.brandService.nextStep();
+            this.brandService.goToStep(1);
             return;
           }
 
@@ -82,7 +90,7 @@ export class StepSelectionComponent {
                 primaryFont: json.foundations.typography?.fontFamily || 'Inter'
               }
             });
-            this.brandService.nextStep();
+            this.brandService.goToStep(1);
             return;
           }
 
@@ -166,7 +174,7 @@ export class StepSelectionComponent {
 
     // 3. Neutrals (Background/Surfaces)
     if (classification.neutral) {
-      updateColor('White', classification.neutral); // Using the most dominant neutral as base
+      updateColor('White', classification.neutral);
       updateColor('Gray', classification.neutral); 
     }
 
@@ -177,7 +185,7 @@ export class StepSelectionComponent {
     if (classification.feedback.info) updateColor('Info', classification.feedback.info);
 
     this.brandService.updateSection('colors', { palette });
-    this.brandService.nextStep();
+    this.brandService.goToStep(1);
   }
 
   private classifyColors(colors: string[]): any {
@@ -207,14 +215,10 @@ export class StepSelectionComponent {
       }
     });
 
-    // Brand is the most frequent vibrant color
     result.brand = vibrants[0] || sorted[0];
     result.secondary = vibrants[1] || null;
-    
-    // Neutral is the most frequent neutral color (usually background)
     result.neutral = neutrals[0] || '#FFFFFF';
 
-    // Feedback Detection (Hue-based matching)
     vibrants.forEach(hex => {
       const hsl = this.hexToHsl(hex);
       const h = hsl.h;
@@ -239,7 +243,6 @@ export class StepSelectionComponent {
           return;
         }
 
-        // Resize for faster processing
         const maxSide = 200;
         let w = img.width;
         let h = img.height;
@@ -256,14 +259,13 @@ export class StepSelectionComponent {
         const imageData = ctx.getImageData(0, 0, w, h).data;
         const colors: string[] = [];
         
-        // Sample every 4th pixel for high accuracy
         for (let i = 0; i < imageData.length; i += 16) {
           const r = imageData[i];
           const g = imageData[i + 1];
           const b = imageData[i + 2];
           const a = imageData[i + 3];
           
-          if (a > 200) { // High opacity only
+          if (a > 200) {
             const hex = this.rgbToHex(
               Math.round(r / 5) * 5,
               Math.round(g / 5) * 5,
@@ -311,21 +313,17 @@ export class StepSelectionComponent {
 
   private generate9StepScale(baseHex: string): string[] {
     const scale: string[] = [];
-    const weights = [0.95, 0.8, 0.6, 0.4, 0.2, 0, 0.2, 0.4, 0.6, 0.8]; // 10 steps to match UI
+    const weights = [0.95, 0.8, 0.6, 0.4, 0.2, 0, 0.2, 0.4, 0.6, 0.8];
     
     for (let i = 0; i < 10; i++) {
       if (i < 5) {
-        // Lighten (50 to 400)
         scale.push(this.mixColors('#FFFFFF', baseHex, 1 - weights[i]));
       } else if (i === 5) {
-        // 500
         scale.push(baseHex);
       } else {
-        // Darken (600 to 900)
         scale.push(this.mixColors(baseHex, '#000000', weights[i]));
       }
     }
-    // Reverse because our UI expects 100% to 0% (White to Black)
     return scale.reverse();
   }
 

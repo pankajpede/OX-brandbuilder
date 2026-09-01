@@ -1,10 +1,10 @@
 <div class="px-4 py-0 animate-fade-in-up">
-  <!-- Standardized Section Header -->
-  <div class="mb-6">
-    <div class="flex items-center gap-2 mb-1">
+  <!-- Page Header -->
+  <div class="mb-4">
+    <div class="flex items-center gap-2 mb-0.5">
       <h2 class="text-xl font-bold text-gray-900">Typography Settings</h2>
       <div class="info-trigger"
-        data-tooltip="Choose a font and configure the visual tone and density to match your brand's personality.">
+        data-tooltip="Configure your typeface, style, scale, and density.">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10" />
@@ -13,43 +13,43 @@
         </svg>
       </div>
     </div>
-    <p class="text-sm text-gray-500">Configure your typeface and semantic scaling logic.</p>
+    <p class="text-xs text-gray-500">Configure your typeface, style, scale, and density.</p>
   </div>
 
-  <form [formGroup]="form" class="flex flex-col gap-0">
-    <!-- Font Selection -->
-    <div class="grid grid-cols-1 gap-6">
-      <div class="form-group" id="font-primary">
-        <app-google-font-selector formControlName="primaryFont" label="Brand Font Family *"
-          placeholder="Search brand font...">
-        </app-google-font-selector>
-      </div>
+  <form [formGroup]="form" class="flex flex-col gap-4">
+    <!-- Brand Font Family -->
+    <div class="form-group mb-0" id="font-primary">
+      <app-google-font-selector formControlName="primaryFont" label="Brand Font Family *"
+        placeholder="Search brand font...">
+      </app-google-font-selector>
     </div>
 
-    <!-- Tone Selection -->
+    <!-- Typography Style -->
     <div>
-      <div class="section-header mb-4">
-        <span class="block text-xs font-bold uppercase tracking-widest text-gray-400">Typography Tone</span>
-        <div class="info-trigger" data-tooltip="Controls the semantic weights and line-heights of your type system.">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="16" x2="12" y2="12" />
-            <line x1="12" y1="8" x2="12.01" y2="8" />
-          </svg>
-        </div>
+      <div class="flex items-center justify-between mb-1">
+        <span class="block text-xs font-bold uppercase tracking-widest text-gray-400">Typography Style</span>
+        <span class="text-[11px] text-gray-400 font-medium">Visual character & weights</span>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
         @for (tone of tones; track tone.id) {
-        <button type="button" (click)="setTone(tone.id)" [class.active]="form.get('tone')?.value === tone.id"
-          class="flex flex-col items-start p-4 text-left border border-border rounded-xl transition-all duration-200 hover:border-primary-500/50 hover:bg-gray-50 group semantic-card">
-          <span class="text-sm font-bold text-gray-900 mb-1 group-[.active]:text-primary-600">{{ tone.label }}</span>
-          <p class="text-[11px] leading-relaxed text-gray-500 font-medium">{{ tone.desc }}</p>
+        <button 
+          type="button" 
+          role="radio"
+          [attr.aria-checked]="form.get('tone')?.value === tone.id"
+          [attr.aria-label]="tone.label + ' style: ' + tone.desc"
+          (click)="setTone(tone.id)" 
+          (keydown.enter)="setTone(tone.id)"
+          (keydown.space)="setTone(tone.id); $event.preventDefault()"
+          [ngClass]="form.get('tone')?.value === tone.id ? 'active border-black bg-gray-50/80' : 'border-border bg-white'"
+          class="flex flex-col items-start p-2.5 text-left border-2 rounded-md transition-all duration-200 hover:border-gray-400 group cursor-pointer focus:outline-none focus:border-black">
+          <span class="text-xs font-bold text-gray-900 mb-0.5 group-[.active]:text-black">{{ tone.label }}</span>
+          <p class="text-[10.5px] leading-tight text-gray-500 font-medium">{{ tone.desc }}</p>
 
           @if (form.get('tone')?.value === tone.id) {
-          <div class="mt-3 flex items-center gap-1.5 text-[10px] font-bold text-primary-600">
-            <span class="w-1.5 h-1.5 rounded-full bg-primary-600"></span>
-            Active Scale
+          <div class="mt-2 flex items-center gap-1 text-[8.5px] font-black uppercase tracking-widest text-black bg-black/5 px-1.5 py-0.5 rounded-md">
+            <span class="w-1 h-1 rounded-full bg-black"></span>
+            Active Style
           </div>
           }
         </button>
@@ -57,41 +57,72 @@
       </div>
     </div>
 
-    <!-- Density Selection -->
+    <!-- System Density -->
     <div>
-      <div class="section-header mb-4">
+      <div class="flex items-center justify-between mb-1">
         <span class="block text-xs font-bold uppercase tracking-widest text-gray-400">System Density</span>
-        <div class="info-trigger"
-          data-tooltip="Adjusts the global scaling of all text elements. Compact is better for dashboards, Comfortable for reading.">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="16" x2="12" y2="12" />
-            <line x1="12" y1="8" x2="12.01" y2="8" />
-          </svg>
-        </div>
+        <span class="text-[11px] text-gray-400 font-medium">Spacing & line height</span>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
         @for (density of densities; track density.id) {
-        <button type="button" (click)="setDensity(density.id)"
-          [class.active]="form.get('density')?.value === density.id"
-          class="flex flex-col items-start p-4 text-left border border-border rounded-xl transition-all duration-200 hover:border-primary-500/50 hover:bg-gray-50 group semantic-card">
-          <span class="text-sm font-bold text-gray-900 mb-1 group-[.active]:text-primary-600">{{ density.label }}</span>
-          <p class="text-[11px] leading-relaxed text-gray-500 font-medium">{{ density.desc }}</p>
+        <button 
+          type="button" 
+          role="radio"
+          [attr.aria-checked]="form.get('density')?.value === density.id"
+          [attr.aria-label]="density.label + ' density: ' + density.desc"
+          (click)="setDensity(density.id)"
+          (keydown.enter)="setDensity(density.id)"
+          (keydown.space)="setDensity(density.id); $event.preventDefault()"
+          [ngClass]="form.get('density')?.value === density.id ? 'active border-black bg-gray-50/80' : 'border-border bg-white'"
+          class="flex flex-col items-start p-2.5 text-left border-2 rounded-md transition-all duration-200 hover:border-gray-400 group cursor-pointer focus:outline-none focus:border-black">
+          <span class="text-xs font-bold text-gray-900 mb-0.5 group-[.active]:text-black">{{ density.label }}</span>
+          <p class="text-[10.5px] leading-tight text-gray-500 font-medium">{{ density.desc }}</p>
 
           @if (form.get('density')?.value === density.id) {
-          <div class="mt-3 flex items-center gap-1.5 text-[10px] font-bold text-primary-600">
-            <span class="w-1.5 h-1.5 rounded-full bg-primary-600"></span>
-            Selected Density
+          <div class="mt-2 flex items-center gap-1 text-[8.5px] font-black uppercase tracking-widest text-black bg-black/5 px-1.5 py-0.5 rounded-md">
+            <span class="w-1 h-1 rounded-full bg-black"></span>
+            Active Density
           </div>
           }
         </button>
+        }
+      </div>
+    </div>
+
+    <!-- Generated Type System Summary & Scale -->
+    <div class="p-3 bg-gray-50/70 rounded-md border border-gray-200/80 flex flex-col gap-2">
+      <div class="flex items-center justify-between border-b border-gray-200/60 pb-1.5">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-gray-900">Generated Type System</span>
+        <span class="text-[10px] font-semibold text-gray-500 font-mono">
+          {{ currentFont }} · 6 sizes · {{ currentDensity | titlecase }}
+        </span>
+      </div>
+
+      <!-- Font Weights Summary -->
+      <div class="flex items-center gap-2">
+        <span class="text-[9.5px] font-bold uppercase tracking-wider text-gray-400 shrink-0">Weights:</span>
+        <div class="flex flex-wrap gap-1">
+          @for (weight of generatedWeights; track weight) {
+            <span class="px-1.5 py-0.5 bg-white border border-gray-200 rounded-md text-[10px] font-semibold text-gray-800">{{ weight }}</span>
+          }
+        </div>
+      </div>
+
+      <!-- Type Scale Table -->
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 pt-0.5">
+        @for (item of generatedScale; track item.label) {
+          <div class="flex flex-col p-1.5 bg-white rounded-md border border-gray-200/80">
+            <span class="text-[9px] font-bold uppercase text-gray-400">{{ item.label }}</span>
+            <span class="text-[11px] font-black text-gray-900 leading-tight mt-0.5">{{ item.size }}</span>
+            <span class="text-[8.5px] font-mono text-gray-400 leading-none">LH: {{ item.line }}</span>
+          </div>
         }
       </div>
     </div>
 
     <!-- Preview Layout Selection -->
-    <div class="mt-4 pt-8 border-t border-gray-100">
+    <div class="pt-4 border-t border-gray-100">
       <app-variant-selector [variants]="variants" [selectedVariant]="selectedVariant"
         (variantSelected)="onVariantChange($event)"></app-variant-selector>
     </div>

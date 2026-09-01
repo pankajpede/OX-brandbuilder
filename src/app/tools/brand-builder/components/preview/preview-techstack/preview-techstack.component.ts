@@ -27,12 +27,16 @@ export class PreviewTechStackComponent {
     this.activeHoveredIndex = idx;
   }
 
+  get techId(): string {
+    return this.data?.techstack?.technology || 'react';
+  }
+
   get techVersion(): string {
     return this.data?.techstack?.techVersion || 'v18.2.0 (Latest)';
   }
 
   get techImage(): string {
-    const techId = this.data?.techstack?.technology;
+    const techId = this.techId;
     switch (techId) {
       case 'react': return 'assets/images/teck-stack/React.svg';
       case 'angular': return 'assets/images/teck-stack/Angular.png';
@@ -49,7 +53,7 @@ export class PreviewTechStackComponent {
   }
 
   get techName(): string {
-    const techId = this.data?.techstack?.technology;
+    const techId = this.techId;
     switch (techId) {
       case 'react': return 'React';
       case 'angular': return 'Angular';

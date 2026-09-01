@@ -3,7 +3,13 @@
 }
 
 .picker-trigger {
-  min-height: auto;
+  height: 40px !important;
+  min-height: 40px !important;
+  box-sizing: border-box !important;
+  padding: 7px 10px !important;
+  border-radius: 5px !important;
+  border: 1.5px solid var(--color-border) !important;
+  font-size: 14px !important;
   cursor: pointer;
   background: white;
   display: flex !important;
@@ -12,12 +18,11 @@
 }
 
 .picker-trigger:hover:not(:disabled) {
-  border-color: var(--color-gray-400);
+  border-color: var(--color-gray-400) !important;
 }
 
 .is-open .picker-trigger {
-  border-color: var(--color-primary);
-  /* box-shadow: 0 0 0 1px var(--color-primary); */
+  border-color: var(--color-primary) !important;
 }
 
 .year-option {

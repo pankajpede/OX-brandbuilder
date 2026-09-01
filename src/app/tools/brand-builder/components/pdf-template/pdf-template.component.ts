@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BrandData, ColorEntry, STEPS, TocItem } from '../../models/brand.model';
 import { CoverTemplateComponent } from '../preview/cover-template/cover-template.component';
 import { SummaryTemplateComponent } from '../preview/summary-template/summary-template.component';
-import { PreviewLogoComponent } from '../preview/preview-logo/preview-logo.component';
+import { PreviewLogoComponent, DocumentedLogoVariant } from '../preview/preview-logo/preview-logo.component';
 import { PreviewColorsComponent } from '../preview/preview-colors/preview-colors.component';
 import { PreviewTypographyComponent } from '../preview/preview-typography/preview-typography.component';
 import { PreviewIconographyComponent } from '../preview/preview-iconography/preview-iconography.component';
@@ -88,29 +88,67 @@ export class PdfTemplateComponent {
     });
   }
 
-  get allUploadedLogos(): any[] {
+  get allUploadedLogos(): DocumentedLogoVariant[] {
     if (!this.brandData?.logo) return [];
-    const logo = this.brandData.logo;
+    const logoData = this.brandData.logo;
     const types = [
-      { key: 'primary',    label: 'Primary Logo',    clearSpace: logo.primaryClearSpace || 24,    minSize: logo.primaryMinSize || 32 },
-      { key: 'secondary',  label: 'Secondary Logo',  clearSpace: logo.secondaryClearSpace || 24,  minSize: logo.secondaryMinSize || 32 },
-      { key: 'horizontal', label: 'Horizontal Mark', clearSpace: logo.horizontalClearSpace || 24, minSize: logo.horizontalMinSize || 32 },
-      { key: 'vertical',   label: 'Vertical Mark',   clearSpace: logo.verticalClearSpace || 24,   minSize: logo.verticalMinSize || 32 },
-      { key: 'icon',       label: 'Icon / Favicon',  clearSpace: logo.iconClearSpace || 24,       minSize: logo.iconMinSize || 32 },
-      { key: 'monoBlack',  label: 'Mono Black',      clearSpace: logo.monoBlackClearSpace || 24,  minSize: logo.monoBlackMinSize || 32 },
-      { key: 'monoWhite',  label: 'Mono White',      clearSpace: logo.monoWhiteClearSpace || 24,  minSize: logo.monoWhiteMinSize || 32 },
+      { key: 'primary', label: 'Primary Logo', subtitle: 'Main brand representation', bgClass: 'bg-white' },
+      { key: 'secondary', label: 'Secondary Logo', subtitle: 'Alternate brand representation', bgClass: 'bg-white' },
+      { key: 'horizontal', label: 'Horizontal Layout', subtitle: 'Horizontal logo lockup', bgClass: 'bg-white' },
+      { key: 'vertical', label: 'Vertical Layout', subtitle: 'Vertical logo lockup', bgClass: 'bg-white' },
+      { key: 'icon', label: 'Icon / Favicon', subtitle: 'Compact digital use', bgClass: 'bg-white' },
+      { key: 'monoBlack', label: 'Mono Black', subtitle: 'Single-color dark version', bgClass: 'bg-white' },
+      { key: 'monoWhite', label: 'Mono White', subtitle: 'Single-color light version', bgClass: 'bg-[#171717]' },
     ];
 
-    const active = types.filter(t => !!(logo as any)[t.key]).map(t => ({
-      ...t,
-      url: (logo as any)[t.key]
-    }));
+    const active = types.filter(t => !!(logoData as any)?.[t.key]).map(t => {
+      const url = (logoData as any)[t.key];
+      const customCS = (logoData as any)[`${t.key}ClearSpace`];
+      const customMS = (logoData as any)[`${t.key}MinSize`];
+
+      let clearSpaceText: string | undefined;
+      if (customCS) {
+        clearSpaceText = `${customCS}px clear space`;
+      } else if (logoData.clearSpaceRule === 'custom' && logoData.customClearSpace) {
+        clearSpaceText = `${logoData.customClearSpace}px clear space`;
+      } else if (logoData.clearSpaceRule === '1x-symbol') {
+        clearSpaceText = '1× Symbol Height clear space';
+      } else if (logoData.clearSpaceRule === '1x-logo') {
+        clearSpaceText = '1× Logo Height clear space';
+      }
+
+      let minSizeText: string | undefined;
+      if (customMS) {
+        minSizeText = `Min: ${customMS}px`;
+      } else if (logoData.minSizeDigital || logoData.minSizePrint) {
+        const parts: string[] = [];
+        if (logoData.minSizeDigital) parts.push(`${logoData.minSizeDigital}px digital`);
+        if (logoData.minSizePrint) parts.push(`${logoData.minSizePrint}mm print`);
+        minSizeText = `Min: ${parts.join(' / ')}`;
+      }
+
+      return {
+        layoutVariantId: t.key,
+        name: t.label,
+        subtitle: t.subtitle,
+        url,
+        bgClass: t.bgClass,
+        clearSpaceText,
+        minSizeText
+      };
+    });
 
     if (active.length > 0) return active;
-    return types.slice(0, 4).map(t => ({ ...t, url: '' }));
+    return types.slice(0, 4).map(t => ({
+      layoutVariantId: t.key,
+      name: t.label,
+      subtitle: t.subtitle,
+      url: '',
+      bgClass: t.bgClass
+    }));
   }
 
-  get logoPageChunks(): { items: any[]; pageNum: string }[] {
+  get logoPageChunks(): { items: DocumentedLogoVariant[]; pageNum: string }[] {
     const variant = this.brandData?.logo?.variant || 'grid';
     const logos = this.allUploadedLogos;
     if (logos.length === 0) return [{ items: [], pageNum: '03' }];
@@ -121,7 +159,7 @@ export class PdfTemplateComponent {
       return [{ items: logos, pageNum: '03' }];
     }
 
-    const chunks: { items: any[]; pageNum: string }[] = [];
+    const chunks: { items: DocumentedLogoVariant[]; pageNum: string }[] = [];
     for (let i = 0; i < logos.length; i += chunkSize) {
       const slice = logos.slice(i, i + chunkSize);
       const pageInt = 3 + chunks.length;

@@ -57,7 +57,7 @@
   padding: var(--space-3) var(--space-4);
   background: var(--color-gray-50);
   border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-base);
   user-select: none;
@@ -130,15 +130,12 @@
 
   &:hover {
     border-color: var(--color-gray-400);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
   }
 
   &.is-selected {
     border-color: var(--color-primary);
-    border-width: 2.5px;
-    transform: translateY(-3px);
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.10), var(--shadow-md);
+    border-width: 2px;
   }
 
   &.is-blurred {

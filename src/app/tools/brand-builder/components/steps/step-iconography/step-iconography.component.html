@@ -1,10 +1,10 @@
 <div class="px-4 py-0 animate-fade-in-up">
-  <!-- Standardized Section Header -->
-  <div class="mb-6">
+  <!-- Section Header -->
+  <div class="mb-4">
     <div class="flex items-center gap-2 mb-1">
-      <h2 class="text-xl font-bold text-gray-900">Iconography</h2>
+      <h2 class="text-xl font-bold text-gray-900">Icon System</h2>
       <div class="info-trigger"
-        data-tooltip="Select an icon library and style that aligns with your brand's visual language.">
+        data-tooltip="Choose the official icon system for your brand.">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10" />
@@ -13,11 +13,12 @@
         </svg>
       </div>
     </div>
-    <p class="text-sm text-gray-500">Choose the official icon system for your brand.</p>
+    <p class="text-xs text-gray-500">Choose the official icon system for your brand.</p>
   </div>
 
   <!-- Search & Selection -->
-  <div class="mb-8">
+  <div class="mb-6">
+    <!-- Search Bar with Clear Action -->
     <div class="relative mb-4">
       <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -26,40 +27,70 @@
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </div>
+
       <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()"
-        class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-        placeholder="Search icon libraries (e.g. Font Awesome, Feather)...">
+        aria-label="Search icon libraries"
+        class="block w-full pl-9 pr-8 py-2 border border-gray-200 rounded-md bg-gray-50/50 text-xs placeholder-gray-400 focus:outline-none focus:border-black focus:bg-white transition-all"
+        placeholder="Search icon libraries (e.g. Font Awesome, Feather, Lucide)...">
+
+      @if (searchQuery) {
+        <button type="button" 
+          (click)="clearSearch()"
+          aria-label="Clear search"
+          class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-black transition-colors cursor-pointer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      }
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto p-1 custom-scrollbar">
+    <!-- Library Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[380px] overflow-y-auto p-1 custom-scrollbar" role="radiogroup" aria-label="Icon library selection">
       @for (lib of filteredLibraries; track lib.id) {
-      <div (click)="selectLibrary(lib)"
-        class="flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all duration-200 group"
-        [ngClass]="{
-            'border-primary bg-primary/5': selectedLibrary?.id === lib.id,
-            'border-transparent bg-white shadow-sm hover:border-gray-200': selectedLibrary?.id !== lib.id
-          }">
+      <div 
+        role="radio"
+        [attr.aria-checked]="selectedLibrary?.id === lib.id"
+        [attr.aria-label]="lib.name + ': ' + lib.description"
+        tabindex="0"
+        (click)="selectLibrary(lib)"
+        (keydown.enter)="selectLibrary(lib)"
+        (keydown.space)="selectLibrary(lib); $event.preventDefault()"
+        class="flex items-start gap-3 p-3 border-2 rounded-md cursor-pointer transition-all duration-200 group focus:outline-none focus:border-black"
+        [ngClass]="selectedLibrary?.id === lib.id ? 'border-black bg-gray-50/80' : 'border-border bg-white hover:border-gray-300'">
 
-        <div
-          class="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-50 border border-gray-100 p-2 group-hover:scale-110 transition-transform overflow-hidden">
+        <!-- Logo Swatch -->
+        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-white border border-gray-200 p-1.5 shrink-0 overflow-hidden shadow-xs">
           <img [src]="getLibraryLogo(lib.id)"
-            class="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all" [alt]="lib.name" />
+            class="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all" [alt]="lib.name + ' logo'" />
         </div>
 
-        <div class="flex flex-col min-w-0 flex-1">
-          <span class="text-sm font-bold text-gray-900 truncate">{{ lib.name }}</span>
-          <span class="text-[10px] text-gray-500 truncate">{{ lib.description }}</span>
+        <div class="flex flex-col min-w-0 flex-1 gap-0.5">
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-xs font-bold text-gray-900 truncate">{{ lib.name }}</span>
+            @if (selectedLibrary?.id === lib.id) {
+              <span class="px-1.5 py-0.5 text-[8.5px] font-black uppercase tracking-widest text-black bg-black/5 rounded-md shrink-0">
+                Selected
+              </span>
+            }
+          </div>
+          <span class="text-[10.5px] text-gray-500 leading-normal">{{ lib.description }}</span>
           
-          @if (selectedLibrary?.id === lib.id && lib.metadata?.versions) {
+          <!-- Version info pill -->
+          @if (lib.metadata?.versions?.length) {
+            <span class="text-[9.5px] font-mono text-gray-400 mt-1">Version {{ lib.metadata?.versions?.[0] || '1.0.0' }}</span>
+          }
+
+          @if (selectedLibrary?.id === lib.id && (lib.metadata?.versions?.length || 0) > 1) {
             <div class="mt-2 flex flex-wrap gap-1" (click)="$event.stopPropagation()">
               @for (ver of lib.metadata?.versions || []; track ver) {
-                <button (click)="updateVersion(ver)" 
-                        class="px-2 py-0.5 rounded text-[10px] font-bold border transition-all"
-                        [ngClass]="{
-                          'border-primary text-primary bg-primary/5': brandData.iconography.version === ver,
-                          'border-gray-200 text-gray-400 bg-white hover:border-gray-300': brandData.iconography.version !== ver
-                        }">
-                  {{ ver }}
+                <button 
+                  type="button"
+                  (click)="updateVersion(ver)" 
+                  class="px-2 py-0.5 rounded-md text-[10px] font-bold border transition-all cursor-pointer"
+                  [ngClass]="brandData.iconography.version === ver ? 'border-black text-black bg-black/5 font-black' : 'border-gray-200 text-gray-400 bg-white hover:border-gray-300'">
+                  Version {{ ver }}
                 </button>
               }
             </div>
@@ -67,14 +98,22 @@
         </div>
 
         @if (selectedLibrary?.id === lib.id) {
-        <div class="ml-auto text-primary">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-            stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
+          <div class="text-black shrink-0 pt-0.5">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
         }
       </div>
+      }
+
+      <!-- Empty State -->
+      @if (filteredLibraries.length === 0) {
+        <div class="col-span-full p-8 bg-gray-50/50 border border-dashed border-gray-200 rounded-md flex flex-col items-center justify-center text-center">
+          <span class="text-xs font-bold text-gray-900 mb-1">No icon libraries found</span>
+          <span class="text-[11px] text-gray-500">Try another library name or keyword.</span>
+        </div>
       }
     </div>
   </div>

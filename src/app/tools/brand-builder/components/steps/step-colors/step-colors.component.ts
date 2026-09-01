@@ -1,15 +1,16 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import { BrandService } from '../../../services/brand.service';
 import { VariantService } from '../../../services/variant.service';
 import { VariantSelectorComponent } from '../../shared/variant-selector/variant-selector.component';
-import { VariantOption, ColorEntry } from '../../../models/brand.model';
+import { VariantOption } from '../../../models/brand.model';
 
 @Component({
   selector: 'app-step-colors',
   standalone: true,
-  imports: [ReactiveFormsModule, VariantSelectorComponent],
+  imports: [CommonModule, ReactiveFormsModule, VariantSelectorComponent],
   templateUrl: './step-colors.component.html',
   styleUrl: './step-colors.component.scss'
 })
@@ -22,6 +23,7 @@ export class StepColorsComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   variants: VariantOption[] = [];
   selectedVariant = '';
+  copiedHexIndex: number | null = null;
 
   get paletteArray(): FormArray {
     return this.form.get('palette') as FormArray;
@@ -29,6 +31,13 @@ export class StepColorsComponent implements OnInit, OnDestroy {
 
   get categories(): string[] {
     return ['Brand', 'Semantic', 'Neutral'];
+  }
+
+  getCategorySubtitle(cat: string): string {
+    if (cat === 'Brand') return 'Define the core colors used across your brand.';
+    if (cat === 'Semantic') return 'Colors used for system feedback and status.';
+    if (cat === 'Neutral') return 'Base background, text, and gray scale colors.';
+    return '';
   }
 
   getColorsByCategory(category: string): any[] {
@@ -52,11 +61,9 @@ export class StepColorsComponent implements OnInit, OnDestroy {
       this.brandService.updateSection('colors', val);
     });
 
-    // Subscribe to numTones changes to refresh tones
     this.brandService.brandData$.subscribe(data => {
       if (this.selectedVariant !== data.colors.variant || this.brandService.getSection('colors').numTones !== data.colors.numTones) {
         this.selectedVariant = data.colors.variant;
-        // Tones will be refreshed if needed
       }
     });
   }
@@ -70,9 +77,13 @@ export class StepColorsComponent implements OnInit, OnDestroy {
     this.brandService.setVariant('colors', variantId);
   }
 
+  getNumTones(): number {
+    return this.brandService.getSection('colors').numTones || 10;
+  }
+
   updateNumTones(delta: number): void {
-    const current = this.brandService.getSection('colors').numTones || 9;
-    const next = Math.min(15, Math.max(3, current + delta));
+    const current = this.getNumTones();
+    const next = Math.min(15, Math.max(5, current + delta));
     if (next !== current) {
       this.brandService.updateSection('colors', { numTones: next });
       this.refreshAllTones();
@@ -80,31 +91,46 @@ export class StepColorsComponent implements OnInit, OnDestroy {
   }
 
   private refreshAllTones(): void {
-    this.paletteArray.controls.forEach((control, index) => {
+    this.paletteArray.controls.forEach((control) => {
       const hex = control.get('hex')?.value;
       if (hex) {
         control.patchValue({ tones: this.generateTones(hex) }, { emitEvent: false });
       }
     });
-    // Manually trigger brand data update since we used emitEvent: false
     this.brandService.updateSection('colors', this.form.value);
   }
 
   addColor(category: string = 'Brand'): void {
+    const count = this.getColorsByCategory(category).length + 1;
+    const defaultName = category === 'Brand' ? `Accent ${count}` : (category === 'Semantic' ? `Status ${count}` : `Neutral ${count}`);
+    const tokenName = `--color-${category.toLowerCase()}-${defaultName.toLowerCase().replace(/\s+/g, '-')}`;
+
     this.paletteArray.push(this.createColorGroup({
-      name: '',
+      name: defaultName,
       category: category,
-      token: `--color-${category.toLowerCase()}-custom`,
-      hex: '#888888',
-      rgb: '136, 136, 136',
-      cmyk: '0, 0, 0, 47',
-      usage: '',
+      token: tokenName,
+      hex: '#3b82f6',
+      rgb: '59, 130, 246',
+      cmyk: '76, 47, 0, 4',
+      usage: 'Primary actions, links, and key interactions',
     }));
   }
 
   removeColor(index: number): void {
     if (this.paletteArray.length > 1) {
       this.paletteArray.removeAt(index);
+    }
+  }
+
+  copyHex(hex: string, index: number): void {
+    if (navigator.clipboard && hex) {
+      navigator.clipboard.writeText(hex);
+      this.copiedHexIndex = index;
+      setTimeout(() => {
+        if (this.copiedHexIndex === index) {
+          this.copiedHexIndex = null;
+        }
+      }, 1500);
     }
   }
 
@@ -168,7 +194,7 @@ export class StepColorsComponent implements OnInit, OnDestroy {
   }
 
   private createColorGroup(color: any): FormGroup {
-    const currentNumTones = this.brandService.getSection('colors').numTones || 9;
+    const currentNumTones = this.getNumTones();
     const hasDuplicates = color.tones && new Set(color.tones).size !== color.tones.length;
     const tones = (color.tones && color.tones.length === currentNumTones && !hasDuplicates) 
       ? color.tones 
@@ -187,52 +213,40 @@ export class StepColorsComponent implements OnInit, OnDestroy {
   }
 
   private generateTones(hex: string): string[] {
-    const numTones = this.brandService.getSection('colors').numTones || 9;
+    const numTones = this.getNumTones();
     const rgbRaw = this.hexToRgb(hex);
     if (!rgbRaw) return [];
     
     const [r, g, b] = rgbRaw.split(', ').map(v => parseInt(v, 10));
-    // Calculate relative luminance for anchor distribution
     const luma = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    
     const tones: string[] = [];
     
-    // Generate a distributed scale that always spans from dark to light
-    // regardless of the base color's position.
     for (let i = 0; i < numTones; i++) {
       const factor = 0.02 + (0.96 * i / (numTones - 1));
       let mixedR, mixedG, mixedB;
-      
       const isNeutral = (Math.max(r, g, b) - Math.min(r, g, b)) < 25;
       
       if (isNeutral) { 
-        // For neutrals, ignore the key color's position and provide a full 0-100 range
-        // This ensures professional "shades of gray" rather than clumping around the key color
         const baseVal = Math.round(255 * factor);
-        // Apply a very subtle tint of the key color if it's not pure gray
         const tintStrength = 0.05;
         mixedR = Math.round(baseVal + (r - luma * 255) * tintStrength);
         mixedG = Math.round(baseVal + (g - luma * 255) * tintStrength);
         mixedB = Math.round(baseVal + (b - luma * 255) * tintStrength);
       } else if (luma < 0.01 || luma > 0.99) {
-        // Extreme pure black/white
         const val = Math.round(255 * factor);
         mixedR = mixedG = mixedB = val;
       } else if (factor < luma) {
-        // Interpolate between Black and the Base Color
         const subFactor = factor / luma;
         mixedR = Math.round(0 + (r - 0) * subFactor);
         mixedG = Math.round(0 + (g - 0) * subFactor);
         mixedB = Math.round(0 + (b - 0) * subFactor);
       } else {
-        // Interpolate between the Base Color and White
         const subFactor = (factor - luma) / (1 - luma);
         mixedR = Math.round(r + (255 - r) * subFactor);
         mixedG = Math.round(g + (255 - g) * subFactor);
         mixedB = Math.round(b + (255 - b) * subFactor);
       }
       
-      // Safety clamp
       mixedR = Math.max(0, Math.min(255, mixedR));
       mixedG = Math.max(0, Math.min(255, mixedG));
       mixedB = Math.max(0, Math.min(255, mixedB));
@@ -240,7 +254,6 @@ export class StepColorsComponent implements OnInit, OnDestroy {
       tones.push(this.rgbToHex(mixedR, mixedG, mixedB));
     }
     
-    // Ensure uniqueness and sort by luminance (lightest first)
     return Array.from(new Set(tones)).sort((a, b) => this.getLuma(b) - this.getLuma(a));
   }
 
@@ -254,11 +267,7 @@ export class StepColorsComponent implements OnInit, OnDestroy {
   private hexToRgb(hex: string): string | null {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (!result) return null;
-    
-    const r = parseInt(result[1], 16);
-    const g = parseInt(result[2], 16);
-    const b = parseInt(result[3], 16);
-    return `${r}, ${g}, ${b}`;
+    return `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`;
   }
 
   private rgbToHex(r: number, g: number, b: number): string {
@@ -266,7 +275,7 @@ export class StepColorsComponent implements OnInit, OnDestroy {
       const h = Math.max(0, Math.min(255, c)).toString(16);
       return h.length === 1 ? '0' + h : h;
     };
-    return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toLowerCase();
+    return `#${toHex(r)}${toHex(r ? g : g)}${toHex(b)}`.toLowerCase();
   }
 
   private rgbToCmyk(r: number, g: number, b: number): string {

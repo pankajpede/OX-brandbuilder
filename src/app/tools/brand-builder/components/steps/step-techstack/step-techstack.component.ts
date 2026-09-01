@@ -89,6 +89,10 @@ export class StepTechStackComponent implements OnInit, OnDestroy {
     return this.technologies.find(t => t.id === this.brandData.techstack?.technology);
   }
 
+  get selectedUiCount(): number {
+    return (this.brandData?.techstack?.selectedUiFrameworks || []).length;
+  }
+
   get selectedUiFrameworksList(): { option: UiFrameworkOption; version: string }[] {
     const list = this.brandData.techstack?.selectedUiFrameworks || [];
     return list.map(item => {

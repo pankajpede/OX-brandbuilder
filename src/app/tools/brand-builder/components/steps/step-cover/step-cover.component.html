@@ -1,109 +1,208 @@
 <div class="px-4 py-0 animate-fade-in-up">
-  <!-- Standardized Section Header -->
-  <div class="mb-6">
+  <!-- Page Header -->
+  <div class="mb-4">
     <div class="flex items-center gap-2 mb-1">
-      <h2 class="text-xl font-bold text-gray-900">Brand Details</h2>
+      <h1 class="text-xl font-extrabold text-gray-900">Create your brand guide</h1>
       <div class="info-trigger"
-        data-tooltip="Configure your brand name, tagline, industry, target audience, personality traits, and cover layout template.">
+        data-tooltip="Tell us about your brand and choose a visual direction. We'll use this information to generate your brand guide.">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12" />
           <line x1="12" y1="8" x2="12.01" y2="8" />
         </svg>
       </div>
     </div>
-    <p class="text-sm text-gray-500">Configure core identity details and layout style for your brand system.</p>
+    <p class="text-xs text-gray-500">Tell us about your brand and choose a visual direction. We'll use this information to generate your brand guide.</p>
   </div>
 
-  <div class="section-header">
-    <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-0">Brand Information</span>
-    <div class="info-trigger"
-      data-tooltip="Basic brand details like name, tagline and founding year that will be used consistently across all components.">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-        stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="12" y1="16" x2="12" y2="12" />
-        <line x1="12" y1="8" x2="12.01" y2="8" />
-      </svg>
-    </div>
-  </div>
 
-  <form [formGroup]="form" class="flex flex-col gap-3">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="form-group" id="brand-name">
-        <label class="form-label">Brand Name <span class="text-red-500">*</span></label>
-        <input class="form-input" formControlName="name" placeholder="Enter your brand name"
-          [class.is-invalid]="isInvalid('name')" />
-        @if (isInvalid('name')) {
-        <span class="form-error">Brand name is required</span>
-        }
+
+  <form [formGroup]="form" class="flex flex-col gap-6">
+    <!-- STEP / SECTION 01: BRAND BASICS -->
+    <div id="section-basics" class="p-4 bg-white border border-gray-200/80 rounded-md scroll-mt-14">
+      <div class="flex items-center justify-between mb-2 border-b border-gray-100 pb-2">
+        <div class="flex items-center gap-2">
+          <h2 class="text-xs font-bold uppercase tracking-widest text-gray-900">01 — Brand Basics</h2>
+          <div class="info-trigger" data-tooltip="These details help shape the content and identity of your generated brand guide.">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Year Founded</label>
-        <app-year-picker formControlName="year"></app-year-picker>
+      <p class="text-xs text-gray-500 mb-4">Tell us about your brand so we can create a guide that feels authentic to your business.</p>
+
+      <div class="flex flex-col gap-3.5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Brand Name -->
+          <div class="form-group" id="brand-name">
+            <label class="form-label text-xs font-bold text-gray-900">Brand Name <span class="text-red-500" aria-hidden="true">*</span></label>
+            <input 
+              class="form-input text-xs" 
+              formControlName="name" 
+              placeholder="Enter your brand name (e.g. Onella Soft)"
+              aria-required="true"
+              [class.is-invalid]="isInvalid('name')" />
+            @if (isInvalid('name')) {
+              <span class="text-[11px] text-red-600 font-medium mt-1 block" role="alert">Brand name is required.</span>
+            }
+          </div>
+
+          <!-- Generated On -->
+          <div class="form-group">
+            <div class="flex justify-between items-center mb-1">
+              <label class="form-label text-xs font-bold text-gray-900 mb-0">Generated On</label>
+              <span class="text-[10px] font-medium text-gray-400 uppercase tracking-wider">Optional</span>
+            </div>
+            <app-year-picker formControlName="year"></app-year-picker>
+          </div>
+        </div>
+
+        <!-- Tagline -->
+        <div class="form-group">
+          <div class="flex flex-col gap-0.5 mb-1">
+            <label class="form-label text-xs font-bold text-gray-900 mb-0">Tagline</label>
+            <span class="text-[10.5px] text-gray-500">Optional · A short phrase that captures your brand promise.</span>
+          </div>
+          <input 
+            class="form-input text-xs" 
+            formControlName="tagline" 
+            placeholder="e.g. Technology that moves businesses forward" />
+        </div>
+
+        <!-- Brand Description -->
+        <div class="form-group">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex flex-col gap-0.5">
+              <label class="form-label text-xs font-bold text-gray-900 mb-0">Brand Description</label>
+              <span class="text-[10.5px] text-gray-500">Describe what your brand does, who it serves, and what makes it different.</span>
+            </div>
+            <span class="text-[10px] font-mono font-bold text-gray-400 shrink-0" [class.text-red-500]="descCharCount >= maxDescLength">
+              {{ descCharCount }} / {{ maxDescLength }}
+            </span>
+          </div>
+          <textarea 
+            class="form-textarea text-xs" 
+            formControlName="description"
+            [attr.maxlength]="maxDescLength"
+            placeholder="e.g. Onella Soft builds accessible digital products and software experiences for growing businesses." 
+            rows="3"></textarea>
+        </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Tagline</label>
-      <input class="form-input" formControlName="tagline" placeholder="A short, memorable phrase" />
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Brand Description</label>
-      <textarea class="form-textarea" formControlName="description"
-        placeholder="Describe what your brand does and stands for..." rows="2"></textarea>
-    </div>
-
-    <div class="form-group" id="industry-select">
-      <div class="flex justify-between">
-        <label class="form-label">Industry</label>
-        <span class="form-hint">Select up to 3 industries</span>
+    <!-- STEP / SECTION 02: BRAND POSITIONING -->
+    <div id="section-positioning" class="p-4 bg-white border border-gray-200/80 rounded-md scroll-mt-14">
+      <div class="flex items-center justify-between mb-2 border-b border-gray-100 pb-2">
+        <div class="flex items-center gap-2">
+          <h2 class="text-xs font-bold uppercase tracking-widest text-gray-900">02 — Brand Positioning</h2>
+          <div class="info-trigger" data-tooltip="These selections influence how your brand is positioned, described, and visually expressed.">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+          </div>
+        </div>
       </div>
-      <app-multi-select-dropdown formControlName="industry" [options]="industryOptions" [maxSelections]="3"
-        placeholder="Select industries..." class="custom-dropdown"></app-multi-select-dropdown>
-    </div>
+      <p class="text-xs text-gray-500 mb-4">Define who your brand serves and how you want it to be perceived.</p>
 
-    <div class="form-group">
-      <div class="flex justify-between">
-        <label class="form-label">Target Audience</label>
-        <span class="form-hint">Select up to 3 audience segments</span>
-      </div>
-      <app-multi-select-dropdown formControlName="audience" [options]="audienceOptions" [maxSelections]="3"
-        placeholder="Select target audiences..." class="custom-dropdown"></app-multi-select-dropdown>
-    </div>
+      <div class="flex flex-col gap-4">
+        <!-- Industry -->
+        <div class="form-group" id="industry-select">
+          <div class="flex flex-col gap-0.5 mb-1">
+            <label class="form-label text-xs font-bold text-gray-900 mb-0">Industry</label>
+            <span class="text-[10.5px] text-gray-500">Select up to 3 industries.</span>
+          </div>
+          <app-multi-select-dropdown 
+            formControlName="industry" 
+            [options]="industryOptions" 
+            [maxSelections]="3"
+            placeholder="Select up to 3 industries" 
+            class="custom-dropdown"></app-multi-select-dropdown>
+        </div>
 
-    <div class="form-group">
-      <div class="flex justify-between">
-        <label class="form-label">Brand Personality</label>
-        <span class="form-hint">Select up to 3 personality traits</span>
+        <!-- Primary Audience (Optional Custom Dropdown) -->
+        <div class="form-group">
+          <div class="flex flex-col gap-0.5 mb-1">
+            <label class="form-label text-xs font-bold text-gray-900 mb-0">Primary Audience</label>
+            <span class="text-[10.5px] text-gray-500">Who is your brand primarily designed for?</span>
+          </div>
+          <app-multi-select-dropdown 
+            formControlName="primaryAudience" 
+            [options]="primaryAudienceOptions" 
+            [maxSelections]="1"
+            placeholder="Select primary target audience" 
+            class="custom-dropdown"></app-multi-select-dropdown>
+        </div>
+
+        <!-- Secondary Audience -->
+        <div class="form-group">
+          <div class="flex flex-col gap-0.5 mb-1">
+            <label class="form-label text-xs font-bold text-gray-900 mb-0">Secondary Audience</label>
+            <span class="text-[10.5px] text-gray-500">Optional · Add audiences who are also important to your brand.</span>
+          </div>
+          <app-multi-select-dropdown 
+            formControlName="secondaryAudiences" 
+            [options]="secondaryAudienceOptions" 
+            [maxSelections]="3"
+            placeholder="Select up to 3 secondary audiences" 
+            class="custom-dropdown"></app-multi-select-dropdown>
+        </div>
+
+        <!-- Brand Personality -->
+        <div class="form-group">
+          <div class="flex flex-col gap-0.5 mb-1">
+            <label class="form-label text-xs font-bold text-gray-900 mb-0">Brand Personality</label>
+            <span class="text-[10.5px] text-gray-500">Choose up to 3 traits that describe how your brand should feel.</span>
+          </div>
+          <app-multi-select-dropdown 
+            formControlName="personality" 
+            [options]="personalityOptions" 
+            [maxSelections]="3"
+            placeholder="Select up to 3 personality traits" 
+            class="custom-dropdown"></app-multi-select-dropdown>
+        </div>
       </div>
-      <app-multi-select-dropdown formControlName="personality" [options]="personalityOptions" [maxSelections]="3"
-        placeholder="Select personality traits..." class="custom-dropdown"></app-multi-select-dropdown>
     </div>
   </form>
 
-  <!-- ── Template Selection ────────────────────────────── -->
-  <div class="mt-8">
-    <div class="section-header">
-      <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-0">Select Template</span>
-      <div class="info-trigger"
-        data-tooltip="Choose a visual style for your brand guide cover page. Different templates offer different layout styles.">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-          stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="16" x2="12" y2="12" />
-          <line x1="12" y1="8" x2="12.01" y2="8" />
-        </svg>
+  <!-- STEP / SECTION 03: GUIDE STYLE -->
+  <div id="section-style" class="mt-6 p-4 bg-white border border-gray-200/80 rounded-md scroll-mt-14">
+    <div class="flex items-center justify-between mb-2 border-b border-gray-100 pb-2">
+      <div class="flex items-center gap-2">
+        <h2 class="text-xs font-bold uppercase tracking-widest text-gray-900">03 — Guide Style</h2>
+        <div class="info-trigger" data-tooltip="This selection controls the visual presentation and layout style of your generated brand guide.">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+        </div>
       </div>
     </div>
-    <div class="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4" #gridRef>
+    <p class="text-xs text-gray-500 mb-1">Choose the visual direction for your generated brand guide.</p>
+    <p class="text-[11px] text-gray-400 mb-4">This controls the visual presentation, layout, and overall feel of your guide.</p>
+
+    <!-- Exactly ONE Template Selector Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3" #gridRef>
       @for (tpl of templates; track tpl.id; let i = $index) {
       <div
-        class="border-2 border-border rounded-lg overflow-hidden cursor-pointer transition-all duration-[250ms] bg-white animate-fade-in-up hover:border-gray-400 hover:-translate-y-[3px] hover:shadow-md template-card"
-        [class.is-selected]="selectedId === tpl.id" [class.is-blurred]="selectedId && selectedId !== tpl.id"
-        (click)="selectTemplate(tpl.id)">
+        tabindex="0"
+        role="button"
+        [attr.aria-selected]="selectedId === tpl.id"
+        [attr.aria-label]="tpl.name + ' template: ' + tpl.title + ' — ' + tpl.description"
+        class="border-2 rounded-md overflow-hidden cursor-pointer transition-all duration-200 bg-white hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-xs template-card focus:outline-none focus:border-black"
+        [class.border-black]="selectedId === tpl.id" 
+        [class.bg-gray-50]="selectedId === tpl.id"
+        [class.border-gray-200]="selectedId !== tpl.id"
+        (click)="selectTemplate(tpl.id)"
+        (keydown.enter)="selectTemplate(tpl.id)"
+        (keydown.space)="selectTemplate(tpl.id); $event.preventDefault()">
+        
         <!-- Thumbnail -->
         <div class="relative w-full h-[112px] overflow-hidden bg-[#eee] cursor-zoom-in template-thumb" #thumbRef
           (click)="$event.stopPropagation(); openPreview(tpl.id)">
@@ -111,10 +210,8 @@
             [style.transform-origin]="'top left'">
             <app-cover-template [templateId]="tpl.id" [data]="brandData"></app-cover-template>
           </div>
-          <div
-            class="absolute inset-0 flex items-center justify-center gap-[6px] text-xs font-semibold text-white bg-black/[0.52] opacity-0 transition-opacity duration-200 thumb-overlay">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
+          <div class="absolute inset-0 flex items-center justify-center gap-1.5 text-xs font-semibold text-white bg-black/50 opacity-0 transition-opacity duration-200 thumb-overlay">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
               <circle cx="12" cy="12" r="3" />
             </svg>
@@ -122,41 +219,38 @@
           </div>
         </div>
 
-        <!-- Footer -->
-        <div class="p-3 flex items-center justify-between gap-2 border-t border-border">
-          <div class="flex flex-col gap-[2px] min-w-0">
-            <span class="text-xs font-bold whitespace-nowrap overflow-hidden text-ellipsis">{{ tpl.name }}</span>
-            <span class="text-[10px] text-gray-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ tpl.description
-              }}</span>
+        <!-- Card Body -->
+        <div class="p-3 flex flex-col gap-1 border-t border-gray-100">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs font-bold text-gray-900">{{ tpl.name }}</span>
+            @if (selectedId === tpl.id) {
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-black text-white rounded-md text-[9.5px] font-bold shrink-0">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                ✓ Selected
+              </span>
+            } @else {
+              <button
+                type="button"
+                class="py-0.5 px-2 border border-gray-200 rounded-md text-[10px] font-bold text-gray-600 transition-all shrink-0 hover:border-black hover:text-black"
+                (click)="selectTemplate(tpl.id); $event.stopPropagation()">Use</button>
+            }
           </div>
-          @if (selectedId === tpl.id) {
-          <span
-            class="inline-flex items-center gap-1 px-2 py-[3px] bg-primary text-white rounded-full text-[10px] font-bold whitespace-nowrap shrink-0">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"
-              stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-            Active
-          </span>
-          } @else {
-          <button
-            class="py-[3px] px-[10px] border-[1.5px] border-border rounded-sm text-[11px] font-semibold text-gray-500 transition-all duration-150 shrink-0 btn-use"
-            (click)="selectTemplate(tpl.id); $event.stopPropagation()">Use</button>
-          }
+          <span class="text-[11px] font-semibold text-black">{{ tpl.title }}</span>
+          <p class="text-[10.5px] text-gray-500 leading-tight leading-normal">{{ tpl.description }}</p>
         </div>
       </div>
       }
     </div>
-  </div>
 
-  @if (selectedId) {
-  <div
-    class="flex items-center gap-2 mt-5 py-3 px-4 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md text-sm text-[#166534]">
-    <svg class="stroke-[#16a34a] shrink-0" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-    <strong>{{ getSelectedName() }}</strong>&nbsp;selected — this will appear as Page 1 of your PDF export
+    @if (selectedId) {
+    <div class="flex items-center gap-2 mt-4 py-2.5 px-3.5 bg-emerald-50 border border-emerald-200 rounded-md text-xs text-emerald-900 font-medium">
+      <svg class="stroke-emerald-600 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+      <span><strong>{{ getSelectedName() }}</strong> selected — visual direction applied to Page 1 cover & guidelines</span>
+    </div>
+    }
   </div>
-  }
 </div>

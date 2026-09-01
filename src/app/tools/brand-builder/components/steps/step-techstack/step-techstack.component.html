@@ -1,6 +1,6 @@
 <div class="px-4 py-0 animate-fade-in-up">
   <!-- Section Header -->
-  <div class="mb-6">
+  <div class="mb-4">
     <div class="flex items-center gap-2 mb-1">
       <h2 class="text-xl font-bold text-gray-900">Tech Stack & Architecture</h2>
       <div class="info-trigger"
@@ -13,25 +13,39 @@
         </svg>
       </div>
     </div>
-    <p class="text-sm text-gray-500">Select the technology framework and UI library options for your brand's application code.</p>
+    <p class="text-xs text-gray-500">Select the technology framework and UI library options for your brand's application code.</p>
   </div>
 
-  <!-- ── 1. Technology ────────────────── -->
-  <div class="mb-8">
-    <div class="flex items-center justify-between mb-3 border-b border-gray-100 pb-2">
-      <div class="flex items-center gap-2">
-        <span class="text-xs font-bold uppercase tracking-widest text-gray-400">1. Technology</span>
-        @if (selectedTech) {
-          <span class="text-xs font-semibold text-primary">({{ selectedTech.name }})</span>
-        }
+  <!-- Compatibility Banner -->
+  <div class="mb-5 p-3 bg-gray-50/70 border border-gray-200/80 rounded-md flex items-center gap-2 text-xs text-gray-600">
+    <svg class="w-4 h-4 text-gray-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    <span><strong>Recommended:</strong> Choose libraries compatible with your selected technology.</span>
+  </div>
+
+  <!-- ── 1. Technology (Single Select) ────────────────── -->
+  <div class="mb-6">
+    <div class="flex items-center justify-between mb-2 border-b border-gray-100 pb-2">
+      <div class="flex flex-col gap-0.5">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold uppercase tracking-widest text-gray-900">Technology</span>
+          @if (selectedTech) {
+            <span class="text-xs font-bold text-black font-mono">({{ selectedTech.name }})</span>
+          }
+        </div>
+        <span class="text-[11px] text-gray-500">Select one application framework</span>
       </div>
       
       <!-- Version Dropdown for Selected Tech -->
       @if (selectedTech) {
-        <div class="flex items-center gap-2">
-          <label class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Version:</label>
+        <div class="flex items-center gap-2 shrink-0">
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Version:</label>
           <select 
-            class="px-3 py-1 text-xs font-bold text-gray-800 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg cursor-pointer transition-all outline-none focus:ring-2 focus:ring-black"
+            aria-label="Technology version selection"
+            class="px-2.5 py-1 text-xs font-bold text-gray-900 bg-white border border-gray-200 rounded-md cursor-pointer transition-all outline-none focus:border-black"
             [ngModel]="brandData.techstack.techVersion"
             (ngModelChange)="onTechVersionChange($event)">
             @for (ver of selectedTech.versions; track ver) {
@@ -42,93 +56,115 @@
       }
     </div>
 
-    <!-- Cards Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <!-- Technology Cards Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5" role="radiogroup" aria-label="Application technology selection">
       @for (tech of technologies; track tech.id) {
         <div 
-          class="group relative flex flex-col items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 bg-white hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-md"
-          [class.border-black]="brandData.techstack.technology === tech.id"
-          [class.bg-gray-50]="brandData.techstack.technology === tech.id"
-          [class.border-gray-200]="brandData.techstack.technology !== tech.id"
-          (click)="selectTechnology(tech.id)">
+          role="radio"
+          [attr.aria-checked]="brandData.techstack.technology === tech.id"
+          [attr.aria-label]="tech.name + ' framework'"
+          tabindex="0"
+          (click)="selectTechnology(tech.id)"
+          (keydown.enter)="selectTechnology(tech.id)"
+          (keydown.space)="selectTechnology(tech.id); $event.preventDefault()"
+          class="group relative flex flex-col items-center justify-center p-3 border-2 rounded-md cursor-pointer transition-all duration-200 bg-white group focus:outline-none focus:border-black"
+          [ngClass]="brandData.techstack.technology === tech.id ? 'border-black bg-gray-50/80' : 'border-border hover:border-gray-300'">
           
           <!-- Selected Checkmark -->
           @if (brandData.techstack.technology === tech.id) {
-            <div class="absolute top-2 right-2 w-5 h-5 bg-black text-white rounded-full flex items-center justify-center shadow-sm">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <div class="absolute top-1.5 right-1.5 w-4 h-4 bg-black text-white rounded-full flex items-center justify-center shadow-xs">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             </div>
           }
 
           <!-- Tech Icon -->
-          <div class="w-12 h-12 mb-3 flex items-center justify-center p-1 group-hover:scale-105 transition-transform">
-            <img [src]="tech.image" [alt]="tech.name" class="max-w-full max-h-full object-contain" />
+          <div class="w-9 h-9 mb-2 flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform">
+            <img [src]="tech.image" [alt]="tech.name + ' icon'" class="max-w-full max-h-full object-contain" />
           </div>
 
           <!-- Name & Default Version -->
-          <span class="text-xs font-bold text-gray-900 text-center leading-tight mb-1">{{ tech.name }}</span>
-          <span class="text-[10px] text-gray-400 font-medium">{{ tech.versions[0] }}</span>
+          <span class="text-xs font-bold text-gray-900 text-center leading-tight mb-0.5">{{ tech.name }}</span>
+          <span class="text-[9.5px] text-gray-400 font-mono">{{ tech.versions[0] }}</span>
         </div>
       }
     </div>
   </div>
 
-  <!-- ── 2. UI Framework / Component Library (Multi-Select) ──────────── -->
+  <!-- ── 2. UI Framework / CSS Library (Multi-Select) ──────────── -->
   <div class="mb-6">
-    <div class="flex items-center justify-between mb-3 border-b border-gray-100 pb-2">
-      <div class="flex items-center gap-2">
-        <span class="text-xs font-bold uppercase tracking-widest text-gray-400">2. UI Framework / CSS Library</span>
-        <span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full uppercase">Multi-select</span>
+    <div class="flex items-center justify-between mb-2 border-b border-gray-100 pb-2">
+      <div class="flex flex-col gap-0.5">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold uppercase tracking-widest text-gray-900">UI Framework / CSS Library</span>
+          <span class="px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-black bg-black/5 rounded-md">
+            Select one or more
+          </span>
+        </div>
+        <span class="text-[11px] text-gray-500">Choose component libraries for your design system</span>
       </div>
+
+      <span class="text-xs font-bold text-gray-900 font-mono shrink-0">
+        {{ selectedUiCount }} selected
+      </span>
     </div>
 
     <!-- UI Cards Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4" role="group" aria-label="UI framework selection">
       @for (ui of uiFrameworks; track ui.id) {
         <div 
-          class="group relative flex flex-col items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 bg-white hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-md"
-          [class.border-black]="isUiSelected(ui.id)"
-          [class.bg-gray-50]="isUiSelected(ui.id)"
-          [class.border-gray-200]="!isUiSelected(ui.id)"
-          (click)="toggleUiFramework(ui.id)">
+          role="checkbox"
+          [attr.aria-checked]="isUiSelected(ui.id)"
+          [attr.aria-label]="ui.name + ' UI library'"
+          tabindex="0"
+          (click)="toggleUiFramework(ui.id)"
+          (keydown.enter)="toggleUiFramework(ui.id)"
+          (keydown.space)="toggleUiFramework(ui.id); $event.preventDefault()"
+          class="group relative flex flex-col items-center justify-center p-3 border-2 rounded-md cursor-pointer transition-all duration-200 bg-white group focus:outline-none focus:border-black"
+          [ngClass]="isUiSelected(ui.id) ? 'border-black bg-gray-50/80' : 'border-border hover:border-gray-300'">
           
           <!-- Selected Checkmark -->
           @if (isUiSelected(ui.id)) {
-            <div class="absolute top-2 right-2 w-5 h-5 bg-black text-white rounded-full flex items-center justify-center shadow-sm">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <div class="absolute top-1.5 right-1.5 w-4 h-4 bg-black text-white rounded-full flex items-center justify-center shadow-xs">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             </div>
           }
 
           <!-- UI Icon -->
-          <div class="w-12 h-12 mb-3 flex items-center justify-center p-1 group-hover:scale-105 transition-transform">
-            <img [src]="ui.image" [alt]="ui.name" class="max-w-full max-h-full object-contain" />
+          <div class="w-9 h-9 mb-2 flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform">
+            <img [src]="ui.image" [alt]="ui.name + ' icon'" class="max-w-full max-h-full object-contain" />
           </div>
 
           <!-- Name & Default Version -->
-          <span class="text-xs font-bold text-gray-900 text-center leading-tight mb-1">{{ ui.name }}</span>
-          <span class="text-[10px] text-gray-400 font-medium">{{ ui.versions[0] }}</span>
+          <span class="text-xs font-bold text-gray-900 text-center leading-tight mb-0.5">{{ ui.name }}</span>
+          <span class="text-[9.5px] text-gray-400 font-mono">{{ ui.versions[0] }}</span>
         </div>
       }
     </div>
 
     <!-- Selected Frameworks Version Pickers -->
     @if (selectedUiFrameworksList.length > 0) {
-      <div class="p-4 bg-gray-50 border border-gray-200 rounded-xl space-y-3">
-        <span class="text-[11px] font-black uppercase tracking-wider text-gray-500 block mb-2">Selected UI Framework Versions:</span>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="p-3.5 bg-gray-50/70 border border-gray-200/80 rounded-md space-y-2.5">
+        <div class="flex flex-col gap-0.5 mb-1">
+          <span class="text-xs font-bold uppercase tracking-wider text-gray-900">Selected UI Framework Versions</span>
+          <span class="text-[11px] text-gray-500">Choose the version to use in your project.</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           @for (item of selectedUiFrameworksList; track item.option.id) {
-            <div class="flex items-center justify-between p-2.5 bg-white border border-gray-200 rounded-lg shadow-sm">
-              <div class="flex items-center gap-2.5">
-                <img [src]="item.option.image" [alt]="item.option.name" class="w-6 h-6 object-contain" />
+            <div class="flex items-center justify-between p-2.5 bg-white border border-gray-200 rounded-md shadow-xs">
+              <div class="flex items-center gap-2">
+                <img [src]="item.option.image" [alt]="item.option.name + ' logo'" class="w-5 h-5 object-contain" />
                 <span class="text-xs font-bold text-gray-900">{{ item.option.name }}</span>
               </div>
               <div class="flex items-center gap-1.5">
-                <label class="text-[10px] font-bold text-gray-400 uppercase">Ver:</label>
+                <label class="text-[9.5px] font-bold text-gray-400 uppercase">Version:</label>
                 <select 
-                  class="px-2 py-1 text-xs font-bold text-gray-800 bg-gray-50 border border-gray-200 rounded-md cursor-pointer outline-none focus:ring-1 focus:ring-black"
+                  [attr.aria-label]="item.option.name + ' version selection'"
+                  class="px-2 py-0.5 text-xs font-bold text-gray-900 bg-white border border-gray-200 rounded-md cursor-pointer outline-none focus:border-black"
                   [ngModel]="item.version"
                   (ngModelChange)="onUiFrameworkVersionChange(item.option.id, $event)">
                   @for (v of item.option.versions; track v) {

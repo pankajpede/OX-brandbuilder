@@ -60,6 +60,11 @@ export class StepIconographyComponent implements OnInit {
     );
   }
 
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.onSearch();
+  }
+
   selectLibrary(lib: VariantOption) {
     this.selectedLibrary = lib;
     this.brandData.iconography.library = lib.id;
@@ -136,14 +141,11 @@ export class StepIconographyComponent implements OnInit {
     }
 
     if (library === 'react-icons') {
-      // Map FiName to name.svg in feather folder
       const featherName = iconName.replace(/^Fi/, '').split(/(?=[A-Z0-9])/).join('-').toLowerCase();
-      // Handle trash-2 specific mapping if needed
       const fileName = featherName === 'trash2' ? 'trash-2' : featherName;
       return `icons/feather/${fileName}.svg`;
     }
     
-    // Handle specific filename mapping for Trash in Regular style
     let fileName = iconName;
     if (library === 'font-awesome' && style === 'regular' && iconName === 'trash') {
       fileName = version === '5.0' ? 'trash-alt' : 'trash-can';
@@ -158,7 +160,6 @@ export class StepIconographyComponent implements OnInit {
     const version = this.brandData.iconography.version;
     const currentStyle = this.brandData.iconography.variant.toLowerCase();
 
-    // If we were trying regular/brands and failed, fallback to solid
     if (library === 'font-awesome' && currentStyle !== 'solid' && !img.src.includes('/solid/')) {
       img.src = `icons/font-awesome/${version}/solid/${iconName}.svg`;
     }

@@ -10,6 +10,7 @@ import { YearPickerComponent } from '../../shared/year-picker/year-picker.compon
 interface CoverTemplate {
   id: string;
   name: string;
+  title: string;
   description: string;
 }
 
@@ -33,17 +34,18 @@ export class StepCoverComponent implements OnInit, OnDestroy, AfterViewInit {
   previewId = '';
   thumbScale = 0.224;
   modalScale = 1;
+  maxDescLength = 750;
 
   templates: CoverTemplate[] = [
-    { id: 't1', name: 'Bold Fill',   description: 'Full color background' },
-    { id: 't2', name: 'Clean Type',  description: 'White, giant typography' },
-    { id: 't3', name: 'Geometric',   description: 'Color + grid & circles' },
-    { id: 't4', name: 'Arc Minimal', description: 'White with side arcs' },
-    { id: 't5', name: 'Brand Book',  description: 'Header meta + headline' },
+    { id: 't1', name: 'Bold Fill', title: 'Bold & expressive', description: 'Strong color blocks, large typography, and high visual impact.' },
+    { id: 't2', name: 'Clean Type', title: 'Minimal & editorial', description: 'White space, typography-led layouts, and a restrained visual treatment.' },
+    { id: 't3', name: 'Geometric', title: 'Structured & modern', description: 'Grid-based layouts with geometric forms and visual patterns.' },
+    { id: 't4', name: 'Arc Minimal', title: 'Soft & refined', description: 'Minimal layouts with subtle curved elements and generous space.' },
+    { id: 't5', name: 'Brand Book', title: 'Classic & corporate', description: 'Traditional brand-book structure with clear documentation hierarchy.' },
   ];
 
   industryOptions = [
-    'Technology', 'Software / SaaS', 'E-Commerce', 'Finance / FinTech',
+    'Software / SaaS', 'Technology', 'E-Commerce', 'Finance / FinTech',
     'Healthcare', 'Education / EdTech', 'Real Estate', 'Fashion / Apparel',
     'Food & Beverage', 'Automotive', 'Travel & Hospitality', 'Media & Entertainment',
     'Sports & Fitness', 'Beauty & Cosmetics', 'Architecture & Design',
@@ -51,21 +53,21 @@ export class StepCoverComponent implements OnInit, OnDestroy, AfterViewInit {
     'Energy / CleanTech', 'Logistics / Supply Chain', 'Retail', 'Consulting', 'Other',
   ];
 
-  audienceOptions = [
-    'Children (Under 12)', 'Teenagers (13–17)', 'Young Adults (18–24)',
-    'Millennials (25–34)', 'Adults (35–44)', 'Middle-Aged (45–54)', 'Seniors (55+)',
-    'Students', 'Professionals', 'Entrepreneurs', 'Small Business Owners',
-    'Enterprise / Corporate', 'Developers / Tech', 'Creatives / Designers',
-    'Healthcare Workers', 'Parents / Families', 'High-Income Earners',
-    'Budget-Conscious', 'Eco-Conscious', 'Luxury Consumers', 'General Public',
+  primaryAudienceOptions = [
+    'Business professionals', 'Developers / Tech', 'Consumers', 'Entrepreneurs',
+    'Small Business Owners', 'Creatives / Designers', 'Students', 'Parents / Families',
+    'Enterprise / Corporate', 'Educators', 'Healthcare Workers', 'General Public'
+  ];
+
+  secondaryAudienceOptions = [
+    'Business professionals', 'Developers / Tech', 'Consumers', 'Entrepreneurs',
+    'Small Business Owners', 'Creatives / Designers', 'Students', 'Parents / Families',
+    'Enterprise / Corporate', 'Educators', 'Healthcare Workers', 'General Public'
   ];
 
   personalityOptions = [
-    'Bold', 'Modern', 'Elegant', 'Playful', 'Minimal', 'Professional',
-    'Friendly', 'Trustworthy', 'Innovative', 'Luxurious', 'Artistic',
-    'Sophisticated', 'Energetic', 'Calm', 'Authoritative', 'Rebellious',
-    'Warm', 'Futuristic', 'Organic / Natural', 'Edgy', 'Classic',
-    'Youthful', 'Confident', 'Approachable',
+    'Modern', 'Professional', 'Friendly', 'Bold', 'Innovative', 'Elegant',
+    'Playful', 'Minimal', 'Trustworthy', 'Premium', 'Energetic', 'Approachable'
   ];
 
   @ViewChildren('thumbRef') thumbRefs!: QueryList<ElementRef>;
@@ -76,20 +78,46 @@ export class StepCoverComponent implements OnInit, OnDestroy, AfterViewInit {
     
     this.sub = this.brandService.brandData$.subscribe(d => this.brandData = d);
 
-    // Initialize form with cover data (renamed from basics)
+    // Initialize form with cover data
     const data = this.brandService.getSection('cover');
+    const currentYear = new Date().getFullYear();
+
+    let initialPrimaryArray: string[] = [];
+    let initialSecondary = data.secondaryAudiences || [];
+    
+    if (data.primaryAudience) {
+      initialPrimaryArray = [data.primaryAudience];
+    } else if (data.audience && data.audience.length > 0) {
+      initialPrimaryArray = [data.audience[0]];
+      initialSecondary = data.audience.slice(1);
+    }
+
     this.form = this.fb.group({
-      name:        [data.name,        Validators.required],
-      tagline:     [data.tagline],
-      description: [data.description],
-      industry:    [data.industry    || []],
-      audience:    [data.audience    || []],
-      personality: [data.personality || []],
-      year:        [data.year],
+      name:               [data.name, [Validators.required]],
+      year:               [data.year || currentYear],
+      tagline:            [data.tagline],
+      description:        [data.description, [Validators.maxLength(750)]],
+      industry:           [data.industry || []],
+      primaryAudience:    [initialPrimaryArray], // Optional custom dropdown
+      secondaryAudiences: [initialSecondary],
+      personality:        [data.personality || []],
     });
 
     this.formSub = this.form.valueChanges.subscribe(val => {
-      this.brandService.updateSection('cover', val);
+      const primaryStr = val.primaryAudience && val.primaryAudience.length > 0 ? val.primaryAudience[0] : '';
+      const combinedAudience: string[] = [];
+      if (primaryStr) combinedAudience.push(primaryStr);
+      if (val.secondaryAudiences && val.secondaryAudiences.length > 0) {
+        val.secondaryAudiences.forEach((sec: string) => {
+          if (!combinedAudience.includes(sec)) combinedAudience.push(sec);
+        });
+      }
+
+      this.brandService.updateSection('cover', {
+        ...val,
+        primaryAudience: primaryStr,
+        audience: combinedAudience
+      });
     });
   }
 
@@ -109,6 +137,13 @@ export class StepCoverComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sub?.unsubscribe();
     this.formSub?.unsubscribe();
     document.body.style.overflow = '';
+  }
+
+  scrollToSection(sectionId: string): void {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   selectTemplate(id: string): void {
@@ -138,6 +173,26 @@ export class StepCoverComponent implements OnInit, OnDestroy, AfterViewInit {
   isInvalid(field: string): boolean {
     const ctrl = this.form.get(field);
     return !!(ctrl && ctrl.invalid && ctrl.touched);
+  }
+
+  get descCharCount(): number {
+    return (this.form.get('description')?.value || '').length;
+  }
+
+  get isBasicsComplete(): boolean {
+    const name = this.form?.get('name')?.value;
+    return !!(name && name.trim());
+  }
+
+  get isPositioningComplete(): boolean {
+    const primary = this.form?.get('primaryAudience')?.value;
+    const industry = this.form?.get('industry')?.value;
+    const personality = this.form?.get('personality')?.value;
+    return (primary && primary.length > 0) || (industry && industry.length > 0) || (personality && personality.length > 0);
+  }
+
+  get isStyleComplete(): boolean {
+    return !!this.selectedId;
   }
 
   getSelectedName(): string { return this.templates.find(t => t.id === this.selectedId)?.name || ''; }

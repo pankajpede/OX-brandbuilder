@@ -31,6 +31,8 @@ export interface BrandCover {
   description: string;
   industry: string[];
   audience: string[];
+  primaryAudience?: string;
+  secondaryAudiences?: string[];
   personality: string[];
   year: number;
   shortLogo: string;
@@ -67,6 +69,11 @@ export interface BrandLogo {
 
   clearSpace: number;
   minSize: number;
+
+  clearSpaceRule?: string;
+  customClearSpace?: number;
+  minSizeDigital?: number;
+  minSizePrint?: number;
 }
 
 export interface BrandColors {
@@ -188,6 +195,8 @@ export function createDefaultBrandData(): BrandData {
       description: '',
       industry: [],
       audience: [],
+      primaryAudience: '',
+      secondaryAudiences: [],
       personality: [],
       year: new Date().getFullYear(),
       shortLogo: '',
@@ -218,6 +227,10 @@ export function createDefaultBrandData(): BrandData {
       monoWhite: '',
       clearSpace: 24,
       minSize: 32,
+      clearSpaceRule: '1x-symbol',
+      customClearSpace: 24,
+      minSizeDigital: 32,
+      minSizePrint: 10,
       primaryClearSpace: 24,
       primaryMinSize: 32,
       secondaryClearSpace: 24,

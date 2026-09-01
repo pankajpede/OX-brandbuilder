@@ -1,7 +1,8 @@
 import { Component, inject, OnInit, OnDestroy, AfterViewInit, ViewChildren, QueryList, ElementRef, NgZone } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BrandService } from '../../../services/brand.service';
-import { BrandData, TocItem } from '../../../models/brand.model';
+import { BrandData } from '../../../models/brand.model';
 import { SummaryTemplateComponent } from '../../preview/summary-template/summary-template.component';
 
 interface SummaryTemplate {
@@ -13,7 +14,7 @@ interface SummaryTemplate {
 @Component({
   selector: 'app-step-summary',
   standalone: true,
-  imports: [SummaryTemplateComponent],
+  imports: [CommonModule, SummaryTemplateComponent],
   templateUrl: './step-summary.component.html',
   styleUrl: './step-summary.component.scss'
 })
@@ -33,7 +34,7 @@ export class StepSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     { id: 'colors', title: 'Color System', icon: '◐' },
     { id: 'typography', title: 'Typography', icon: 'Aa' },
     { id: 'iconography', title: 'Iconography', icon: '✦' },
-    { id: 'techstack', title: 'Tech Stack', icon: '⚡' },
+    { id: 'techstack', title: 'Tech Stack', icon: '⌘' },
   ];
 
   templates: SummaryTemplate[] = [
@@ -46,9 +47,17 @@ export class StepSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren('thumbRef') thumbRefs!: QueryList<ElementRef>;
 
+  get enabledCount(): number {
+    return this.brandData?.summary?.enabledSections?.length || 0;
+  }
+
+  get totalCount(): number {
+    return this.optionalSteps.length;
+  }
+
   ngOnInit(): void {
     this.brandData = this.brandService.brandData;
-    this.selectedId = this.brandService.getSection('summary').variant || '';
+    this.selectedId = this.brandService.getSection('summary').variant || 's1';
     
     this.brandDataSub = this.brandService.brandData$.subscribe(d => {
       this.brandData = d;
@@ -56,11 +65,11 @@ export class StepSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   isSectionEnabled(id: string): boolean {
-    return this.brandData.summary.enabledSections.includes(id);
+    return this.brandData?.summary?.enabledSections?.includes(id) || false;
   }
 
   toggleSection(id: string): void {
-    const current = [...this.brandData.summary.enabledSections];
+    const current = [...(this.brandData?.summary?.enabledSections || [])];
     const index = current.indexOf(id);
     
     if (index > -1) {
@@ -85,6 +94,7 @@ export class StepSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.brandDataSub?.unsubscribe();
     document.body.style.overflow = '';
   }
 

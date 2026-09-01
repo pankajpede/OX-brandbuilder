@@ -2,7 +2,6 @@ import { Component, Input, OnInit, forwardRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { GoogleFontsService, GoogleFont } from '../../../services/google-fonts.service';
-import { BehaviorSubject, combineLatest, map, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-google-font-selector',
@@ -51,6 +50,15 @@ export class GoogleFontSelectorComponent implements OnInit, ControlValueAccessor
       this.allFonts = fonts;
       this.filterFonts();
     });
+  }
+
+  getSelectedFontObj(): GoogleFont | undefined {
+    return this.allFonts.find(f => f.family.toLowerCase() === this.selectedValue.toLowerCase());
+  }
+
+  getSelectedCategoryLabel(): string {
+    const f = this.getSelectedFontObj();
+    return f ? f.category : 'Sans-Serif';
   }
 
   filterFonts(): void {

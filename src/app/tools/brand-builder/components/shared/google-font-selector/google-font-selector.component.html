@@ -2,13 +2,24 @@
   <label class="form-label" *ngIf="label">{{ label }}</label>
   
   <div class="selector-trigger" (click)="toggleDropdown()" [class.is-open]="isOpen">
-    <div class="selected-info">
-      <span *ngIf="selectedValue" class="font-display-name" [style.font-family]="selectedValue">
-        {{ selectedValue }}
-      </span>
-      <span *ngIf="!selectedValue" class="text-gray-400 text-sm">
-        {{ placeholder }}
-      </span>
+    <div class="selected-info flex flex-col gap-0.5">
+      @if (selectedValue) {
+        <div class="flex items-center gap-2">
+          <span class="font-display-name text-sm font-bold text-gray-900" [style.font-family]="selectedValue">
+            {{ selectedValue }}
+          </span>
+          <span class="px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-gray-400 bg-gray-100 rounded-md">
+            {{ getSelectedCategoryLabel() }}
+          </span>
+        </div>
+        <span class="text-xs text-gray-500 font-medium tracking-wide" [style.font-family]="selectedValue">
+          Aa Bb Cc 123 · The quick brown fox
+        </span>
+      } @else {
+        <span class="text-gray-400 text-sm">
+          {{ placeholder }}
+        </span>
+      }
     </div>
     <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="m6 9 6 6 6-6"/>
@@ -50,7 +61,7 @@
           <span class="category-tag">{{ font.category }}</span>
         </div>
         <div class="font-preview" [style.font-family]="font.family">
-          Sentence preview of {{ font.family }}
+          Aa Bb Cc 123 · The quick brown fox
         </div>
       </div>
       

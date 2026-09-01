@@ -8,7 +8,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12" />
           <line x1="12" y1="8" x2="12.01" y2="8" />
         </svg>
       </div>
@@ -20,13 +20,12 @@
   <div class="flex flex-col gap-2.5 mb-4">
     
     <!-- Option 1: Export JSON Tokens -->
-    <div class="p-3.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 group"
+    <div class="p-3 rounded-md border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 group"
       [ngClass]="exportJson ? 'bg-white border-black shadow-xs' : 'bg-gray-50/70 border-gray-200'"
       (click)="toggleOption('json')">
       
       <div class="flex items-center gap-3 flex-1 min-w-0">
-        <!-- Feather Code / File-Text Icon -->
-        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/80">
+        <div class="w-8 h-8 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/80">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
@@ -55,13 +54,12 @@
     </div>
 
     <!-- Option 2: Export Brand Guide PDF -->
-    <div class="p-3.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 group"
+    <div class="p-3 rounded-md border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 group"
       [ngClass]="exportPdf ? 'bg-white border-black shadow-xs' : 'bg-gray-50/70 border-gray-200'"
       (click)="toggleOption('pdf')">
       
       <div class="flex items-center gap-3 flex-1 min-w-0">
-        <!-- Feather Book / File-Text Icon -->
-        <div class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-100/80">
+        <div class="w-8 h-8 rounded-md bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-100/80">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -76,7 +74,7 @@
             </span>
           </div>
           <p class="text-[11px] text-gray-500 truncate leading-tight">
-            Compiles <code class="bg-gray-100 px-1 py-0.2 rounded font-mono text-[10px] text-gray-800">brand-guide.pdf</code> with multi-page A4 landscape vector guidelines.
+            Compiles <code class="bg-gray-100 px-1 py-0.2 rounded font-mono text-[10px] text-gray-800">brand-guide.pdf</code> with multi-page vector guidelines.
           </p>
         </div>
       </div>
@@ -86,14 +84,43 @@
       </div>
     </div>
 
-    <!-- Option 3: Export Fonts (.ttf) -->
-    <div class="p-3.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 group"
+    <!-- Option 3: Export Logo Assets Folder (DEFAULT CHECKED) -->
+    <div class="p-3 rounded-md border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 group"
+      [ngClass]="exportLogos ? 'bg-white border-black shadow-xs' : 'bg-gray-50/70 border-gray-200'"
+      (click)="toggleOption('logos')">
+      
+      <div class="flex items-center gap-3 flex-1 min-w-0">
+        <div class="w-8 h-8 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100/80">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </div>
+
+        <div class="flex flex-col min-w-0">
+          <div class="flex items-center gap-2 mb-0.5">
+            <h4 class="text-xs font-bold text-gray-900 truncate">Export Logo Assets</h4>
+            <span class="text-[9px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 border border-emerald-100 px-1.5 py-0.2 rounded shrink-0">
+              /logos
+            </span>
+          </div>
+          <p class="text-[11px] text-gray-500 truncate leading-tight">
+            Packs uploaded logo variants (<code class="bg-gray-100 px-1 py-0.2 rounded font-mono text-[10px] text-gray-800">primary-logo</code>, <code class="bg-gray-100 px-1 py-0.2 rounded font-mono text-[10px] text-gray-800">icon-favicon</code>, etc.) into a dedicated folder.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center shrink-0">
+        <input type="checkbox" [(ngModel)]="exportLogos" (click)="$event.stopPropagation()" class="w-4 h-4 accent-black rounded cursor-pointer" />
+      </div>
+    </div>
+
+    <!-- Option 4: Export Fonts (.ttf) -->
+    <div class="p-3 rounded-md border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 group"
       [ngClass]="exportFonts ? 'bg-white border-black shadow-xs' : 'bg-gray-50/70 border-gray-200'"
       (click)="toggleOption('fonts')">
       
       <div class="flex items-center gap-3 flex-1 min-w-0">
-        <!-- Feather Type / Font Icon -->
-        <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100/80">
+        <div class="w-8 h-8 rounded-md bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100/80">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="4 7 4 4 20 4 20 7"></polyline>
             <line x1="9" y1="20" x2="15" y2="20"></line>
@@ -132,7 +159,7 @@
     </div>
 
     <button 
-      class="inline-flex items-center gap-2 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white bg-black hover:bg-gray-800 rounded-full transition-all shadow-sm active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+      class="inline-flex items-center gap-2 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white bg-black hover:bg-gray-800 rounded-md transition-all shadow-sm active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
       [disabled]="!canExport || exportService.isExportingBundle"
       (click)="onExportBundle()">
       @if (exportService.isExportingBundle) {

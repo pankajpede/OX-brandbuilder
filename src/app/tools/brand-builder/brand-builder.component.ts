@@ -56,13 +56,36 @@ export class BrandBuilderComponent implements OnInit, OnDestroy {
 
   showExportMenu = false;
 
-  // Footer Checkbox Selections (Default all true)
-  exportJson = true;
-  exportPdf = true;
-  exportFonts = true;
+  get exportJson(): boolean {
+    return this.exportService.bundleOptions.json;
+  }
+  set exportJson(val: boolean) {
+    this.exportService.bundleOptions.json = val;
+  }
+
+  get exportPdf(): boolean {
+    return this.exportService.bundleOptions.pdf;
+  }
+  set exportPdf(val: boolean) {
+    this.exportService.bundleOptions.pdf = val;
+  }
+
+  get exportLogos(): boolean {
+    return this.exportService.bundleOptions.logos !== false;
+  }
+  set exportLogos(val: boolean) {
+    this.exportService.bundleOptions.logos = val;
+  }
+
+  get exportFonts(): boolean {
+    return this.exportService.bundleOptions.fonts;
+  }
+  set exportFonts(val: boolean) {
+    this.exportService.bundleOptions.fonts = val;
+  }
 
   get canExport(): boolean {
-    return this.exportJson || this.exportPdf || this.exportFonts;
+    return this.exportService.canExport;
   }
 
   toggleExportMenu(event?: Event) {
@@ -84,11 +107,7 @@ export class BrandBuilderComponent implements OnInit, OnDestroy {
 
   onExportBundle() {
     this.closeExportMenu();
-    this.exportService.exportBundleZip(this.brandData, {
-      json: this.exportJson,
-      pdf: this.exportPdf,
-      fonts: this.exportFonts
-    });
+    this.exportService.exportBundleZip(this.brandData, this.exportService.bundleOptions);
   }
 
   onExportJson() {
