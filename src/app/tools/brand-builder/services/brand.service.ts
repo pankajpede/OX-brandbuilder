@@ -124,11 +124,30 @@ export class BrandService {
     }
   }
 
+  private urlExtractionSubject = new Subject<string>();
+  urlExtraction$ = this.urlExtractionSubject.asObservable();
+
+  triggerUrlExtraction(url: string): void {
+    this.urlExtractionSubject.next(url);
+  }
+
   /** Check if a step has been filled with required data */
   isStepValid(stepIndex: number): boolean {
     const data = this.brandData;
     switch (stepIndex) {
       case 0: // Selection
+        if (data.brandMode === 'url') {
+          const url = (data.urlInput || '').trim();
+          if (!url) return false;
+          let testUrl = url;
+          if (!/^https?:\/\//i.test(testUrl)) testUrl = 'https://' + testUrl;
+          try {
+            const p = new URL(testUrl);
+            return p.protocol === 'http:' || p.protocol === 'https:';
+          } catch {
+            return false;
+          }
+        }
         return true;
       case 1: // Cover
         return !!data.cover.name;

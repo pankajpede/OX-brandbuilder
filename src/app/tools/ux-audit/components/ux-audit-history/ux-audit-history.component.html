@@ -1,0 +1,76 @@
+<div class="h-full flex flex-col box-border overflow-y-auto bg-gray-50 text-gray-900 p-6 md:p-10 font-sans">
+  <div class="max-w-5xl mx-auto w-full flex-1 flex flex-col justify-start py-6">
+
+    <!-- Top Action Bar -->
+    <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-black text-gray-900">UX Audit History</h1>
+        <p class="text-xs md:text-sm text-gray-500">View previous website experience and accessibility audit reports.</p>
+      </div>
+
+      <button
+        (click)="newAudit()"
+        class="px-5 py-2.5 bg-[#0A66C2] hover:bg-[#08529c] active:bg-[#074787] text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
+      >
+        + New UX Audit
+      </button>
+    </div>
+
+    <!-- History Table -->
+    <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-xs">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-gray-200 bg-gray-50 text-gray-500 uppercase text-[10px] tracking-wider">
+              <th class="py-3.5 px-4">Website / Domain</th>
+              <th class="py-3.5 px-4">Audit ID</th>
+              <th class="py-3.5 px-4">Audit Date</th>
+              <th class="py-3.5 px-4 text-center">Score</th>
+              <th class="py-3.5 px-4">Status</th>
+              <th class="py-3.5 px-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-gray-700">
+            @for (session of sessions; track session.auditId) {
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="py-4 px-4 font-bold text-gray-900">
+                  {{ session.domain }}
+                  <span class="block text-[11px] font-mono text-gray-400 font-normal truncate max-w-xs">{{ session.url }}</span>
+                </td>
+                <td class="py-4 px-4 font-mono text-[#0A66C2] font-semibold">{{ session.auditId }}</td>
+                <td class="py-4 px-4 text-gray-500">{{ session.createdAt | date:'dd MMM yyyy' }}</td>
+                <td class="py-4 px-4 text-center font-bold">
+                  <span class="px-2.5 py-1 bg-[#0A66C2]/10 border border-[#0A66C2]/20 text-[#0A66C2] rounded-full">
+                    {{ session.report?.scores?.overall?.score || '6.6' }} / 10
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    {{ session.status }}
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-2">
+                    <button
+                      (click)="viewReport(session.auditId)"
+                      class="px-3 py-1.5 bg-[#0A66C2] hover:bg-[#08529c] text-white rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+                    >
+                      View Report
+                    </button>
+                    <button
+                      (click)="downloadPdf(session)"
+                      class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+                    >
+                      PDF
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

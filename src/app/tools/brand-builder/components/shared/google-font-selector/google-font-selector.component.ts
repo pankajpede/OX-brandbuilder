@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, forwardRef, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, forwardRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { GoogleFontsService, GoogleFont } from '../../../services/google-fonts.service';
@@ -22,6 +22,13 @@ export class GoogleFontSelectorComponent implements OnInit, ControlValueAccessor
 
   @Input() label = 'Select Font';
   @Input() placeholder = 'Search fonts...';
+  @Input() set value(val: string) {
+    if (val) {
+      this.selectedValue = val;
+      this.fontService.loadFont(val);
+    }
+  }
+  @Output() fontSelected = new EventEmitter<string>();
 
   // State
   isOpen = false;
@@ -93,6 +100,7 @@ export class GoogleFontSelectorComponent implements OnInit, ControlValueAccessor
     this.fontService.loadFont(font.family);
     this.onChange(font.family);
     this.onTouched();
+    this.fontSelected.emit(font.family);
     this.filterFonts();
   }
 

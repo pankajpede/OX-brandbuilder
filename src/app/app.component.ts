@@ -26,6 +26,8 @@ export class AppComponent implements OnInit {
       const url = event.urlAfterRedirects;
       if (url.includes('brand-builder')) {
         this.activeTool = 'Brand Builder';
+      } else if (url.includes('ux-audit')) {
+        this.activeTool = 'OX UX Audit';
       } else {
         this.activeTool = null;
       }

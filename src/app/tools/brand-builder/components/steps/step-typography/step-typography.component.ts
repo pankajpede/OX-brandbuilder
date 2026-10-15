@@ -6,7 +6,7 @@ import { BrandService } from '../../../services/brand.service';
 import { VariantService } from '../../../services/variant.service';
 import { GoogleFontSelectorComponent } from '../../shared/google-font-selector/google-font-selector.component';
 import { VariantSelectorComponent } from '../../shared/variant-selector/variant-selector.component';
-import { VariantOption, TypographyTone, TypographyDensity } from '../../../models/brand.model';
+import { VariantOption, TypographyTone, TypographyDensity, BrandTypography, FontFamilyEntry } from '../../../models/brand.model';
 
 @Component({
   selector: 'app-step-typography',
@@ -48,17 +48,16 @@ export class StepTypographyComponent implements OnInit, OnDestroy {
     return this.form?.get('density')?.value || 'comfortable';
   }
 
-  get generatedWeights(): string[] {
-    const style = this.currentStyle;
+  getWeightsForTone(style: TypographyTone): string[] {
     if (style === 'modern') return ['300 Light', '400 Regular', '500 Medium'];
     if (style === 'bold') return ['400 Regular', '600 Semibold', '700 Bold'];
     return ['400 Regular', '500 Medium', '600 Semibold'];
   }
 
-  get generatedScale(): { label: string; size: string; line: string; weight: string }[] {
+  getScaleForFamily(style: TypographyTone): { label: string; size: string; line: string; weight: string }[] {
     const isCompact = this.currentDensity === 'compact';
-    const isBold = this.currentStyle === 'bold';
-    const isModern = this.currentStyle === 'modern';
+    const isBold = style === 'bold';
+    const isModern = style === 'modern';
 
     const mainWeight = isBold ? '700' : (isModern ? '500' : '600');
     const bodyWeight = isModern ? '300' : '400';
@@ -73,6 +72,83 @@ export class StepTypographyComponent implements OnInit, OnDestroy {
     ];
   }
 
+  get typographyData(): BrandTypography {
+    return this.brandService.getSection('typography');
+  }
+
+  useRecommendedFont(): void {
+    const fallback = this.typographyData.fallbackFont || 'Inter';
+    this.form.patchValue({ primaryFont: fallback });
+    this.brandService.updateSection('typography', {
+      primaryFont: fallback,
+      isCustomWebFont: false
+    });
+  }
+
+  keepActualFontName(): void {
+    this.brandService.updateSection('typography', {
+      isCustomWebFont: false
+    });
+  }
+
+  get fontFamilies(): FontFamilyEntry[] {
+    const data = this.brandService.getSection('typography');
+    if (!data.fontFamilies || data.fontFamilies.length === 0) {
+      return [
+        { role: 'primary', fontFamily: data.primaryFont || 'Inter', tone: data.tone || 'professional' }
+      ];
+    }
+    return data.fontFamilies;
+  }
+
+  addFontFamily(): void {
+    const current = [...this.fontFamilies];
+    current.push({
+      role: 'secondary',
+      fontFamily: 'Outfit',
+      tone: 'modern'
+    });
+    this.brandService.updateSection('typography', { fontFamilies: current });
+  }
+
+  removeFontFamily(index: number): void {
+    const current = [...this.fontFamilies];
+    if (current.length > 1) {
+      current.splice(index, 1);
+      this.brandService.updateSection('typography', { fontFamilies: current });
+    }
+  }
+
+  updateFontFamilyName(index: number, fontFamily: string): void {
+    const current = [...this.fontFamilies];
+    if (current[index] && fontFamily) {
+      current[index] = { ...current[index], fontFamily };
+      if (index === 0) {
+        this.form.patchValue({ primaryFont: fontFamily }, { emitEvent: false });
+      }
+      this.brandService.updateSection('typography', {
+        primaryFont: current[0].fontFamily,
+        fontFamilies: current
+      });
+    }
+  }
+
+  updateFontFamilyRole(index: number, role: 'primary' | 'secondary' | 'display' | 'body' | 'code'): void {
+    const current = [...this.fontFamilies];
+    if (current[index]) {
+      current[index] = { ...current[index], role };
+      this.brandService.updateSection('typography', { fontFamilies: current });
+    }
+  }
+
+  updateFontFamilyTone(index: number, tone: TypographyTone): void {
+    const current = [...this.fontFamilies];
+    if (current[index]) {
+      current[index] = { ...current[index], tone };
+      this.brandService.updateSection('typography', { fontFamilies: current });
+    }
+  }
+
   ngOnInit(): void {
     const data = this.brandService.getSection('typography');
     this.variants = this.variantService.getVariants('typography');
@@ -85,7 +161,15 @@ export class StepTypographyComponent implements OnInit, OnDestroy {
     });
 
     this.sub = this.form.valueChanges.subscribe(val => {
-      this.brandService.updateSection('typography', val);
+      // Sync primary font family entry in fontFamilies list
+      const list = [...this.fontFamilies];
+      if (list.length > 0 && val.primaryFont) {
+        list[0] = { ...list[0], fontFamily: val.primaryFont, tone: val.tone };
+      }
+      this.brandService.updateSection('typography', {
+        ...val,
+        fontFamilies: list
+      });
     });
   }
 

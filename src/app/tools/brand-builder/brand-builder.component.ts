@@ -176,8 +176,32 @@ export class BrandBuilderComponent implements OnInit, OnDestroy {
   }
 
   onNext() {
+    if (this.currentStep === 0 && this.brandData.brandMode === 'url') {
+      const url = this.brandData.urlInput || '';
+      if (!this.isValidUrl(url)) {
+        alert('Please enter a valid website URL (e.g., example.com or https://example.com)');
+        return;
+      }
+      this.brandService.triggerUrlExtraction(url);
+      return;
+    }
+
     if (this.currentStep < this.steps.length - 1) {
       this.brandService.goToStep(this.currentStep + 1);
+    }
+  }
+
+  private isValidUrl(urlString: string): boolean {
+    if (!urlString || !urlString.trim()) return false;
+    let urlToTest = urlString.trim();
+    if (!/^https?:\/\//i.test(urlToTest)) {
+      urlToTest = 'https://' + urlToTest;
+    }
+    try {
+      const parsed = new URL(urlToTest);
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+      return false;
     }
   }
 

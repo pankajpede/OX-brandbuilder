@@ -36,6 +36,15 @@ export class HomeComponent {
       color: '#000000'
     },
     {
+      id: 'ux-audit',
+      route: '/ux-audit',
+      title: 'OX UX Audit',
+      description: 'Analyze any public website and generate a comprehensive UX, accessibility, content & responsive audit report.',
+      icon: '🔍',
+      status: 'ready',
+      color: '#4F46E5'
+    },
+    {
       id: 'semantic-builder',
       route: '/semantic-builder',
       title: 'Semantic UI',

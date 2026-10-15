@@ -85,11 +85,24 @@ export interface BrandColors {
 export type TypographyTone = 'professional' | 'modern' | 'bold';
 export type TypographyDensity = 'compact' | 'comfortable';
 
+export interface FontFamilyEntry {
+  role: 'primary' | 'secondary' | 'display' | 'body' | 'code';
+  fontFamily: string;
+  tone: TypographyTone;
+  customFontUrl?: string;
+  fallbackFont?: string;
+  isCustomWebFont?: boolean;
+}
+
 export interface BrandTypography {
   variant: string; // Preview template variant
   primaryFont: string;
   tone: TypographyTone;
   density: TypographyDensity;
+  customFontUrl?: string;
+  fallbackFont?: string;
+  isCustomWebFont?: boolean;
+  fontFamilies?: FontFamilyEntry[];
 }
 
 export interface BrandIconography {
@@ -135,7 +148,8 @@ export interface BrandSummary {
 
 // ── Master Data Interface ─────────────────────────────────────
 export interface BrandData {
-  brandMode: 'ai' | 'custom' | 'import';
+  brandMode: 'ai' | 'custom' | 'url' | 'import';
+  urlInput?: string;
   aiMockups: string[];
   cover: BrandCover;
   summary: BrandSummary;
@@ -187,6 +201,7 @@ export const STEPS: StepConfig[] = [
 export function createDefaultBrandData(): BrandData {
   return {
     brandMode: 'custom',
+    urlInput: '',
     aiMockups: [],
     cover: {
       variant: 't1',
@@ -297,6 +312,10 @@ export function createDefaultBrandData(): BrandData {
       primaryFont: 'Inter',
       tone: 'professional',
       density: 'comfortable',
+      fontFamilies: [
+        { role: 'primary', fontFamily: 'Inter', tone: 'professional' },
+        { role: 'secondary', fontFamily: 'Plus Jakarta Sans', tone: 'modern' }
+      ]
     },
     iconography: {
       library: 'react-icons',
